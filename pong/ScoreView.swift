@@ -6,61 +6,87 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ScoreView: View {
 	
-	@State var gameScore: Score
-	@State var gameSide: GameSide
+	@ObservedObject var match: Match
 	
 	let size = UIScreen.main.bounds.height/3
 	
     var body: some View {
 			HStack {
 				VStack {
-					Text(leftTeam.rawValue.uppercased())
+					Text(leftID.rawValue.uppercased())
 						.font(.title)
 						.padding()
 					Text(String(leftScore))
-						.font(.system(size: size, weight: .bold, design: .monospaced))
+						.font(.system(size: 1000, weight: .bold, design: .default))
 						.frame(maxWidth: .infinity, maxHeight: .infinity)
-						.multilineTextAlignment(.center)
-						.border(Color.blue, width: 1)
+						.minimumScaleFactor(0.1)
+						.lineLimit(1)
+						.border(leftColor, width: 1)
+						.fixedSize(horizontal: false, vertical: false)
 
 				}.padding()
 				VStack {
-					Text(rightTeam.rawValue.uppercased())
+					Text(rightID.rawValue.uppercased())
 						.font(.title)
 						.padding()
 					Text(String(rightScore))
-						.font(.system(size: size, weight: .bold, design: .rounded))
+						.font(.system(size: 1000, weight: .bold, design: .rounded))
+						.minimumScaleFactor(0.1)
 						.frame(maxWidth: .infinity, maxHeight: .infinity)
-						.multilineTextAlignment(.center)
-						.border(Color.blue, width: 1)
+						.lineLimit(1)
+						.border(rightColor, width: 1)
+						.fixedSize(horizontal: false, vertical: false)
 				}.padding()
 			}
 			.fixedSize(horizontal: false, vertical: false)
     }
 	
+	var leftID: TeamID {
+		match.teamID(.left)
+	}
+	
+	var rightID: TeamID {
+		match.teamID(.right)
+	}
+	
+	var leftColor: Color {
+		if leftID == match.service {
+			return Color.green
+		}
+		return Color.blue
+	}
+	
+	var rightColor: Color {
+		if rightID == match.service {
+			return Color.green
+		}
+		return Color.blue
+	}
+	
 	var leftScore: Int {
-		switch gameSide.home {
+		switch match.tableSides.home {
 		case .left:
-			return gameScore.home
+			return match.gameScore.home
 		case .right:
-			return gameScore.guest
+			return match.gameScore.guest
 		}
 	}
 	
 	var rightScore: Int {
-		switch gameSide.guest {
+		switch match.tableSides.guest {
 		case .left:
-			return gameScore.home
+			return match.gameScore.home
 		case .right:
-			return gameScore.guest
+			return match.gameScore.guest
 		}
 	}
 	
 	var leftTeam: TeamID {
-		switch gameSide.home {
+		switch match.tableSides.home {
 		case .left:
 			return .home
 		case .right:
@@ -69,7 +95,7 @@ struct ScoreView: View {
 	}
 	
 	var rightTeam: TeamID {
-		switch gameSide.guest {
+		switch match.tableSides.guest {
 		case .left:
 			return .home
 		case .right:
@@ -80,6 +106,6 @@ struct ScoreView: View {
 
 struct ScoreView_Previews: PreviewProvider {
     static var previews: some View {
-        ScoreView(gameScore: Score(), gameSide: GameSide())
+			ScoreView(match: Match())
     }
 }

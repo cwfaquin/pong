@@ -7,30 +7,12 @@
 
 import Foundation
 
-enum GameStatus {
-	case pregame
-	case start(service: TeamID, homeSide: TableSide)
-	case paused(Date)
-	case regularPoint(homeScore: Int, guestScore: Int)
-	case gamePoint(teamOne: Int, teamTwo: Int)
-	case deuceTwenty
-	case deuce(tieScore: Int)
-	case advantageOut(teamOne: Int, teamTwo: Int)
-	case gameOver(winner: TeamID)
+enum MatchStatus: Int, CaseIterable {
+	case pregame // guest choose side
+	case ping // ping
+	case playing
+	case gameComplete
+	case setComplete
+	case matchComplete
 }
 
-enum SetStatus {
-	case pregame
-	case ping
-	case inProgress(homeGames: Int, guestGames: Int)
-	case paused(Date)
-	case setComplete(winner: TeamID)
-}
-
-enum MatchStatus {
-	case pregame
-	case inProgress(homeSets: Int, awaySets: Int)
-	case paused(Date)
-	case cancelled
-	case gameSetMatch(winner: TeamID)
-}

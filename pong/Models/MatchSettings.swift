@@ -13,12 +13,26 @@ final class MatchSettings: ObservableObject {
 	@Published var matchType: MatchType = .singleSet
 }
 
-enum GameType: Int, CaseIterable {
-	case short = 11
-	case long = 21
+protocol PointGoal {
+	var pointGoal: Int { get }
 }
 
-enum SetType: CaseIterable {
+enum GameType: CaseIterable, PointGoal {
+	case short
+	case long
+	
+	var pointGoal: Int {
+		switch self {
+		case .long:
+			return 21
+		case .short:
+			return 11
+		}
+	}
+	
+}
+
+enum SetType: CaseIterable, PointGoal {
 	case singleGame
 	case bestOfThree
 	
@@ -32,7 +46,7 @@ enum SetType: CaseIterable {
 	}
 }
 
-enum MatchType: CaseIterable {
+enum MatchType: CaseIterable, PointGoal {
 	case singleSet
 	case bestOfThree
 	case bestOfFive

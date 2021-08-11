@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct GameView: View {
-	@State var gameScore: Score
-	@State var gameSide: GameSide
+	
+	@ObservedObject var match: Match
 	
 	let size = UIScreen.main.bounds.width/3
 	
@@ -22,7 +22,7 @@ struct GameView: View {
 				Divider()
 					.foregroundColor(.gray)
 					.padding()
-				Text(String(21))
+				Text(String(rightScore))
 					.font(.system(size:size, weight: .bold, design: .monospaced))
 					.multilineTextAlignment(.center)
 					.scaledToFill()
@@ -30,20 +30,20 @@ struct GameView: View {
 		}
 	
 	var leftScore: Int {
-		switch gameSide.home {
+		switch match.tableSides.home {
 		case .left:
-			return gameScore.home
+			return match.gameScore.home
 		case .right:
-			return gameScore.guest
+			return match.gameScore.guest
 		}
 	}
 	
 	var rightScore: Int {
-		switch gameSide.guest {
+		switch match.tableSides.guest {
 		case .left:
-			return gameScore.home
+			return match.gameScore.home
 		case .right:
-			return gameScore.guest
+			return match.gameScore.guest
 		}
 	}
 }
@@ -51,6 +51,6 @@ struct GameView: View {
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
-        GameView(gameScore: Score(), gameSide: GameSide())
+			GameView(match: Match())
     }
 }

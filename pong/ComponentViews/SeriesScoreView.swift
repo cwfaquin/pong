@@ -25,12 +25,11 @@ struct SeriesScoreView: View {
 				ForEach(0..<viewModel.winningScore) { index in
 					Image(systemName: viewModel.imageNames[index])
 						.aspectRatio(contentMode: .fit)
-						.foregroundColor(.green)
+						.foregroundColor(Color(.cyan))
 						.imageScale(.large)
 				}
 			}
-			.frame(alignment: alignment)
-			.fixedSize(horizontal: false, vertical: false)
+
 	}
 }
 

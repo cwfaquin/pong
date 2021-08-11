@@ -19,7 +19,6 @@ struct MainApp: App {
             ScoreboardView(viewModel: ScoreboardVM())
 							.environmentObject(settings)
 							.environmentObject(match)
-							.background(Color.black.ignoresSafeArea())
 				}
 		}
 
