@@ -242,8 +242,14 @@ struct Game {
 	}
 	
 	mutating func updateScore(home: Int = 0, guest: Int = 0) {
-		self.home = min(max(home, 0), pointGoal)
-		self.guest = min(max(guest, 0), pointGoal)
+		if home != 0 {
+			self.home = min(max(home, 0), pointGoal)
+		} else if guest != 0 {
+			self.guest = min(max(guest, 0), pointGoal)
+		} else if home == 0 && guest == 0 {
+			self.home = 0
+			self.guest = 0
+		}
 		updateStatus()
 		updateService()
 	}
