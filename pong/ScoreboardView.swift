@@ -34,6 +34,7 @@ struct ScoreboardView: View {
 						.foregroundColor(.white)
 						.font(.body)
 				}, trailing: Button(action: {
+					match.singleTapMiddle()
 			}) {
 					Image(systemName: "gear")
 						.foregroundColor(.purple)
@@ -52,7 +53,7 @@ struct ScoreboardView: View {
 								buttonAction(index)
 				}, label: {
 					switch ToolbarButton.allCases[index] {
-					case .spacer, .spacer1, .spacer2, .spacer3:
+					case .spacer, .spacer1, .spacer2:
 						Spacer()
 					default:
 					Image(systemName: "\(ToolbarButton.allCases[index].rawValue).circle")
@@ -67,16 +68,13 @@ struct ScoreboardView: View {
 	func buttonAction(_ index: Int) {
 		switch ToolbarButton.allCases[index] {
 		case .plus:
-			match.incrementGameScore(1, team: .home)
+			match.singleTap(.left)
 		case .minus:
-			match.incrementGameScore(1, team: .guest)
-		case .pause:
-			print("pause")
+			match.singleTap(.right)
 		case .play:
-			print("play")
-		case .restart:
-			match.gameScore.home = 0
-			match.gameScore.guest = 0
+			match.doubleTap(.left)
+		case .pause:
+			match.doubleTap(.right)
 		default:
 			break
 		}
@@ -95,11 +93,7 @@ enum ToolbarButton: String, CaseIterable {
 	case spacer
 	case minus
 	case spacer1
-	case restart
+	case play
 	case spacer2
 	case pause
-	case spacer3
-	case play
-	
-
 }

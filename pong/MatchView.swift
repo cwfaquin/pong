@@ -13,11 +13,29 @@ struct MatchView: View {
 	
     var body: some View {
 			HStack(spacing: 20) {
-				SeriesScoreView(viewModel: SeriesScoreVM(tableSide: .left, currentScore: match.matchScore.home, winningScore: match.matchScore.pointGoal))
-				Text("SETS")
-				SeriesScoreView(viewModel: SeriesScoreVM(tableSide: .right, currentScore: match.matchScore.guest, winningScore: match.matchScore.pointGoal))
+				SeriesScoreView(viewModel: SeriesScoreVM(tableSide: .left, currentScore: leftScore, winningScore: match.matchType.pointGoal))
+				Text(" SETS ")
+				SeriesScoreView(viewModel: SeriesScoreVM(tableSide: .right, currentScore: rightScore, winningScore: match.matchType.pointGoal))
 			}
     }
+	
+	var leftScore: Int {
+		switch match.tableSides.home {
+		case .left:
+			return match.homeSets.count
+		case .right:
+			return match.guestSets.count
+		}
+	}
+	
+	var rightScore: Int {
+		switch match.tableSides.guest {
+		case .left:
+			return match.homeSets.count
+		case .right:
+			return match.guestSets.count
+		}
+	}
 }
 
 struct MatchView_Previews: PreviewProvider {

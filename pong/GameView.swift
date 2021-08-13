@@ -32,18 +32,18 @@ struct GameView: View {
 	var leftScore: Int {
 		switch match.tableSides.home {
 		case .left:
-			return match.gameScore.home
+			return match.game.home
 		case .right:
-			return match.gameScore.guest
+			return match.game.guest
 		}
 	}
 	
 	var rightScore: Int {
 		switch match.tableSides.guest {
 		case .left:
-			return match.gameScore.home
+			return match.game.home
 		case .right:
-			return match.gameScore.guest
+			return match.game.guest
 		}
 	}
 }

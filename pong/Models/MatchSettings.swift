@@ -11,6 +11,7 @@ final class MatchSettings: ObservableObject {
 	@Published var gameType: GameType = .long
 	@Published var setType: SetType = .bestOfThree
 	@Published var matchType: MatchType = .singleSet
+	@Published var optionToExtend: Bool = true 
 }
 
 protocol PointGoal {

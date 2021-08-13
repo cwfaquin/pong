@@ -8,11 +8,12 @@
 import Foundation
 
 enum MatchStatus: Int, CaseIterable {
-	case pregame // guest choose side
-	case ping // ping
+	case pregame
+	case guestChooseSide
+	case ping 
 	case playing
-	case gameComplete
-	case setComplete
+	case optionToExtend
 	case matchComplete
+	case postgame
 }
 

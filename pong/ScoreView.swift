@@ -21,13 +21,11 @@ struct ScoreView: View {
 						.font(.title)
 						.padding()
 					Text(String(leftScore))
-						.font(.system(size: 1000, weight: .bold, design: .default))
+						.font(.system(size: 1000, weight: .bold, design: .rounded))
 						.frame(maxWidth: .infinity, maxHeight: .infinity)
 						.minimumScaleFactor(0.1)
 						.lineLimit(1)
 						.border(leftColor, width: 1)
-						.fixedSize(horizontal: false, vertical: false)
-
 				}.padding()
 				VStack {
 					Text(rightID.rawValue.uppercased())
@@ -39,7 +37,6 @@ struct ScoreView: View {
 						.frame(maxWidth: .infinity, maxHeight: .infinity)
 						.lineLimit(1)
 						.border(rightColor, width: 1)
-						.fixedSize(horizontal: false, vertical: false)
 				}.padding()
 			}
 			.fixedSize(horizontal: false, vertical: false)
@@ -54,14 +51,14 @@ struct ScoreView: View {
 	}
 	
 	var leftColor: Color {
-		if leftID == match.service {
+		if leftID == match.game.service {
 			return Color.green
 		}
 		return Color.blue
 	}
 	
 	var rightColor: Color {
-		if rightID == match.service {
+		if rightID == match.game.service {
 			return Color.green
 		}
 		return Color.blue
@@ -70,18 +67,18 @@ struct ScoreView: View {
 	var leftScore: Int {
 		switch match.tableSides.home {
 		case .left:
-			return match.gameScore.home
+			return match.game.home
 		case .right:
-			return match.gameScore.guest
+			return match.game.guest
 		}
 	}
 	
 	var rightScore: Int {
 		switch match.tableSides.guest {
 		case .left:
-			return match.gameScore.home
+			return match.game.home
 		case .right:
-			return match.gameScore.guest
+			return match.game.guest
 		}
 	}
 	
