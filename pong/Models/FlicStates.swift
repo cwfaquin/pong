@@ -12,3 +12,9 @@ enum FlicAction: CaseIterable {
 	case doubleTap
 	case longPress
 }
+
+enum FlicColor: CaseIterable {
+	case green
+	case yellow
+	case red
+}

@@ -9,16 +9,7 @@ import SwiftUI
 
 struct SeriesScoreView: View {
 
-	@State var viewModel: SeriesScoreVM
-	
-	var alignment: Alignment {
-		switch viewModel.tableSide {
-		case .left:
-			return .trailing
-		case .right:
-			return .leading
-		}
-	}
+	@ObservedObject var viewModel: SeriesScoreVM
 	
 	var body: some View {
 		LazyHStack(spacing: 20) {

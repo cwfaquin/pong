@@ -26,7 +26,7 @@ struct ScoreboardView: View {
 				Spacer()
 					.padding()
 			}
-			.navigationBarTitle(" ")
+			.navigationBarTitle("\(match.set.home.count) - \(match.set.guest.count)")
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationBarItems(leading: Button(action: {
 			}) {

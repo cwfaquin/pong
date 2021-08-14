@@ -15,7 +15,7 @@ class SeriesScoreVM: ObservableObject {
 	@Published var winningScore: Int
 	
 	private let empty: String = "circle"
-	private let filled: String = "circle.inset.filled"
+	private let filled: String = "circle.fill"
 	
 	init(tableSide: TableSide = .left, currentScore: Int = 0, winningScore: Int = 3) {
 		self.tableSide = tableSide

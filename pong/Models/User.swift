@@ -16,6 +16,7 @@ struct User {
 	let lastName: String?
 	var avatarUrl: String?
 	var avatarName: String?
+	var matchStats: [Match]?
 }
 
 

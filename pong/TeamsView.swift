@@ -13,21 +13,30 @@ struct TeamsView: View {
 	
     var body: some View {
 			HStack {
+				/*
 				Rectangle()
 					.foregroundColor(.secondary)
 					.cornerRadius(10)
 					.frame(maxWidth: .infinity, maxHeight: .infinity)
-				
-				Text("VS")
+				*/
+				Text("Match = \(String(describing: match.status))")
 					.font(.headline)
 					.foregroundColor(.yellow)
 					.padding()
 				
-				Rectangle()
-					.foregroundColor(.secondary)
-					.cornerRadius(10)
-					.frame(maxWidth: .infinity, maxHeight: .infinity)
+				Text("Game = \(String(describing: match.game.status))")
+					.font(.headline)
+					.foregroundColor(.yellow)
+					.padding()
+				
+				/*
+					Rectangle()
+						.foregroundColor(.secondary)
+						.cornerRadius(10)
+						.frame(maxWidth: .infinity, maxHeight: .infinity)
+				*/
 			}
+				
 			.fixedSize(horizontal: false, vertical: false)
 			.padding()
     }
