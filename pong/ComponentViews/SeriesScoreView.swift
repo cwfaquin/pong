@@ -12,15 +12,20 @@ struct SeriesScoreView: View {
 	@ObservedObject var viewModel: SeriesScoreVM
 	
 	var body: some View {
-		LazyHStack(spacing: 20) {
-				ForEach(0..<viewModel.winningScore) { index in
-					Image(systemName: viewModel.imageNames[index])
-						.aspectRatio(contentMode: .fit)
-						.foregroundColor(Color(.cyan))
-						.imageScale(.large)
-				}
+		LazyHStack {
+				ForEach(0..<4) { index in
+					Circle()
+						.foregroundColor(viewModel.foregoundColors[index])
+						.padding()
+						.scaledToFill()
+					/*GroupBox {
+						Image(systemName: viewModel.imageNames[index])
+							.foregroundColor(viewModel.foregoundColors[index])
+							.aspectRatio(1, contentMode: .fill)
+					}
+					}*/
 			}
-
+		}
 	}
 }
 

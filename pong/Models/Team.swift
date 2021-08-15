@@ -11,6 +11,15 @@ import SwiftUI
 enum TeamID: String, CaseIterable {
 	case home
 	case guest
+	
+	var systemName: String {
+		switch self {
+		case .home:
+			return "house.circle"
+		case .guest:
+			return "location.circle"
+		}
+	}
 }
 
 struct Team {

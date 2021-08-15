@@ -15,7 +15,7 @@ class SeriesScoreVM: ObservableObject {
 	@Published var winningScore: Int
 	
 	private let empty: String = "circle"
-	private let filled: String = "circle.fill"
+	private let filled: String = "circle.inset.filled"
 	
 	init(tableSide: TableSide = .left, currentScore: Int = 0, winningScore: Int = 3) {
 		self.tableSide = tableSide
@@ -24,7 +24,7 @@ class SeriesScoreVM: ObservableObject {
 	}
 
 	var imageNames: [String] {
-		let names = Array(1...winningScore)
+		let names = Array(1...4)
 			.compactMap { $0 > currentScore ? empty : filled }
 		switch tableSide {
 		case .left:
@@ -32,6 +32,11 @@ class SeriesScoreVM: ObservableObject {
 		case .right:
 			return names
 		}
+	}
+	
+	var foregoundColors: [Color] {
+		Array(1...4)
+			.compactMap { $0 > winningScore ? .clear : Color(.cyan) }
 	}
 }
 

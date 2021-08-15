@@ -9,41 +9,68 @@ import SwiftUI
 
 struct TeamsView: View {
 	
-	@EnvironmentObject var match: Match
+	@ObservedObject var match: Match
+
+	
+	var leftTeam: Team {
+		switch match.teamID(.left) {
+		case .home:
+			return match.home
+		case .guest:
+			return match.guest
+		}
+	}
+	
+	var rightTeam: Team {
+		switch match.teamID(.right) {
+		case .home:
+			return match.home
+		case .guest:
+			return match.guest
+		}
+	}
+	
+	var teams: [Team] {
+		[leftTeam, rightTeam]
+	}
 	
     var body: some View {
-			HStack {
-				/*
-				Rectangle()
-					.foregroundColor(.secondary)
-					.cornerRadius(10)
-					.frame(maxWidth: .infinity, maxHeight: .infinity)
-				*/
-				Text("Match = \(String(describing: match.status))")
-					.font(.headline)
-					.foregroundColor(.yellow)
-					.padding()
-				
-				Text("Game = \(String(describing: match.game.status))")
-					.font(.headline)
-					.foregroundColor(.yellow)
-					.padding()
-				
-				/*
-					Rectangle()
-						.foregroundColor(.secondary)
-						.cornerRadius(10)
-						.frame(maxWidth: .infinity, maxHeight: .infinity)
-				*/
+			LazyHStack {
+				teamView(leftTeam)
+				teamView(rightTeam)
 			}
-				
-			.fixedSize(horizontal: false, vertical: false)
-			.padding()
     }
+		
+	func teamView(_ team: Team) -> some View {
+		return GroupBox {
+			Text(team.id.rawValue.uppercased())
+				.font(.largeTitle)
+				.fontWeight(.semibold)
+				.padding()
+			GroupBox {
+				if match.status != .pregame {
+					Text(team.user?.username ?? "Unknown Player")
+				} else {
+					if #available(macCatalyst 15.0, *) {
+						Button("Add User", action: addUser)
+							.controlSize(.large)
+							.padding()
+					} else {
+							Button("Add User", action: addUser)
+								.padding()
+					}
+				}
+			}
+		}
+	}
+	
+	func addUser() {
+		
+	}
 }
 
 struct TeamsView_Previews: PreviewProvider {
     static var previews: some View {
-        TeamsView()
+			TeamsView(match: Match())
     }
 }
