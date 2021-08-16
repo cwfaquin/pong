@@ -35,9 +35,18 @@ class SeriesScoreVM: ObservableObject {
 	}
 	
 	var foregoundColors: [Color] {
-		Array(1...4)
+		var array = Array(1...4)
+		switch tableSide {
+		case .left:
+			array = array.reversed()
+		case .right:
+			break
+		}
+		return array
 			.compactMap { $0 > winningScore ? .clear : Color(.cyan) }
 	}
+
+
 }
 
 

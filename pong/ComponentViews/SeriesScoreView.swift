@@ -14,17 +14,13 @@ struct SeriesScoreView: View {
 	var body: some View {
 		LazyHStack {
 				ForEach(0..<4) { index in
-					Circle()
+					Image(systemName: viewModel.imageNames[index])
+						.resizable()
 						.foregroundColor(viewModel.foregoundColors[index])
+						.frame(minWidth: 10, idealWidth: 50, maxWidth: 60, minHeight: 10, idealHeight: 50, maxHeight: 60)
+						.scaledToFit()
 						.padding()
-						.scaledToFill()
-					/*GroupBox {
-						Image(systemName: viewModel.imageNames[index])
-							.foregroundColor(viewModel.foregoundColors[index])
-							.aspectRatio(1, contentMode: .fill)
-					}
-					}*/
-			}
+				}
 		}
 	}
 }

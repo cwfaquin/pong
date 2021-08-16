@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ScoreboardView: View {
-
+	
 	@EnvironmentObject var settings: MatchSettings
 	@EnvironmentObject var match: Match
 	@ObservedObject var viewModel: ScoreboardVM
@@ -23,64 +23,87 @@ struct ScoreboardView: View {
 	var columns = [GridItem(), GridItem()]
 	
 	var body: some View {
-
-		HStack {
-			GroupBox {
-				Text(match.home.id.rawValue.uppercased())
-					.font(.system(size: 50, weight: .semibold, design: .monospaced))
-					.padding()
-				//GroupBox {
-				
-					Text(String(match.game.home))
-					.font(.system(size: 700, weight: .bold, design: .rounded))
-
+		GeometryReader { geo in
+			ZStack {
+			HStack {
+				makeGroup(.left)
+				Rectangle()
+					.foregroundColor(.black)
+					.frame(width: geo.size.width/8)
+				makeGroup(.right)
 			}
-			
-			
-			GroupBox {
-				Text(match.guest.id.rawValue.uppercased())
-					.font(.system(size: 50, weight: .semibold, design: .monospaced))
-					.padding()
-					//.frame(width: .infinity, alignment: .center)
-				SeriesScoreView(viewModel: guestSetVM)
-				SeriesScoreView(viewModel: guestMatchVM)
-				Text(match.guest.id.rawValue.uppercased())
-					.font(.largeTitle)
-					.fontWeight(.semibold)
-					.padding()
-				GroupBox {
-					Text(String(match.game.guest))
-					.font(.system(size: 700, weight: .bold, design: .rounded))
+				VStack {
+					Spacer(minLength: geo.size.height/5)
+					HStack {
+						SeriesScoreView(viewModel: homeSetVM)
+						Text("SET")
+							.font(.system(size: 50, weight: .regular, design: .monospaced))
+							.frame(width: geo.size.width/8)
+						SeriesScoreView(viewModel: guestSetVM)
+					}
+					HStack {
+						SeriesScoreView(viewModel: homeMatchVM)
+						Text("MATCH")
+							.font(.system(size: 50, weight: .regular, design: .monospaced))
+							.frame(width: geo.size.width/8)
+						SeriesScoreView(viewModel: guestMatchVM)
+					}
+					Divider()
+						.frame(width: geo.size.width/9)
+					Spacer(minLength: geo.size.height/2)
 				}
 			}
-			
-		
-			
 		}
-					
 	}
-			
-		/*	.navigationBarTitle("\(match.set.home.count) - \(match.set.guest.count)")
-			.navigationBarTitleDisplayMode(.inline)
-			.navigationBarItems(leading: Button(action: {
-			}) {
-					Text(date, style: .time)
-						.foregroundColor(.white)
-						.font(.body)
-				}, trailing: Button(action: {
-					match.singleTapMiddle()
-			}) {
-					Image(systemName: "gear")
-						.foregroundColor(.purple)
-						.imageScale(.large)
+	
+	func makeGroup(_ tableSide: TableSide) -> some View {
+		let id = match.teamID(tableSide)
+		let score = id == .home ? match.game.home : match.game.guest
+		return GroupBox {
+			Text(id.rawValue.uppercased())
+				.font(.system(size: 100, weight: .semibold, design: .monospaced))
+				.padding()
+			Divider()
+			HStack {
+				switch tableSide {
+				case .left:
+					Text(String(score))
+						.font(.system(size: 700, weight: .bold, design: .rounded))
+						.layoutPriority(1)
+					Rectangle()
+						.foregroundColor(.clear)
+				case .right:
+					Rectangle()
+						.foregroundColor(.clear)
+					Text(String(score))
+						.font(.system(size: 700, weight: .bold, design: .rounded))
+						.layoutPriority(1)
 				}
-			)*/
+			}
+		}.layoutPriority(1)
+	}
+	
+	/*	.navigationBarTitle("\(match.set.home.count) - \(match.set.guest.count)")
+	 .navigationBarTitleDisplayMode(.inline)
+	 .navigationBarItems(leading: Button(action: {
+	 }) {
+	 Text(date, style: .time)
+	 .foregroundColor(.white)
+	 .font(.body)
+	 }, trailing: Button(action: {
+	 match.singleTapMiddle()
+	 }) {
+	 Image(systemName: "gear")
+	 .foregroundColor(.purple)
+	 .imageScale(.large)
+	 }
+	 )*/
 	
 	
 	
-
-		//.navigationViewStyle(StackNavigationViewStyle())
-		//.toolbar(content: toolBarItemGroup)
+	
+	//.navigationViewStyle(StackNavigationViewStyle())
+	//.toolbar(content: toolBarItemGroup)
 	
 	
 	var homeSetVM: SeriesScoreVM {
@@ -103,15 +126,15 @@ struct ScoreboardView: View {
 		ToolbarItemGroup(placement: .bottomBar) {
 			ForEach(0..<ToolbarButton.allCases.count) { index in
 				Button(action: {
-								buttonAction(index)
+					buttonAction(index)
 				}, label: {
 					switch ToolbarButton.allCases[index] {
 					case .spacer, .spacer1, .spacer2:
 						Spacer()
 					default:
-					Image(systemName: "\(ToolbarButton.allCases[index].rawValue).circle")
-						.imageScale(.large)
-						.foregroundColor(.purple)
+						Image(systemName: "\(ToolbarButton.allCases[index].rawValue).circle")
+							.imageScale(.large)
+							.foregroundColor(.purple)
 					}
 				})
 			}
