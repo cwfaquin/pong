@@ -21,6 +21,12 @@ final class Match: ObservableObject {
 	@Published var homeSets = [Set]()
 	@Published var guestSets = [Set]()
 	
+	@Published var geoSize: CGSize = .zero
+	
+	var middlePanelWidth: CGFloat {
+		geoSize.width/8
+	}
+	
 	/* Single Tap player side buttons used for:
 	1. Choose side prematch
 	2. Set ping winner preset

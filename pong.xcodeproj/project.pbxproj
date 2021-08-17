@@ -9,17 +9,17 @@
 /* Begin PBXBuildFile section */
 		97302CAC26C2AFF0002E70C2 /* SetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CAB26C2AFF0002E70C2 /* SetView.swift */; };
 		97302CAE26C2AFF7002E70C2 /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CAD26C2AFF7002E70C2 /* MatchView.swift */; };
-		97302CB026C2B46A002E70C2 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CAF26C2B46A002E70C2 /* ScoreView.swift */; };
 		97302CB226C2C6C0002E70C2 /* TeamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CB126C2C6C0002E70C2 /* TeamsView.swift */; };
 		97302CB726C32995002E70C2 /* UsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CB626C32995002E70C2 /* UsersView.swift */; };
 		97302CB926C810C8002E70C2 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CB826C810C8002E70C2 /* Game.swift */; };
 		97302CBB26C8190B002E70C2 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CBA26C8190B002E70C2 /* Set.swift */; };
 		97302CBD26C819A4002E70C2 /* TableSides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CBC26C819A4002E70C2 /* TableSides.swift */; };
 		97302CBF26C8223E002E70C2 /* ToastOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */; };
-		9752B55226C83C6000F6B5A2 /* TeamScorePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55126C83C6000F6B5A2 /* TeamScorePanel.swift */; };
 		9752B55426C961A000F6B5A2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55326C961A000F6B5A2 /* SettingsView.swift */; };
 		9752B55626C967B700F6B5A2 /* TeamBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55526C967B600F6B5A2 /* TeamBox.swift */; };
 		9752B55826C976D300F6B5A2 /* MiddlePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55726C976D300F6B5A2 /* MiddlePanel.swift */; };
+		9752B55A26CAA3F500F6B5A2 /* PossessionArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */; };
+		9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */; };
 		97C612CB26BF458300C7879E /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612CA26BF458300C7879E /* MainApp.swift */; };
 		97C612CF26BF458400C7879E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612CE26BF458400C7879E /* Assets.xcassets */; };
 		97C612D226BF458400C7879E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612D126BF458400C7879E /* Preview Assets.xcassets */; };
@@ -55,17 +55,17 @@
 /* Begin PBXFileReference section */
 		97302CAB26C2AFF0002E70C2 /* SetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetView.swift; sourceTree = "<group>"; };
 		97302CAD26C2AFF7002E70C2 /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
-		97302CAF26C2B46A002E70C2 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		97302CB126C2C6C0002E70C2 /* TeamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsView.swift; sourceTree = "<group>"; };
 		97302CB626C32995002E70C2 /* UsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersView.swift; sourceTree = "<group>"; };
 		97302CB826C810C8002E70C2 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		97302CBA26C8190B002E70C2 /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 		97302CBC26C819A4002E70C2 /* TableSides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSides.swift; sourceTree = "<group>"; };
 		97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastOverlayView.swift; sourceTree = "<group>"; };
-		9752B55126C83C6000F6B5A2 /* TeamScorePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamScorePanel.swift; sourceTree = "<group>"; };
 		9752B55326C961A000F6B5A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9752B55526C967B600F6B5A2 /* TeamBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamBox.swift; sourceTree = "<group>"; };
 		9752B55726C976D300F6B5A2 /* MiddlePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddlePanel.swift; sourceTree = "<group>"; };
+		9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PossessionArrow.swift; sourceTree = "<group>"; };
+		9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackGroupBoxStyle.swift; sourceTree = "<group>"; };
 		97C612C726BF458300C7879E /* pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97C612CA26BF458300C7879E /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		97C612CE26BF458400C7879E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -134,15 +134,15 @@
 				97C612DA26BF59D300C7879E /* ScoreboardView.swift */,
 				97302CB126C2C6C0002E70C2 /* TeamsView.swift */,
 				97302CB626C32995002E70C2 /* UsersView.swift */,
+				9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */,
 				97302CB326C2C805002E70C2 /* ComponentViews */,
 				97302CAB26C2AFF0002E70C2 /* SetView.swift */,
 				97302CAD26C2AFF7002E70C2 /* MatchView.swift */,
 				9752B55526C967B600F6B5A2 /* TeamBox.swift */,
-				9752B55126C83C6000F6B5A2 /* TeamScorePanel.swift */,
 				9752B55726C976D300F6B5A2 /* MiddlePanel.swift */,
-				97302CAF26C2B46A002E70C2 /* ScoreView.swift */,
 				97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */,
 				9752B55326C961A000F6B5A2 /* SettingsView.swift */,
+				9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */,
 				97C612E826BF838900C7879E /* Utility */,
 				97C612DE26BF5F2200C7879E /* Models */,
 				97C612CE26BF458400C7879E /* Assets.xcassets */,
@@ -261,9 +261,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9752B55226C83C6000F6B5A2 /* TeamScorePanel.swift in Sources */,
 				9752B55426C961A000F6B5A2 /* SettingsView.swift in Sources */,
-				97302CB026C2B46A002E70C2 /* ScoreView.swift in Sources */,
+				9752B55A26CAA3F500F6B5A2 /* PossessionArrow.swift in Sources */,
 				97C6130426C0795500C7879E /* SeriesScoreVM.swift in Sources */,
 				97C612E226BF5F8A00C7879E /* FlicStates.swift in Sources */,
 				97C612DD26BF5D8800C7879E /* ScoreboardVM.swift in Sources */,
@@ -272,6 +271,7 @@
 				97302CAE26C2AFF7002E70C2 /* MatchView.swift in Sources */,
 				97302CB926C810C8002E70C2 /* Game.swift in Sources */,
 				97C612EE26BF88C200C7879E /* User.swift in Sources */,
+				9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */,
 				97C6130026C0471900C7879E /* SeriesScoreView.swift in Sources */,
 				97302CB726C32995002E70C2 /* UsersView.swift in Sources */,
 				97C612DB26BF59D300C7879E /* ScoreboardView.swift in Sources */,

@@ -22,6 +22,8 @@ struct SeriesScoreView: View {
 						.padding()
 				}
 		}
+			
+		
 	}
 }
 
