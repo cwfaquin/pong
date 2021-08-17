@@ -22,6 +22,8 @@ final class Match: ObservableObject {
 	@Published var guestSets = [Set]()
 	
 	@Published var geoSize: CGSize = .zero
+
+	
 	
 	var middlePanelWidth: CGFloat {
 		geoSize.width/8

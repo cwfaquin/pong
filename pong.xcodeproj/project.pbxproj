@@ -20,6 +20,7 @@
 		9752B55826C976D300F6B5A2 /* MiddlePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55726C976D300F6B5A2 /* MiddlePanel.swift */; };
 		9752B55A26CAA3F500F6B5A2 /* PossessionArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */; };
 		9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */; };
+		9752B56026CC293900F6B5A2 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55F26CC293900F6B5A2 /* SettingsVM.swift */; };
 		97C612CB26BF458300C7879E /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612CA26BF458300C7879E /* MainApp.swift */; };
 		97C612CF26BF458400C7879E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612CE26BF458400C7879E /* Assets.xcassets */; };
 		97C612D226BF458400C7879E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612D126BF458400C7879E /* Preview Assets.xcassets */; };
@@ -66,6 +67,7 @@
 		9752B55726C976D300F6B5A2 /* MiddlePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddlePanel.swift; sourceTree = "<group>"; };
 		9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PossessionArrow.swift; sourceTree = "<group>"; };
 		9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackGroupBoxStyle.swift; sourceTree = "<group>"; };
+		9752B55F26CC293900F6B5A2 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
 		97C612C726BF458300C7879E /* pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97C612CA26BF458300C7879E /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		97C612CE26BF458400C7879E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				9752B55726C976D300F6B5A2 /* MiddlePanel.swift */,
 				97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */,
 				9752B55326C961A000F6B5A2 /* SettingsView.swift */,
+				9752B55F26CC293900F6B5A2 /* SettingsVM.swift */,
 				9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */,
 				97C612E826BF838900C7879E /* Utility */,
 				97C612DE26BF5F2200C7879E /* Models */,
@@ -272,6 +275,7 @@
 				97302CB926C810C8002E70C2 /* Game.swift in Sources */,
 				97C612EE26BF88C200C7879E /* User.swift in Sources */,
 				9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */,
+				9752B56026CC293900F6B5A2 /* SettingsVM.swift in Sources */,
 				97C6130026C0471900C7879E /* SeriesScoreView.swift in Sources */,
 				97302CB726C32995002E70C2 /* UsersView.swift in Sources */,
 				97C612DB26BF59D300C7879E /* ScoreboardView.swift in Sources */,

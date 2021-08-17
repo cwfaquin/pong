@@ -20,17 +20,15 @@ struct PossessionArrow: View {
 					.padding()
 					.scaledToFit()
 					.shadow(color: .green, radius: shadowRadius(.left), x: 0, y: 0)
-					.shadow(radius: shadowRadius(.left))
 				Text("S E R V I C E")
 					.font(.system(size: 50, weight: .ultraLight, design: .rounded))
 					.frame(width: match.middlePanelWidth)
 				Image(systemName: "arrowtriangle.right\(imageSuffix(.right))")
 					.resizable()
-					.foregroundColor(imageColor(.left))
+					.foregroundColor(imageColor(.right))
 					.padding()
 					.scaledToFit()
 					.shadow(color: .green, radius: shadowRadius(.right), x: 0, y: 0)
-					.shadow(radius: shadowRadius(.right))
 			}.frame(width: match.geoSize.width/3)
     }
 	
@@ -57,7 +55,7 @@ struct PossessionArrow: View {
 		case .ping, .pregame, .guestChooseSide:
 			return 0
 		default:
-			return side == serviceSide ? 3 : 0
+			return side == serviceSide ? 5 : 0
 		}
 	}
 	

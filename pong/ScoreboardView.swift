@@ -28,23 +28,20 @@ struct ScoreboardView: View {
 			VStack {
 				HStack {
 					ForEach(0..<ToolbarButton.allCases.count) { index in
-						Button(action: {
-							buttonAction(index)
-						}, label: {
-							switch ToolbarButton.allCases[index] {
-							case .spacer, .spacer1, .spacer2:
-								Spacer()
-							default:
-								Image(systemName: "\(ToolbarButton.allCases[index].rawValue).circle")
-									.resizable()
-									.frame(width: 100, height: 100)
-									.foregroundColor(.purple)
-							}
-						}).padding()
-				}
+							Button(action: {
+								buttonAction(index)
+							}, label: {
+								Image(systemName: "\(ToolbarButton.allCases[index].rawValue)")
+										.resizable()
+										.foregroundColor(.purple)
+										.scaledToFit()
+										.padding()
+							}).padding()
+						}
+					
 				}.foregroundColor(Color(UIColor.systemGray6))
 					.frame(height: 100)
-					
+				
 				
 				ZStack {
 					
@@ -60,25 +57,25 @@ struct ScoreboardView: View {
 							.frame(width: geo.size.width/7, height: geo.size.height/8)
 						
 						HStack {
-							SeriesScoreView(viewModel: homeMatchVM)
+							SeriesScoreView(viewModel: leftMatchVM)
 							Text("M A T C H")
 								.font(.system(size: 50, weight: .ultraLight, design: .rounded))
 								.frame(width: geo.size.width/9)
-							SeriesScoreView(viewModel: guestMatchVM)
+							SeriesScoreView(viewModel: rightMatchVM)
 							
 						}.frame(height: geo.size.height/8)
 						
 						HStack {
-							SeriesScoreView(viewModel: homeSetVM)
+							SeriesScoreView(viewModel: leftSetVM)
 							Text("S E T")
 								.font(.system(size: 50, weight: .ultraLight, design: .rounded))
 								.frame(width: geo.size.width/9)
-							SeriesScoreView(viewModel: guestSetVM)
+							SeriesScoreView(viewModel: rightSetVM)
 						}.frame(height: geo.size.height/8)
 						
 						Spacer(minLength: geo.size.height * 2/8)
 						GroupBox {
-							Text("Update the status here.")
+							Text("Match Status = \(String(describing: match.status)), Game Status = \(String(describing: match.game.status))")
 								.font(.system(size: 50, weight: .ultraLight, design: .rounded))
 								.foregroundColor(.green)
 								.padding()
@@ -89,146 +86,165 @@ struct ScoreboardView: View {
 				}
 				
 			}
-				
-				.onAppear {
-					match.geoSize = geo.size
-				}
-			}
 			
-			
-			
-		}
-		
-		func makeGroup(_ tableSide: TableSide) -> some View {
-			let id = match.teamID(tableSide)
-			let score = id == .home ? 20 : 20
-			return VStack {
-				Spacer()
-				Text(id.rawValue.uppercased())
-					.font(.system(size: 100, weight: .semibold, design: .monospaced))
-					.padding()
-				Divider()
-				
-				Text(String(score))
-					.font(.system(size: 700, weight: .bold, design: .rounded))
-					.minimumScaleFactor(0.9)
-					.padding([.leading, .trailing])
-				Rectangle()
-					.foregroundColor(Color(UIColor.systemGray6))
-					.frame(height: 200)
-					.layoutPriority(1)
-				
-			}.background(Color.black)
-		}
-		/*
-		 HStack {
-		 switch tableSide {
-		 case .left:
-		 Text(String(score))
-		 .font(.system(size: 700, weight: .bold, design: .rounded))
-		 .layoutPriority(1)
-		 Rectangle()
-		 .foregroundColor(.clear)
-		 case .right:
-		 Rectangle()
-		 .foregroundColor(.clear)
-		 Text(String(score))
-		 .font(.system(size: 700, weight: .bold, design: .rounded))
-		 .layoutPriority(1)
-		 }
-		 }
-		 }
-		 .layoutPriority(1)
-		 //.groupBoxStyle(BlackGroupBoxStyle())
-		 }
-		 
-		 .navigationBarTitle("\(match.set.home.count) - \(match.set.guest.count)")
-		 .navigationBarTitleDisplayMode(.inline)
-		 .navigationBarItems(leading: Button(action: {
-		 }) {
-		 Text(date, style: .time)
-		 .foregroundColor(.white)
-		 .font(.body)
-		 }, trailing: Button(action: {
-		 match.singleTapMiddle()
-		 }) {
-		 Image(systemName: "gear")
-		 .foregroundColor(.purple)
-		 .imageScale(.large)
-		 }
-		 )*/
-		
-		
-		
-		
-		//.navigationViewStyle(StackNavigationViewStyle())
-		//.toolbar(content: toolBarItemGroup)
-		
-		
-		var homeSetVM: SeriesScoreVM {
-			SeriesScoreVM(tableSide: match.tableSides.home, currentScore: match.homeSets.count, winningScore: match.set.setType.pointGoal)
-		}
-		
-		var guestSetVM: SeriesScoreVM {
-			SeriesScoreVM(tableSide: match.tableSides.guest, currentScore: match.set.guest.count, winningScore: match.set.setType.pointGoal)
-		}
-		
-		var homeMatchVM: SeriesScoreVM {
-			SeriesScoreVM(tableSide: match.tableSides.home, currentScore: match.homeSets.count, winningScore: match.matchType.pointGoal)
-		}
-		
-		var guestMatchVM: SeriesScoreVM {
-			SeriesScoreVM(tableSide: match.tableSides.guest, currentScore: match.guestSets.count, winningScore: match.matchType.pointGoal)
-		}
-		
-		func toolBarItemGroup() -> some ToolbarContent {
-			ToolbarItemGroup(placement: .navigationBarLeading) {
-				ForEach(0..<ToolbarButton.allCases.count) { index in
-					Button(action: {
-						buttonAction(index)
-					}, label: {
-						switch ToolbarButton.allCases[index] {
-						case .spacer, .spacer1, .spacer2:
-							Spacer()
-						default:
-							Image(systemName: "\(ToolbarButton.allCases[index].rawValue).circle")
-								.resizable()
-								.frame(width: 100, height: 100)
-						}
-					})
-				}
+			.onAppear {
+				match.geoSize = geo.size
 			}
 		}
 		
-		func buttonAction(_ index: Int) {
-			switch ToolbarButton.allCases[index] {
-			case .plus:
-				match.singleTap(.left)
-			case .minus:
-				match.singleTap(.right)
-			case .play:
-				match.doubleTap(.left)
-			case .pause:
-				match.doubleTap(.right)
-			default:
-				break
-			}
-		}
+		
 		
 	}
 	
-	struct ScoreboardView_Previews: PreviewProvider {
-		static var previews: some View {
-			ScoreboardView(viewModel: ScoreboardVM())
+	func makeGroup(_ tableSide: TableSide) -> some View {
+		let id = match.teamID(tableSide)
+		let score = id == .home ? match.game.home : match.game.guest
+		return VStack {
+			Spacer()
+			Text(id.rawValue.uppercased())
+				.font(.system(size: 100, weight: .semibold, design: .monospaced))
+				.padding()
+			Divider()
+			
+			Text(String(score))
+				.font(.system(size: 700, weight: .bold, design: .rounded))
+				.minimumScaleFactor(0.9)
+				.padding([.leading, .trailing])
+			Rectangle()
+				.foregroundColor(Color(UIColor.systemGray6))
+				.frame(height: 200)
+				.layoutPriority(1)
+			
+		}.background(Color.black)
+	}
+	/*
+	 HStack {
+	 switch tableSide {
+	 case .left:
+	 Text(String(score))
+	 .font(.system(size: 700, weight: .bold, design: .rounded))
+	 .layoutPriority(1)
+	 Rectangle()
+	 .foregroundColor(.clear)
+	 case .right:
+	 Rectangle()
+	 .foregroundColor(.clear)
+	 Text(String(score))
+	 .font(.system(size: 700, weight: .bold, design: .rounded))
+	 .layoutPriority(1)
+	 }
+	 }
+	 }
+	 .layoutPriority(1)
+	 //.groupBoxStyle(BlackGroupBoxStyle())
+	 }
+	 
+	 .navigationBarTitle("\(match.set.home.count) - \(match.set.guest.count)")
+	 .navigationBarTitleDisplayMode(.inline)
+	 .navigationBarItems(leading: Button(action: {
+	 }) {
+	 Text(date, style: .time)
+	 .foregroundColor(.white)
+	 .font(.body)
+	 }, trailing: Button(action: {
+	 match.singleTapMiddle()
+	 }) {
+	 Image(systemName: "gear")
+	 .foregroundColor(.purple)
+	 .imageScale(.large)
+	 }
+	 )*/
+	
+	
+	
+	
+	//.navigationViewStyle(StackNavigationViewStyle())
+	//.toolbar(content: toolBarItemGroup)
+	func setScore(_ tableSide: TableSide) -> Int {
+		switch match.teamID(tableSide) {
+		case .home:
+			return match.set.home.count
+		case .guest:
+			return match.set.guest.count
 		}
 	}
 	
-	enum ToolbarButton: String, CaseIterable {
-		case plus
-		case spacer
-		case minus
-		case spacer1
-		case play
-		case spacer2
-		case pause
+	func matchScore(_ tableSide: TableSide) -> Int {
+		switch match.teamID(tableSide) {
+		case .home:
+			return match.homeSets.count
+		case .guest:
+			return match.guestSets.count
+		}
 	}
+
+	var leftSetVM: SeriesScoreVM {
+		SeriesScoreVM(tableSide: .left, currentScore: setScore(.left), winningScore: match.set.setType.pointGoal)
+	}
+	
+	var rightSetVM: SeriesScoreVM {
+		SeriesScoreVM(tableSide: .right, currentScore: setScore(.right), winningScore: match.set.setType.pointGoal)
+	}
+	
+	var leftMatchVM: SeriesScoreVM {
+		SeriesScoreVM(tableSide: .left, currentScore: matchScore(.left), winningScore: match.matchType.pointGoal)
+	}
+	
+	var rightMatchVM: SeriesScoreVM {
+		SeriesScoreVM(tableSide: .right, currentScore: matchScore(.right), winningScore: match.matchType.pointGoal)
+	}
+
+	/*
+	 func toolBarItemGroup() -> some ToolbarContent {
+		 ToolbarItemGroup(placement: .navigationBarLeading) {
+			 ForEach(0..<ToolbarButton.allCases.count) { index in
+				 Button(action: {
+					 buttonAction(index)
+				 }, label: {
+					 switch ToolbarButton.allCases[index] {
+					 case .spacer, .spacer1, .spacer2:
+						 Spacer()
+					 default:
+						 Image(systemName: "\(ToolbarButton.allCases[index].rawValue).circle")
+							 .resizable()
+							 .frame(width: 100, height: 100)
+					 }
+				 })
+			 }
+		 }
+	 */
+
+	
+	
+	func buttonAction(_ index: Int) {
+		switch ToolbarButton.allCases[index] {
+		case .settings:
+			match.singleTapMiddle()
+		case .plus:
+			match.singleTap(.left)
+		case .minus:
+			match.singleTap(.right)
+		case .play:
+			match.doubleTap(.left)
+		case .pause:
+			match.doubleTap(.right)
+		default:
+			break
+		}
+	}
+	
+}
+
+struct ScoreboardView_Previews: PreviewProvider {
+	static var previews: some View {
+		ScoreboardView(viewModel: ScoreboardVM())
+	}
+}
+
+enum ToolbarButton: String, CaseIterable {
+	case settings = "gear"
+	case plus
+	case minus
+	case play
+	case pause
+}
