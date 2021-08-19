@@ -10,7 +10,22 @@ import SwiftUI
 struct TeamsView: View {
 	
 	@ObservedObject var match: Match
-
+	
+	var body: some View {
+		HStack {
+			teamView(leftTeam, tableSide: .left)
+			Spacer()
+			Rectangle()
+				.foregroundColor(.clear)
+				.frame(width: match.middlePanelWidth)
+				.layoutPriority(-1)
+			Spacer()
+			teamView(rightTeam, tableSide: .right)
+		}
+		.fixedSize(horizontal: false, vertical: false)
+		.padding()
+	}
+	
 	
 	var leftTeam: Team {
 		switch match.teamID(.left) {
@@ -30,46 +45,45 @@ struct TeamsView: View {
 		}
 	}
 	
-	var teams: [Team] {
-		[leftTeam, rightTeam]
-	}
 	
-    var body: some View {
-			HStack {
-				teamView(leftTeam, tableSide: .left)
-				Spacer()
-				Rectangle()
-					.foregroundColor(.clear)
-					.frame(width: match.middlePanelWidth)
-				Spacer()
-				teamView(rightTeam, tableSide: .right)
-			}
-			.padding()
-    }
-		
 	func teamView(_ team: Team, tableSide: TableSide) -> some View {
 		GroupBox {
 			Text(team.id.rawValue.uppercased())
 				.font(.system(size: 100, weight: .semibold, design: .monospaced))
+				.lineLimit(1)
 				.minimumScaleFactor(0.25)
 				.padding()
 				.frame(maxWidth: .infinity)
+				.shadow(color: .white, radius: 2.5, x: 0, y: 0)
 			Divider()
 			HStack {
-				if tableSide == .right { Spacer() }
-				GroupBox {
-					if match.status != .pregame {
-						Button(team.user?.username ?? "Unknown Player", action: addUser)
-							.padding()
-					} else {
-						Button("Add Player", action: addUser)
-							.foregroundColor(Color(UIColor.systemTeal))
-							.padding()
-					}
+				switch tableSide {
+				case .left:
+					makePlayerBox(team)
+					Spacer()
+					makeStepper(tableSide)
+				case .right:
+					makeStepper(tableSide)
+					Spacer()
+					makePlayerBox(team)
 				}
-				if tableSide == .left { Spacer() }
 			}
 		}
+	}
+	
+	func makePlayerBox(_ team: Team) -> some View {
+		GroupBox {
+			Button(action: addUser, label: { Label("Player", systemImage: "plus.circle") })
+				.foregroundColor(Color(UIColor.systemTeal))
+				.padding()
+				.font(.title)
+		}
+	}
+	
+	
+	func makeStepper(_ tableSide: TableSide) -> some View {
+		Stepper("", onIncrement: { match.singleTap(tableSide) }, onDecrement: { match.doubleTap(tableSide) })
+			.labelsHidden()
 	}
 	
 	func addUser() {
@@ -78,7 +92,7 @@ struct TeamsView: View {
 }
 
 struct TeamsView_Previews: PreviewProvider {
-    static var previews: some View {
-			TeamsView(match: Match())
-    }
+	static var previews: some View {
+		TeamsView(match: Match())
+	}
 }

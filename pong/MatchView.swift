@@ -11,17 +11,22 @@ struct MatchView: View {
 	
 	@ObservedObject var match: Match
 	
-    var body: some View {
-			HStack(spacing: 20) {
-				SeriesScoreView(viewModel: leftMatchVM)
-				Divider()
-					Text("S E T S")
-						.font(.system(size: 50, weight: .ultraLight, design: .rounded))
-						.frame(width: match.middlePanelWidth)
-				Divider()
-				SeriesScoreView(viewModel: rightMatchVM)
-			}
-    }
+	var body: some View {
+		HStack {
+			SeriesScoreView(viewModel: leftMatchVM)
+			Divider()
+				.frame(minHeight: 15, idealHeight: 70, maxHeight: 80)
+			Text("S E T S")
+				.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+				.minimumScaleFactor(0.25)
+				.frame(width: match.middlePanelWidth)
+				.shadow(color: .white, radius: 2, x: 0, y: 0)
+			Divider()
+				.frame(minHeight: 15, idealHeight: 70, maxHeight: 80)
+			
+			SeriesScoreView(viewModel: rightMatchVM)
+		}
+	}
 	
 	func matchScore(_ tableSide: TableSide) -> Int {
 		switch match.teamID(tableSide) {
@@ -39,28 +44,10 @@ struct MatchView: View {
 	var rightMatchVM: SeriesScoreVM {
 		SeriesScoreVM(tableSide: .right, currentScore: matchScore(.right), winningScore: match.matchType.pointGoal)
 	}
-	
-	var leftScore: Int {
-		switch match.tableSides.home {
-		case .left:
-			return match.homeSets.count
-		case .right:
-			return match.guestSets.count
-		}
-	}
-	
-	var rightScore: Int {
-		switch match.tableSides.guest {
-		case .left:
-			return match.homeSets.count
-		case .right:
-			return match.guestSets.count
-		}
-	}
 }
 
 struct MatchView_Previews: PreviewProvider {
-    static var previews: some View {
-        MatchView(match: Match())
-    }
+	static var previews: some View {
+		MatchView(match: Match())
+	}
 }

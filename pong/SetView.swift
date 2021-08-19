@@ -11,20 +11,22 @@ struct SetView: View {
 	
 	@ObservedObject var match: Match
 	
-		var body: some View {
-			HStack(spacing: 20) {
-				SeriesScoreView(viewModel: leftSetVM)
-				Divider()
-					Text("G A M E S")
-						.font(.system(size: 50, weight: .ultraLight, design: .rounded))
-						.frame(width: match.middlePanelWidth)
-				Divider()
-
-				SeriesScoreView(viewModel: rightSetVM)
-			}
-			.frame(maxWidth: .infinity, maxHeight: .infinity)
-			.fixedSize(horizontal: false, vertical: false)
+	var body: some View {
+		HStack {
+			SeriesScoreView(viewModel: leftSetVM)
+			Divider()
+				.frame(minHeight: 15, idealHeight: 70, maxHeight: 80)
+			Text("G A M E S")
+				.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+				.minimumScaleFactor(0.25)
+				.frame(width: match.middlePanelWidth)
+				.shadow(color: .white, radius: 2, x: 0, y: 0)
+			
+			Divider()
+				.frame(minHeight: 15, idealHeight: 70, maxHeight: 80)
+			SeriesScoreView(viewModel: rightSetVM)
 		}
+	}
 	
 	var leftSetVM: SeriesScoreVM {
 		SeriesScoreVM(tableSide: .left, currentScore: setScore(.left), winningScore: match.set.setType.pointGoal)
@@ -45,7 +47,7 @@ struct SetView: View {
 }
 
 struct SetView_Previews: PreviewProvider {
-    static var previews: some View {
-        SetView(match: Match())
-    }
+	static var previews: some View {
+		SetView(match: Match())
+	}
 }

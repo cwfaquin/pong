@@ -11,26 +11,55 @@ struct PossessionArrow: View {
 	
 	@ObservedObject var match: Match
 	
-    var body: some View {
+	var body: some View {
+		
+		HStack {
+			Image(systemName: "arrowtriangle.left\(imageSuffix(.left))")
+				.resizable()
+				.foregroundColor(imageColor(.left))
+				.scaledToFit()
+				.shadow(color: .green, radius: shadowRadius(.left), x: 0, y: 0)
+				.padding()
 			
-			HStack {
-				Image(systemName: "arrowtriangle.left\(imageSuffix(.left))")
-					.resizable()
-					.foregroundColor(imageColor(.left))
-					.padding()
-					.scaledToFit()
-					.shadow(color: .green, radius: shadowRadius(.left), x: 0, y: 0)
-				Text("S E R V I C E")
-					.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+				Text(text)
+					.font(.system(size: 80, weight: .thin, design: .rounded))
+					.minimumScaleFactor(0.5)
+					.foregroundColor(textColor)
+					.shadow(color: .white, radius: 3, x: 0, y: 0)
+					.lineLimit(1)
 					.frame(width: match.middlePanelWidth)
-				Image(systemName: "arrowtriangle.right\(imageSuffix(.right))")
-					.resizable()
-					.foregroundColor(imageColor(.right))
 					.padding()
-					.scaledToFit()
-					.shadow(color: .green, radius: shadowRadius(.right), x: 0, y: 0)
-			}.frame(width: match.geoSize.width/3)
-    }
+			
+			Image(systemName: "arrowtriangle.right\(imageSuffix(.right))")
+				.resizable()
+				.foregroundColor(imageColor(.right))
+				.scaledToFit()
+				.shadow(color: .green, radius: shadowRadius(.right), x: 0, y: 0)
+				.padding()
+		}
+		.frame(width: match.middlePanelWidth * 3)
+		.padding()
+	}
+	
+	var text: String {
+		switch match.status {
+		case .ping:
+			return " P I N G "
+		default:
+			return " S E R V I C E "
+		}
+	}
+	
+	var textColor: Color {
+		switch match.status {
+		case .ping:
+			return .green
+		default:
+			return .white
+		}
+	}
+	
+	
 	
 	func imageSuffix(_ side: TableSide) -> String {
 		switch match.status {
@@ -44,7 +73,7 @@ struct PossessionArrow: View {
 	func imageColor(_ side: TableSide) -> Color {
 		switch match.status {
 		case .ping, .pregame, .guestChooseSide:
-			return .green
+			return .gray
 		default:
 			return side == serviceSide ? .green : .gray
 		}
@@ -70,7 +99,7 @@ struct PossessionArrow: View {
 }
 
 struct PossessionArrow_Previews: PreviewProvider {
-    static var previews: some View {
-			PossessionArrow(match: Match())
-    }
+	static var previews: some View {
+		PossessionArrow(match: Match())
+	}
 }

@@ -17,7 +17,6 @@
 		97302CBF26C8223E002E70C2 /* ToastOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */; };
 		9752B55426C961A000F6B5A2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55326C961A000F6B5A2 /* SettingsView.swift */; };
 		9752B55626C967B700F6B5A2 /* TeamBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55526C967B600F6B5A2 /* TeamBox.swift */; };
-		9752B55826C976D300F6B5A2 /* MiddlePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55726C976D300F6B5A2 /* MiddlePanel.swift */; };
 		9752B55A26CAA3F500F6B5A2 /* PossessionArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */; };
 		9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */; };
 		9752B56026CC293900F6B5A2 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55F26CC293900F6B5A2 /* SettingsVM.swift */; };
@@ -34,7 +33,6 @@
 		97C612EE26BF88C200C7879E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612ED26BF88C200C7879E /* User.swift */; };
 		97C612F226BF99EE00C7879E /* MatchSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612F126BF99EE00C7879E /* MatchSettings.swift */; };
 		97C612F426C0306100C7879E /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612F326C0306100C7879E /* Match.swift */; };
-		97C612FC26C0435900C7879E /* TeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612FB26C0435900C7879E /* TeamView.swift */; };
 		97C6130026C0471900C7879E /* SeriesScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612FF26C0471900C7879E /* SeriesScoreView.swift */; };
 		97C6130426C0795500C7879E /* SeriesScoreVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C6130326C0795500C7879E /* SeriesScoreVM.swift */; };
 /* End PBXBuildFile section */
@@ -64,7 +62,6 @@
 		97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastOverlayView.swift; sourceTree = "<group>"; };
 		9752B55326C961A000F6B5A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9752B55526C967B600F6B5A2 /* TeamBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamBox.swift; sourceTree = "<group>"; };
-		9752B55726C976D300F6B5A2 /* MiddlePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddlePanel.swift; sourceTree = "<group>"; };
 		9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PossessionArrow.swift; sourceTree = "<group>"; };
 		9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackGroupBoxStyle.swift; sourceTree = "<group>"; };
 		9752B55F26CC293900F6B5A2 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
@@ -83,7 +80,6 @@
 		97C612ED26BF88C200C7879E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		97C612F126BF99EE00C7879E /* MatchSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSettings.swift; sourceTree = "<group>"; };
 		97C612F326C0306100C7879E /* Match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
-		97C612FB26C0435900C7879E /* TeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamView.swift; sourceTree = "<group>"; };
 		97C612FF26C0471900C7879E /* SeriesScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesScoreView.swift; sourceTree = "<group>"; };
 		97C6130326C0795500C7879E /* SeriesScoreVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesScoreVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,16 +96,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		97302CB326C2C805002E70C2 /* ComponentViews */ = {
-			isa = PBXGroup;
-			children = (
-				97C612FB26C0435900C7879E /* TeamView.swift */,
-				97C612FF26C0471900C7879E /* SeriesScoreView.swift */,
-				97C6130326C0795500C7879E /* SeriesScoreVM.swift */,
-			);
-			path = ComponentViews;
-			sourceTree = "<group>";
-		};
 		97C612BE26BF458300C7879E = {
 			isa = PBXGroup;
 			children = (
@@ -136,12 +122,12 @@
 				97C612DA26BF59D300C7879E /* ScoreboardView.swift */,
 				97302CB126C2C6C0002E70C2 /* TeamsView.swift */,
 				97302CB626C32995002E70C2 /* UsersView.swift */,
+				97C612FF26C0471900C7879E /* SeriesScoreView.swift */,
+				97C6130326C0795500C7879E /* SeriesScoreVM.swift */,
 				9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */,
-				97302CB326C2C805002E70C2 /* ComponentViews */,
 				97302CAB26C2AFF0002E70C2 /* SetView.swift */,
 				97302CAD26C2AFF7002E70C2 /* MatchView.swift */,
 				9752B55526C967B600F6B5A2 /* TeamBox.swift */,
-				9752B55726C976D300F6B5A2 /* MiddlePanel.swift */,
 				97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */,
 				9752B55326C961A000F6B5A2 /* SettingsView.swift */,
 				9752B55F26CC293900F6B5A2 /* SettingsVM.swift */,
@@ -279,13 +265,11 @@
 				97C6130026C0471900C7879E /* SeriesScoreView.swift in Sources */,
 				97302CB726C32995002E70C2 /* UsersView.swift in Sources */,
 				97C612DB26BF59D300C7879E /* ScoreboardView.swift in Sources */,
-				9752B55826C976D300F6B5A2 /* MiddlePanel.swift in Sources */,
 				97302CBD26C819A4002E70C2 /* TableSides.swift in Sources */,
 				97C612F226BF99EE00C7879E /* MatchSettings.swift in Sources */,
 				9752B55626C967B700F6B5A2 /* TeamBox.swift in Sources */,
 				97302CB226C2C6C0002E70C2 /* TeamsView.swift in Sources */,
 				97C612E026BF5F3D00C7879E /* Team.swift in Sources */,
-				97C612FC26C0435900C7879E /* TeamView.swift in Sources */,
 				97C612CB26BF458300C7879E /* MainApp.swift in Sources */,
 				97302CBF26C8223E002E70C2 /* ToastOverlayView.swift in Sources */,
 				97C612F426C0306100C7879E /* Match.swift in Sources */,

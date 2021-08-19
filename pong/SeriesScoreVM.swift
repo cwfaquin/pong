@@ -45,8 +45,6 @@ class SeriesScoreVM: ObservableObject {
 		return array
 			.compactMap { $0 > winningScore ? .clear : Color(.cyan) }
 	}
-
-
 }
 
 
