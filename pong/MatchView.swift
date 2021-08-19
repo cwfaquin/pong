@@ -13,11 +13,32 @@ struct MatchView: View {
 	
     var body: some View {
 			HStack(spacing: 20) {
-				SeriesScoreView(viewModel: SeriesScoreVM(tableSide: .left, currentScore: leftScore, winningScore: match.matchType.pointGoal))
-				Text(" SETS ")
-				SeriesScoreView(viewModel: SeriesScoreVM(tableSide: .right, currentScore: rightScore, winningScore: match.matchType.pointGoal))
+				SeriesScoreView(viewModel: leftMatchVM)
+				Divider()
+					Text("S E T S")
+						.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+						.frame(width: match.middlePanelWidth)
+				Divider()
+				SeriesScoreView(viewModel: rightMatchVM)
 			}
     }
+	
+	func matchScore(_ tableSide: TableSide) -> Int {
+		switch match.teamID(tableSide) {
+		case .home:
+			return match.homeSets.count
+		case .guest:
+			return match.guestSets.count
+		}
+	}
+	
+	var leftMatchVM: SeriesScoreVM {
+		SeriesScoreVM(tableSide: .left, currentScore: matchScore(.left), winningScore: match.matchType.pointGoal)
+	}
+	
+	var rightMatchVM: SeriesScoreVM {
+		SeriesScoreVM(tableSide: .right, currentScore: matchScore(.right), winningScore: match.matchType.pointGoal)
+	}
 	
 	var leftScore: Int {
 		switch match.tableSides.home {

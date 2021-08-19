@@ -13,28 +13,32 @@ struct SetView: View {
 	
 		var body: some View {
 			HStack(spacing: 20) {
-				SeriesScoreView(viewModel: SeriesScoreVM(tableSide: match.tableSides.home, currentScore: leftScore, winningScore: match.set.setType.pointGoal))
-				Text("GAMES")
-				SeriesScoreView(viewModel: SeriesScoreVM(tableSide: match.tableSides.guest, currentScore: rightScore, winningScore: match.set.setType.pointGoal))
+				SeriesScoreView(viewModel: leftSetVM)
+				Divider()
+					Text("G A M E S")
+						.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+						.frame(width: match.middlePanelWidth)
+				Divider()
+
+				SeriesScoreView(viewModel: rightSetVM)
 			}
 			.frame(maxWidth: .infinity, maxHeight: .infinity)
 			.fixedSize(horizontal: false, vertical: false)
 		}
 	
-	var leftScore: Int {
-		switch match.tableSides.home {
-		case .left:
-			return match.set.home.count
-		case .right:
-			return match.set.guest.count
-		}
+	var leftSetVM: SeriesScoreVM {
+		SeriesScoreVM(tableSide: .left, currentScore: setScore(.left), winningScore: match.set.setType.pointGoal)
 	}
 	
-	var rightScore: Int {
-		switch match.tableSides.guest {
-		case .left:
+	var rightSetVM: SeriesScoreVM {
+		SeriesScoreVM(tableSide: .right, currentScore: setScore(.right), winningScore: match.set.setType.pointGoal)
+	}
+	
+	func setScore(_ tableSide: TableSide) -> Int {
+		switch match.teamID(tableSide) {
+		case .home:
 			return match.set.home.count
-		case .right:
+		case .guest:
 			return match.set.guest.count
 		}
 	}

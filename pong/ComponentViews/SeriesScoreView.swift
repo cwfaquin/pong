@@ -17,11 +17,11 @@ struct SeriesScoreView: View {
 					Image(systemName: viewModel.imageNames[index])
 						.resizable()
 						.foregroundColor(viewModel.foregoundColors[index])
-						.frame(minWidth: 10, idealWidth: 50, maxWidth: 60, minHeight: 10, idealHeight: 50, maxHeight: 60)
+						.frame(minWidth: 20, idealWidth: 70, maxWidth: 80, minHeight: 20, idealHeight: 70, maxHeight: 80)
 						.scaledToFit()
 						.padding()
 				}
-		}
+		}.padding()
 			
 		
 	}

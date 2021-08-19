@@ -17,10 +17,8 @@ struct MiddlePanel: View {
 						.frame(width: geo.size.width, height: geo.size.height * 0.2)
 					Text("SET")
 						.frame(width: geo.size.width, height: geo.size.height * 0.1)
-				//		.alignmentGuide(VerticalAlignment.center) { _ in 0 }
 					Text("MATCH")
 						.frame(width: geo.size.width, height: geo.size.height * 0.1)
-					//	.alignmentGuide(VerticalAlignment.center) { _ in 0 }
 					Rectangle()
 						.frame(width: geo.size.width, height: geo.size.height * 0.5)
 					}

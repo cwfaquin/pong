@@ -25,6 +25,100 @@ struct ScoreboardView: View {
 	var body: some View {
 		
 		return GeometryReader { geo in
+			LazyVStack {
+				HStack {
+					ForEach(0..<ToolbarButton.allCases.count) { index in
+							Button(action: {
+								buttonAction(index)
+							}, label: {
+								Image(systemName: "\(ToolbarButton.allCases[index].rawValue)")
+										.resizable()
+										.foregroundColor(.purple)
+										.scaledToFit()
+										.padding()
+							}).padding()
+						}
+				}.foregroundColor(Color(UIColor.systemGray6))
+					.frame(height: 100)
+				
+					TeamsView(match: match)
+					MatchView(match: match)
+					SetView(match: match)
+					HStack {
+						Spacer()
+						Text(String(gameScore(.left)))
+							.font(.system(size: 300, weight: .bold, design: .rounded))
+							.minimumScaleFactor(0.25)
+							.lineLimit(1)
+							.scaledToFill()
+						Spacer()
+						GroupBox {
+							Text("Match Status = \(String(describing: match.status)), Game Status = \(String(describing: match.game.status))")
+								.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+								.foregroundColor(.green)
+								.padding()
+						}.frame(width: match.middlePanelWidth * 1.5)
+						Spacer()
+						Text(String(gameScore(.right)))
+							.font(.system(size: 300, weight: .bold, design: .rounded))
+							.lineLimit(1)
+							.minimumScaleFactor(0.25)
+							.scaledToFill()
+						Spacer()
+					}
+				Spacer()
+				}
+				/*ZStack {
+					
+					HStack {
+						makeGroup(.left)
+						Rectangle()
+							.foregroundColor(.black)
+							.frame(width: geo.size.width/9)
+						makeGroup(.right)
+					}
+					VStack {
+						PossessionArrow(match: match)
+							.frame(width: geo.size.width/7, height: geo.size.height/8)
+						
+						HStack {
+							SeriesScoreView(viewModel: leftMatchVM)
+							Text("M A T C H")
+								.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+								.frame(width: geo.size.width/9)
+							SeriesScoreView(viewModel: rightMatchVM)
+							
+						}.frame(height: geo.size.height/8)
+						
+						HStack {
+							SeriesScoreView(viewModel: leftSetVM)
+							Text("S E T")
+								.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+								.frame(width: geo.size.width/9)
+							SeriesScoreView(viewModel: rightSetVM)
+						}.frame(height: geo.size.height/8)
+						
+						Spacer(minLength: geo.size.height * 2/8)
+						GroupBox {
+							Text("Match Status = \(String(describing: match.status)), Game Status = \(String(describing: match.game.status))")
+								.font(.system(size: 50, weight: .ultraLight, design: .rounded))
+								.foregroundColor(.green)
+								.padding()
+						}
+						
+						Spacer(minLength: geo.size.height/8)
+					}
+				}
+				
+			}*/
+			
+			.onAppear {
+				match.geoSize = geo.size
+			}
+		}
+	}
+		/*
+		return GeometryReader { geo in
 			VStack {
 				HStack {
 					ForEach(0..<ToolbarButton.allCases.count) { index in
@@ -91,9 +185,11 @@ struct ScoreboardView: View {
 				match.geoSize = geo.size
 			}
 		}
-		
-		
-		
+	}*/
+	
+	func gameScore(_ tableSide: TableSide) -> Int {
+		let id = match.teamID(tableSide)
+		return id == .home ? match.game.home : match.game.guest
 	}
 	
 	func makeGroup(_ tableSide: TableSide) -> some View {
@@ -108,7 +204,7 @@ struct ScoreboardView: View {
 			
 			Text(String(score))
 				.font(.system(size: 700, weight: .bold, design: .rounded))
-				.minimumScaleFactor(0.9)
+				.minimumScaleFactor(0.5)
 				.padding([.leading, .trailing])
 			Rectangle()
 				.foregroundColor(Color(UIColor.systemGray6))
@@ -228,8 +324,6 @@ struct ScoreboardView: View {
 			match.doubleTap(.left)
 		case .pause:
 			match.doubleTap(.right)
-		default:
-			break
 		}
 	}
 	
