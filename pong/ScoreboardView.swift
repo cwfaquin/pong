@@ -18,9 +18,12 @@ struct ScoreboardView: View {
 		ZStack {
 			GeometryReader { geo in
 				VStack {
-					TeamsView(match: match)
-					MatchView(match: match)
-					SetView(match: match)
+					VStack {
+						TeamsView(match: match)
+						MatchView(match: match)
+						SetView(match: match)
+					}
+					
 					HStack {
 						makeScoreView(.left)
 							.frame(width: geo.size.width/3)
@@ -28,7 +31,8 @@ struct ScoreboardView: View {
 						makeScoreView(.right)
 							.frame(width: geo.size.width/3)
 					}
-					Spacer()
+
+					//Spacer()
 				}
 				.onAppear {	match.geoSize = geo.size }
 			}
