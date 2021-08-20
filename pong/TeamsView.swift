@@ -53,7 +53,6 @@ struct TeamsView: View {
 				.lineLimit(1)
 				.minimumScaleFactor(0.25)
 				.padding()
-				.frame(maxWidth: .infinity)
 				.shadow(color: .white, radius: 2.5, x: 0, y: 0)
 			Divider()
 			HStack {
@@ -69,6 +68,14 @@ struct TeamsView: View {
 				}
 			}
 		}
+		.cornerRadius(10)
+		.padding(5)
+		.groupBoxStyle(BlackGroupBoxStyle(color: .black))
+		.overlay(
+				RoundedRectangle(cornerRadius: 10)
+					.stroke(borderColor(tableSide), lineWidth: 2)
+					.shadow(color: borderColor(tableSide), radius: shadowRadius(tableSide), x: 0, y: 0)
+		)
 	}
 	
 	func makePlayerBox(_ team: Team) -> some View {
@@ -86,8 +93,34 @@ struct TeamsView: View {
 			.labelsHidden()
 	}
 	
+	func shadowRadius(_ side: TableSide) -> CGFloat {
+		switch match.status {
+		case .ping, .pregame:
+			return 0
+		case .guestChooseSide:
+			return side == match.tableSides.guest ? 3 : 0
+		default:
+			return side == match.serviceSide ? 3 : 0
+		}
+	}
+	
+	func borderColor(_ side: TableSide) -> Color {
+		let gray = Color(UIColor.secondarySystemFill)
+		switch match.status {
+		case .ping, .pregame:
+			return gray
+		case .guestChooseSide:
+			return side == match.tableSides.guest ? .green : gray
+		default:
+			return side == match.serviceSide ? .green : gray
+		}
+	}
+	
 	func addUser() {
-		
+		let random = Int.random(in: 0..<ScoreboardVM.SoundType.allCases.count)
+		let sound = ScoreboardVM.SoundType.allCases[random]
+		print(sound.rawValue)
+		ScoreboardVM.playSound(sound)
 	}
 }
 

@@ -12,6 +12,7 @@ struct ScoreboardView: View {
 	@EnvironmentObject var settings: MatchSettings
 	@EnvironmentObject var match: Match
 	@ObservedObject var viewModel: ScoreboardVM
+	@State var showSettings: Bool = false
 	
 	var body: some View {
 		
@@ -31,8 +32,6 @@ struct ScoreboardView: View {
 						makeScoreView(.right)
 							.frame(width: geo.size.width/3)
 					}
-
-					//Spacer()
 				}
 				.onAppear {	match.geoSize = geo.size }
 			}
@@ -40,7 +39,7 @@ struct ScoreboardView: View {
 				Rectangle()
 					.foregroundColor(.clear)
 					.frame(width: 0, height: match.middlePanelWidth/3)
-				Button(action: match.singleTapMiddle) {
+				Button(action: settingsButtonTapped) {
 					Image(systemName: "gear")
 						.resizable()
 						.foregroundColor(.pink)
@@ -56,7 +55,21 @@ struct ScoreboardView: View {
 				makeStatusView(statusText)
 					.padding()
 			}
-		}.background(Color.black)
+		}
+		.background(Color.black)
+		.popover(isPresented: $showSettings) {
+			SettingsView(
+				viewModel: SettingsVM(),
+					gameType: $match.game.gameType,
+					setType: $match.set.setType,
+					matchType: $match.matchType
+			)
+		}
+	}
+	
+	func settingsButtonTapped() {
+		showSettings = !showSettings
+		
 	}
 	
 	func makeStatusView(_ text: String) -> some View {
@@ -65,7 +78,9 @@ struct ScoreboardView: View {
 				.font(.system(size: 50, weight: .regular, design: .monospaced))
 				.foregroundColor(.green)
 				.shadow(color: .green, radius: 1, x: 0, y: 0)
+				.frame(maxWidth: .infinity)
 				.padding()
+
 		}
 		.frame(width: match.geoSize.width/2.25)
 		.groupBoxStyle(BlackGroupBoxStyle(color: .black.opacity(0.9)))

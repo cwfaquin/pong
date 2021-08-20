@@ -10,7 +10,16 @@ import flic2lib
 
 final class SettingsVM: ObservableObject {
 	
+	@Published var gameType: GameType = .long
+	@Published var setType: SetType = .bestOfThree
+	@Published var matchType: MatchType = .singleSet
 	@Published var isScanning: Bool = false
+	
+	init(gameType: GameType = .long, setType: SetType = .bestOfThree, matchType: MatchType = .singleSet) {
+		self.gameType = gameType
+		self.setType = setType
+		self.matchType = matchType
+	}
 
 	func scanForButtons() {
 		FLICManager.shared()?.scanForButtons(stateChangeHandler: { statusEvent in
@@ -58,4 +67,17 @@ enum FlicName: String, CaseIterable {
 	case home
 	case tableLeft
 	case tableRight
+	
+	var singleSound: ScoreboardVM.SoundType {
+		switch self {
+		case .home:
+			return .singleTapMiddle
+		default:
+			return .singleTapSide
+		}
+	}
+	
+	var doubleSound: ScoreboardVM.SoundType {
+		.doubleTap
+	}
 }

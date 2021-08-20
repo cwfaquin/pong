@@ -20,6 +20,11 @@
 		9752B55A26CAA3F500F6B5A2 /* PossessionArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */; };
 		9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */; };
 		9752B56026CC293900F6B5A2 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55F26CC293900F6B5A2 /* SettingsVM.swift */; };
+		9752B56326D0479A00F6B5A2 /* button1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56226D0479A00F6B5A2 /* button1.mp3 */; };
+		9752B56526D047A200F6B5A2 /* button2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56426D047A200F6B5A2 /* button2.mp3 */; };
+		9752B56726D047AC00F6B5A2 /* button3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56626D047AC00F6B5A2 /* button3.mp3 */; };
+		9752B56926D047B200F6B5A2 /* button4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56826D047B200F6B5A2 /* button4.mp3 */; };
+		9752B56B26D047B800F6B5A2 /* button5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56A26D047B800F6B5A2 /* button5.mp3 */; };
 		97C612CB26BF458300C7879E /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612CA26BF458300C7879E /* MainApp.swift */; };
 		97C612CF26BF458400C7879E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612CE26BF458400C7879E /* Assets.xcassets */; };
 		97C612D226BF458400C7879E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612D126BF458400C7879E /* Preview Assets.xcassets */; };
@@ -65,6 +70,11 @@
 		9752B55926CAA3F500F6B5A2 /* PossessionArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PossessionArrow.swift; sourceTree = "<group>"; };
 		9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackGroupBoxStyle.swift; sourceTree = "<group>"; };
 		9752B55F26CC293900F6B5A2 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
+		9752B56226D0479A00F6B5A2 /* button1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button1.mp3; path = ../../../Downloads/button1.mp3; sourceTree = "<group>"; };
+		9752B56426D047A200F6B5A2 /* button2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button2.mp3; path = ../../../Downloads/button2.mp3; sourceTree = "<group>"; };
+		9752B56626D047AC00F6B5A2 /* button3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button3.mp3; path = ../../../Downloads/button3.mp3; sourceTree = "<group>"; };
+		9752B56826D047B200F6B5A2 /* button4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button4.mp3; path = ../../../Downloads/button4.mp3; sourceTree = "<group>"; };
+		9752B56A26D047B800F6B5A2 /* button5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button5.mp3; path = ../../../Downloads/button5.mp3; sourceTree = "<group>"; };
 		97C612C726BF458300C7879E /* pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97C612CA26BF458300C7879E /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		97C612CE26BF458400C7879E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -96,6 +106,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9752B56126D0478C00F6B5A2 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				9752B56226D0479A00F6B5A2 /* button1.mp3 */,
+				9752B56426D047A200F6B5A2 /* button2.mp3 */,
+				9752B56626D047AC00F6B5A2 /* button3.mp3 */,
+				9752B56826D047B200F6B5A2 /* button4.mp3 */,
+				9752B56A26D047B800F6B5A2 /* button5.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		97C612BE26BF458300C7879E = {
 			isa = PBXGroup;
 			children = (
@@ -132,6 +154,7 @@
 				9752B55326C961A000F6B5A2 /* SettingsView.swift */,
 				9752B55F26CC293900F6B5A2 /* SettingsVM.swift */,
 				9752B55B26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift */,
+				9752B56126D0478C00F6B5A2 /* Sounds */,
 				97C612E826BF838900C7879E /* Utility */,
 				97C612DE26BF5F2200C7879E /* Models */,
 				97C612CE26BF458400C7879E /* Assets.xcassets */,
@@ -238,7 +261,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9752B56B26D047B800F6B5A2 /* button5.mp3 in Resources */,
 				97C612D226BF458400C7879E /* Preview Assets.xcassets in Resources */,
+				9752B56926D047B200F6B5A2 /* button4.mp3 in Resources */,
+				9752B56726D047AC00F6B5A2 /* button3.mp3 in Resources */,
+				9752B56526D047A200F6B5A2 /* button2.mp3 in Resources */,
+				9752B56326D0479A00F6B5A2 /* button1.mp3 in Resources */,
 				97C612CF26BF458400C7879E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -410,11 +438,12 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = pong/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cube.pong;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -436,11 +465,12 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = pong/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cube.pong;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

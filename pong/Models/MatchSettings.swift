@@ -11,13 +11,15 @@ final class MatchSettings: ObservableObject {
 	@Published var gameType: GameType = .long
 	@Published var setType: SetType = .bestOfThree
 	@Published var matchType: MatchType = .singleSet
+	
+	
 }
 
 protocol PointGoal {
 	var pointGoal: Int { get }
 }
 
-enum GameType: CaseIterable, PointGoal {
+enum GameType: Int, CaseIterable, PointGoal {
 	case short
 	case long
 	
@@ -32,9 +34,11 @@ enum GameType: CaseIterable, PointGoal {
 	
 }
 
-enum SetType: CaseIterable, PointGoal {
+enum SetType: Int, CaseIterable, PointGoal {
 	case singleGame
 	case bestOfThree
+	case bestOfFive
+	case bestOfSeven
 	
 	var pointGoal: Int {
 		switch self {
@@ -42,11 +46,28 @@ enum SetType: CaseIterable, PointGoal {
 			return 1
 		case .bestOfThree:
 			return 2
+		case .bestOfFive:
+			return 3
+		case .bestOfSeven:
+			return 4
+		}
+	}
+	
+	var bestOf: Int {
+		switch self {
+		case .singleGame:
+			return 1
+		case .bestOfThree:
+			return 3
+		case .bestOfFive:
+			return 5
+		case .bestOfSeven:
+			return 7
 		}
 	}
 }
 
-enum MatchType: CaseIterable, PointGoal {
+enum MatchType: Int, CaseIterable, PointGoal {
 	case singleSet
 	case bestOfThree
 	case bestOfFive
@@ -62,6 +83,19 @@ enum MatchType: CaseIterable, PointGoal {
 			return 3
 		case .bestOfSeven:
 			return 4
+		}
+	}
+	
+	var bestOf: Int {
+		switch self {
+		case .singleSet:
+			return 1
+		case .bestOfThree:
+			return 3
+		case .bestOfFive:
+			return 5
+		case .bestOfSeven:
+			return 7
 		}
 	}
 }

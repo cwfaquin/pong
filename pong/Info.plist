@@ -2,12 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Pong uses Calendar to send matches.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Pong uses Contacts to make shit easy.</string>
-	<key>UIUserInterfaceStyle</key>
-	<string>Dark</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -30,6 +24,10 @@
 	<string>Pong requires bluetooth for Flic buttons.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Pong requires bluetooth for Flic buttons.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Pong uses Calendar to send matches.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Pong uses Contacts to make shit easy.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -60,5 +58,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Dark</string>
 </dict>
 </plist>

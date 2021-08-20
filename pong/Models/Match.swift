@@ -201,6 +201,15 @@ final class Match: ObservableObject {
 		homeSets.count == matchType.pointGoal ||
 			guestSets.count == matchType.pointGoal
 	}
+	
+	var serviceSide: TableSide {
+		switch game.service {
+		case .home:
+			return tableSides.home
+		case .guest:
+			return tableSides.guest
+		}
+	}
 }
 
 extension Match {

@@ -59,14 +59,12 @@ struct PossessionArrow: View {
 		}
 	}
 	
-	
-	
 	func imageSuffix(_ side: TableSide) -> String {
 		switch match.status {
 		case .ping, .pregame, .guestChooseSide:
 			return ""
 		default:
-			return side == serviceSide ? ".fill" : ""
+			return side == match.serviceSide ? ".fill" : ""
 		}
 	}
 	
@@ -75,7 +73,7 @@ struct PossessionArrow: View {
 		case .ping, .pregame, .guestChooseSide:
 			return .gray
 		default:
-			return side == serviceSide ? .green : .gray
+			return side == match.serviceSide ? .green : .gray
 		}
 	}
 	
@@ -84,16 +82,7 @@ struct PossessionArrow: View {
 		case .ping, .pregame, .guestChooseSide:
 			return 0
 		default:
-			return side == serviceSide ? 5 : 0
-		}
-	}
-	
-	var serviceSide: TableSide {
-		switch match.game.service {
-		case .home:
-			return match.tableSides.home
-		case .guest:
-			return match.tableSides.guest
+			return side == match.serviceSide ? 5 : 0
 		}
 	}
 }
