@@ -55,22 +55,26 @@ struct ScoreboardView: View {
 				makeStatusView(statusText)
 					.padding()
 			}
+			if showSettings {
+					SettingsView(
+						viewModel: SettingsVM(),
+							gameType: $match.game.gameType,
+							setType: $match.set.setType,
+							matchType: $match.matchType,
+							showSettings: $showSettings
+					).padding(100)
+				}
 		}
 		.background(Color.black)
-		.popover(isPresented: $showSettings) {
-			SettingsView(
-				viewModel: SettingsVM(),
-					gameType: $match.game.gameType,
-					setType: $match.set.setType,
-					matchType: $match.matchType
-			)
-		}
+		
 	}
 	
 	func settingsButtonTapped() {
 		showSettings = !showSettings
 		
 	}
+	
+	
 	
 	func makeStatusView(_ text: String) -> some View {
 		GroupBox {
@@ -80,7 +84,6 @@ struct ScoreboardView: View {
 				.shadow(color: .green, radius: 1, x: 0, y: 0)
 				.frame(maxWidth: .infinity)
 				.padding()
-
 		}
 		.frame(width: match.geoSize.width/2.25)
 		.groupBoxStyle(BlackGroupBoxStyle(color: .black.opacity(0.9)))

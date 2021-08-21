@@ -10,16 +10,12 @@ import flic2lib
 
 final class SettingsVM: ObservableObject {
 	
-	@Published var gameType: GameType = .long
-	@Published var setType: SetType = .bestOfThree
-	@Published var matchType: MatchType = .singleSet
 	@Published var isScanning: Bool = false
+	@Published var leftButton: FLICButton?
+	@Published var rightButton: FLICButton?
+	@Published var homeButton: FLICButton?
+
 	
-	init(gameType: GameType = .long, setType: SetType = .bestOfThree, matchType: MatchType = .singleSet) {
-		self.gameType = gameType
-		self.setType = setType
-		self.matchType = matchType
-	}
 
 	func scanForButtons() {
 		FLICManager.shared()?.scanForButtons(stateChangeHandler: { statusEvent in
@@ -61,12 +57,44 @@ final class SettingsVM: ObservableObject {
 			print("Failed to forget button \(uuid) with error: \(error.localizedDescription)")
 		})
 	}
+	
+	func flicButton(_ name: FlicName) -> FLICButton?  {
+		switch name {
+		case .tableLeft:
+			return leftButton
+		case .tableRight:
+			return rightButton
+		case .home:
+			return homeButton
+		}
+	}
+	
+	var needsScan: Bool {
+		leftButton == nil || rightButton == nil || homeButton == nil 
+	}
+}
+
+extension FLICButtonState {
+	var description: String {
+		switch self {
+		case .connected:
+			return "Connected"
+		case .disconnected:
+			return "Disconnected"
+		case .disconnecting:
+			return "Disconnecting"
+		case .connecting:
+			return "Connecting"
+		default:
+			return "Status Unknown"
+		}
+	}
 }
 
 enum FlicName: String, CaseIterable {
 	case home
-	case tableLeft
-	case tableRight
+	case tableLeft = "Table Left"
+	case tableRight = "Table Right"
 	
 	var singleSound: ScoreboardVM.SoundType {
 		switch self {

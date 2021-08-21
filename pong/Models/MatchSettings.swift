@@ -53,16 +53,16 @@ enum SetType: Int, CaseIterable, PointGoal {
 		}
 	}
 	
-	var bestOf: Int {
+	var bestOf: String {
 		switch self {
 		case .singleGame:
-			return 1
+			return "Single Game"
 		case .bestOfThree:
-			return 3
+			return "Best of Three"
 		case .bestOfFive:
-			return 5
+			return "Best of Five"
 		case .bestOfSeven:
-			return 7
+			return "Best of Seven"
 		}
 	}
 }
@@ -86,16 +86,16 @@ enum MatchType: Int, CaseIterable, PointGoal {
 		}
 	}
 	
-	var bestOf: Int {
+	var bestOf: String {
 		switch self {
 		case .singleSet:
-			return 1
+			return "Single Set"
 		case .bestOfThree:
-			return 3
+			return "Best of Three"
 		case .bestOfFive:
-			return 5
+			return "Best of Five"
 		case .bestOfSeven:
-			return 7
+			return "Best of Seven"
 		}
 	}
 }
