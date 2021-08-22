@@ -12,8 +12,7 @@ final class Match: ObservableObject {
 	
 	@Published var status: Status = .pregame
 	@Published var matchType: MatchType = .bestOfFive
-	@Published var home: Team = Team(.home)
-	@Published var guest: Team = Team(.guest)
+
 	
 	@Published var tableSides = TableSides()
 	@Published var game: Game = Game(firstService: .guest, tableSides: TableSides())

@@ -20,7 +20,7 @@ struct ScoreboardView: View {
 			GeometryReader { geo in
 				VStack {
 					VStack {
-						TeamsView(match: match)
+						TeamsView(match: match, home: viewModel.home, guest: viewModel.guest)
 						MatchView(match: match)
 						SetView(match: match)
 					}
@@ -89,7 +89,7 @@ struct ScoreboardView: View {
 		.groupBoxStyle(BlackGroupBoxStyle(color: .black.opacity(0.9)))
 		.overlay(
 					 RoundedRectangle(cornerRadius: 10)
-						.stroke(.white, lineWidth: 4)
+						.stroke(Color.white, lineWidth: 4)
 						.shadow(color: .white, radius: 2, x: 0, y: 0)
 			 )
 	}

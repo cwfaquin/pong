@@ -10,6 +10,8 @@ import SwiftUI
 struct TeamsView: View {
 	
 	@ObservedObject var match: Match
+	@State var home: Team
+	@State var guest: Team
 	
 	var body: some View {
 		HStack {
@@ -30,18 +32,18 @@ struct TeamsView: View {
 	var leftTeam: Team {
 		switch match.teamID(.left) {
 		case .home:
-			return match.home
+			return home
 		case .guest:
-			return match.guest
+			return guest
 		}
 	}
 	
 	var rightTeam: Team {
 		switch match.teamID(.right) {
 		case .home:
-			return match.home
+			return home
 		case .guest:
-			return match.guest
+			return guest
 		}
 	}
 	
@@ -117,15 +119,12 @@ struct TeamsView: View {
 	}
 	
 	func addUser() {
-		let random = Int.random(in: 0..<ScoreboardVM.SoundType.allCases.count)
-		let sound = ScoreboardVM.SoundType.allCases[random]
-		print(sound.rawValue)
-		ScoreboardVM.playSound(sound)
+	
 	}
 }
 
 struct TeamsView_Previews: PreviewProvider {
 	static var previews: some View {
-		TeamsView(match: Match())
+		TeamsView(match: Match(), home: Team(.home), guest: Team(.guest))
 	}
 }

@@ -14,7 +14,22 @@ final class SettingsVM: ObservableObject {
 	@Published var leftButton: FLICButton?
 	@Published var rightButton: FLICButton?
 	@Published var homeButton: FLICButton?
-
+	@Published var navText: String = "Settings"
+	
+	init() {
+		FLICManager.shared()?.buttons().forEach {
+			switch $0.nickname {
+			case FlicName.tableLeft.rawValue:
+				leftButton = $0
+			case FlicName.tableRight.rawValue:
+				rightButton = $0
+			case FlicName.home.rawValue:
+				homeButton = $0
+			default:
+				break 
+			}
+		}
+	}
 	
 
 	func scanForButtons() {
@@ -40,6 +55,30 @@ final class SettingsVM: ObservableObject {
 			
 			print("Flic button successfully verified.\nName = \(button.name ?? "")\nbluetooth address = \(button.bluetoothAddress))\nserial# = \(button.serialNumber)\nnickname = \(button.nickname ?? "")")
 			button.triggerMode = .clickAndDoubleClick
+			let names = FlicName.allCases.compactMap { $0.rawValue }
+			if let nickname = button.nickname, names.contains(nickname) {
+				switch FlicName(rawValue: nickname) {
+				case .tableLeft:
+					self.leftButton = button
+				case .tableRight:
+					self.rightButton = button
+				default:
+					self.homeButton = button
+				}
+			} else {
+				FlicName.allCases.forEach {
+					guard button.nickname == nil, self.flicButton($0) == nil else { return }
+					button.nickname = $0.rawValue
+					switch $0 {
+					case .tableLeft:
+						self.leftButton = button
+					case .tableRight:
+						self.rightButton = button
+					case .home:
+						self.homeButton = button
+					}
+				}
+			}
 			print("Set Nickname")
 		})
 	}

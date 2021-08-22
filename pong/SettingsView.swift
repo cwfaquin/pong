@@ -96,7 +96,7 @@ struct SettingsView: View {
 				}
 			}
 		}
-		.navigationBarTitle("Settings")
+		.navigationBarTitle(viewModel.navText)
 		.navigationBarItems(
 			trailing:
 				Button(
@@ -131,7 +131,7 @@ struct SettingsView: View {
 					}
 				case .connecting, .disconnecting:
 					ProgressView()
-						.progressViewStyle(.circular)
+					
 				case .disconnected:
 					Button(action: { button.connect() }) {
 						Text("Disconnect")

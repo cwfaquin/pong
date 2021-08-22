@@ -12,13 +12,16 @@ import AudioToolbox
 
 final class ScoreboardVM: NSObject, ObservableObject {
 			
-
+	@Published var match: Match = Match()
+	@Published var home: Team = Team(.home)
+	@Published var guest: Team = Team(.guest)
+	
 	override init() {
 		super.init()
 		FLICManager.configure(with: self, buttonDelegate: self, background: true)
 	}
 	
-	static func playSound(_ soundType: ScoreboardVM.SoundType) {
+	func playSound(_ soundType: ScoreboardVM.SoundType) {
 		var soundID: SystemSoundID = 0
 		guard let path = Bundle.main.path(forResource: soundType.rawValue, ofType: "mp3")  else {
 			assertionFailure("Failed to find file at: \(soundType.rawValue)")
@@ -27,15 +30,6 @@ final class ScoreboardVM: NSObject, ObservableObject {
 		let url = NSURL(fileURLWithPath: path)
 		AudioServicesCreateSystemSoundID(url, &soundID)
 		AudioServicesPlaySystemSound(soundID)
-
-	 /*do {
-		 let sound = try AVAudioPlayer(contentsOf: url)
-		 sound.play()
-	 } catch {
-		 print("Audio error: \(error.localizedDescription)")
-	 }
-	 */
-
 	}
 	
 	enum SoundType: String, CaseIterable {
@@ -62,24 +56,47 @@ extension ScoreboardVM: FLICManagerDelegate {
 extension ScoreboardVM: FLICButtonDelegate {
 	func buttonDidConnect(_ button: FLICButton) {
 		print(#function)
-		print(String(describing: button))
+		print(button.nickname ?? button.uuid)
 	}
 	
 	func buttonIsReady(_ button: FLICButton) {
 		print(#function)
-		print(String(describing: button))
+		print(button.nickname ?? button.uuid)
 	}
 	
 	func button(_ button: FLICButton, didReceiveButtonClick queued: Bool, age: Int) {
 		print(#function)
 		print("queued = \(queued), age = \(age)")
 		print(String(describing: button))
+		switch FlicName(rawValue: button.nickname ?? "") {
+		case .tableLeft:
+			playSound(.singleTapSide)
+			match.singleTap(.left)
+		case .tableRight:
+			playSound(.singleTapSide)
+			match.singleTap(.right)
+		case .home:
+			playSound(.singleTapMiddle)
+			match.singleTapMiddle()
+		default:
+			assertionFailure("Unnamed Button clicked")
+		}
 	}
 	
 	func button(_ button: FLICButton, didReceiveButtonDoubleClick queued: Bool, age: Int) {
 		print(#function)
 		print("queued = \(queued), age = \(age)")
-		print(String(describing: button))
+		playSound(.doubleTap)
+		switch FlicName(rawValue: button.nickname ?? "") {
+		case .tableLeft:
+			match.doubleTap(.left)
+		case .tableRight:
+			match.doubleTap(.right)
+		case .home:
+			match.singleTapMiddle()
+		default:
+			assertionFailure("Unnamed Button clicked")
+		}
 	}
 	
 	func button(_ button: FLICButton, didUpdateNickname nickname: String) {
@@ -89,26 +106,22 @@ extension ScoreboardVM: FLICButtonDelegate {
 	
 	func button(_ button: FLICButton, didUpdateBatteryVoltage voltage: Float) {
 		print(#function)
-		print(String(describing: button))
 		print("voltage = \(voltage)")
 	}
 	
 	func button(_ button: FLICButton, didUnpairWithError error: Error?) {
 		print(#function)
-		print(String(describing: button))
 		print(String(describing: error))
 	}
 	
 	func button(_ button: FLICButton, didDisconnectWithError error: Error?) {
 		print(#function)
-		print(String(describing: button))
 		print(String(describing: error))
 	}
 	
 	
 	func button(_ button: FLICButton, didFailToConnectWithError error: Error?) {
 		print(#function)
-		print(String(describing: button))
 		print(String(describing: error))
 	}
 	

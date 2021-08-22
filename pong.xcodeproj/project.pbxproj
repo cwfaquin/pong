@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9717D17726D1A3DF00B43D99 /* flic2lib.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97C612E426BF72AD00C7879E /* flic2lib.xcframework */; };
+		9717D17826D1A3DF00B43D99 /* flic2lib.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 97C612E426BF72AD00C7879E /* flic2lib.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		97302CAC26C2AFF0002E70C2 /* SetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CAB26C2AFF0002E70C2 /* SetView.swift */; };
 		97302CAE26C2AFF7002E70C2 /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CAD26C2AFF7002E70C2 /* MatchView.swift */; };
 		97302CB226C2C6C0002E70C2 /* TeamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CB126C2C6C0002E70C2 /* TeamsView.swift */; };
@@ -25,15 +27,15 @@
 		9752B56726D047AC00F6B5A2 /* button3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56626D047AC00F6B5A2 /* button3.mp3 */; };
 		9752B56926D047B200F6B5A2 /* button4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56826D047B200F6B5A2 /* button4.mp3 */; };
 		9752B56B26D047B800F6B5A2 /* button5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56A26D047B800F6B5A2 /* button5.mp3 */; };
+		9752B56D26D1579500F6B5A2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9752B56C26D1579500F6B5A2 /* ExternalAccessory.framework */; };
+		9778FFDE26D174C80005B941 /* MainAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9778FFDD26D174C80005B941 /* MainAppVM.swift */; };
 		97C612CB26BF458300C7879E /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612CA26BF458300C7879E /* MainApp.swift */; };
 		97C612CF26BF458400C7879E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612CE26BF458400C7879E /* Assets.xcassets */; };
 		97C612D226BF458400C7879E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612D126BF458400C7879E /* Preview Assets.xcassets */; };
 		97C612DB26BF59D300C7879E /* ScoreboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612DA26BF59D300C7879E /* ScoreboardView.swift */; };
 		97C612DD26BF5D8800C7879E /* ScoreboardVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612DC26BF5D8800C7879E /* ScoreboardVM.swift */; };
 		97C612E026BF5F3D00C7879E /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612DF26BF5F3D00C7879E /* Team.swift */; };
-		97C612E226BF5F8A00C7879E /* FlicStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612E126BF5F8A00C7879E /* FlicStates.swift */; };
-		97C612E526BF72AD00C7879E /* flic2lib.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97C612E426BF72AD00C7879E /* flic2lib.xcframework */; };
-		97C612E626BF72AD00C7879E /* flic2lib.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 97C612E426BF72AD00C7879E /* flic2lib.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		97C612E226BF5F8A00C7879E /* FlicAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612E126BF5F8A00C7879E /* FlicAction.swift */; };
 		97C612EA26BF83A800C7879E /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612E926BF83A800C7879E /* Config.swift */; };
 		97C612EE26BF88C200C7879E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612ED26BF88C200C7879E /* User.swift */; };
 		97C612F226BF99EE00C7879E /* MatchSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612F126BF99EE00C7879E /* MatchSettings.swift */; };
@@ -43,13 +45,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		97C612E726BF72AD00C7879E /* Embed Frameworks */ = {
+		9717D17926D1A3DF00B43D99 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				97C612E626BF72AD00C7879E /* flic2lib.xcframework in Embed Frameworks */,
+				9717D17826D1A3DF00B43D99 /* flic2lib.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,6 +59,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9717D17B26D1A40D00B43D99 /* flic2lib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = flic2lib.framework; sourceTree = "<group>"; };
 		97302CAB26C2AFF0002E70C2 /* SetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetView.swift; sourceTree = "<group>"; };
 		97302CAD26C2AFF7002E70C2 /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
 		97302CB126C2C6C0002E70C2 /* TeamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsView.swift; sourceTree = "<group>"; };
@@ -75,6 +78,9 @@
 		9752B56626D047AC00F6B5A2 /* button3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button3.mp3; path = ../../../Downloads/button3.mp3; sourceTree = "<group>"; };
 		9752B56826D047B200F6B5A2 /* button4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button4.mp3; path = ../../../Downloads/button4.mp3; sourceTree = "<group>"; };
 		9752B56A26D047B800F6B5A2 /* button5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = button5.mp3; path = ../../../Downloads/button5.mp3; sourceTree = "<group>"; };
+		9752B56C26D1579500F6B5A2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		9752B56E26D15B8F00F6B5A2 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
+		9778FFDD26D174C80005B941 /* MainAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppVM.swift; sourceTree = "<group>"; };
 		97C612C726BF458300C7879E /* pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97C612CA26BF458300C7879E /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		97C612CE26BF458400C7879E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -84,7 +90,7 @@
 		97C612DA26BF59D300C7879E /* ScoreboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardView.swift; sourceTree = "<group>"; };
 		97C612DC26BF5D8800C7879E /* ScoreboardVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardVM.swift; sourceTree = "<group>"; };
 		97C612DF26BF5F3D00C7879E /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
-		97C612E126BF5F8A00C7879E /* FlicStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlicStates.swift; sourceTree = "<group>"; };
+		97C612E126BF5F8A00C7879E /* FlicAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlicAction.swift; sourceTree = "<group>"; };
 		97C612E426BF72AD00C7879E /* flic2lib.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = flic2lib.xcframework; sourceTree = "<group>"; };
 		97C612E926BF83A800C7879E /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		97C612ED26BF88C200C7879E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -99,13 +105,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				97C612E526BF72AD00C7879E /* flic2lib.xcframework in Frameworks */,
+				9717D17726D1A3DF00B43D99 /* flic2lib.xcframework in Frameworks */,
+				9752B56D26D1579500F6B5A2 /* ExternalAccessory.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9717D17A26D1A40D00B43D99 /* ios-arm64_x86_64-simulator */ = {
+			isa = PBXGroup;
+			children = (
+				9717D17B26D1A40D00B43D99 /* flic2lib.framework */,
+			);
+			name = "ios-arm64_x86_64-simulator";
+			path = "flic2lib.xcframework/ios-arm64_x86_64-simulator";
+			sourceTree = "<group>";
+		};
 		9752B56126D0478C00F6B5A2 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +156,7 @@
 			children = (
 				97C612D926BF45D800C7879E /* pong.entitlements */,
 				97C612CA26BF458300C7879E /* MainApp.swift */,
+				9778FFDD26D174C80005B941 /* MainAppVM.swift */,
 				97C612DC26BF5D8800C7879E /* ScoreboardVM.swift */,
 				97C612DA26BF59D300C7879E /* ScoreboardView.swift */,
 				97302CB126C2C6C0002E70C2 /* TeamsView.swift */,
@@ -177,7 +194,7 @@
 			children = (
 				97C612ED26BF88C200C7879E /* User.swift */,
 				97C612DF26BF5F3D00C7879E /* Team.swift */,
-				97C612E126BF5F8A00C7879E /* FlicStates.swift */,
+				97C612E126BF5F8A00C7879E /* FlicAction.swift */,
 				97C612F126BF99EE00C7879E /* MatchSettings.swift */,
 				97302CBC26C819A4002E70C2 /* TableSides.swift */,
 				97302CB826C810C8002E70C2 /* Game.swift */,
@@ -190,6 +207,9 @@
 		97C612E326BF72AD00C7879E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9717D17A26D1A40D00B43D99 /* ios-arm64_x86_64-simulator */,
+				9752B56E26D15B8F00F6B5A2 /* CoreBluetooth.framework */,
+				9752B56C26D1579500F6B5A2 /* ExternalAccessory.framework */,
 				97C612E426BF72AD00C7879E /* flic2lib.xcframework */,
 			);
 			name = Frameworks;
@@ -213,7 +233,7 @@
 				97C612C326BF458300C7879E /* Sources */,
 				97C612C426BF458300C7879E /* Frameworks */,
 				97C612C526BF458300C7879E /* Resources */,
-				97C612E726BF72AD00C7879E /* Embed Frameworks */,
+				9717D17926D1A3DF00B43D99 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -281,10 +301,11 @@
 				9752B55426C961A000F6B5A2 /* SettingsView.swift in Sources */,
 				9752B55A26CAA3F500F6B5A2 /* PossessionArrow.swift in Sources */,
 				97C6130426C0795500C7879E /* SeriesScoreVM.swift in Sources */,
-				97C612E226BF5F8A00C7879E /* FlicStates.swift in Sources */,
+				97C612E226BF5F8A00C7879E /* FlicAction.swift in Sources */,
 				97C612DD26BF5D8800C7879E /* ScoreboardVM.swift in Sources */,
 				97302CBB26C8190B002E70C2 /* Set.swift in Sources */,
 				97C612EA26BF83A800C7879E /* Config.swift in Sources */,
+				9778FFDE26D174C80005B941 /* MainAppVM.swift in Sources */,
 				97302CAE26C2AFF7002E70C2 /* MatchView.swift in Sources */,
 				97302CB926C810C8002E70C2 /* Game.swift in Sources */,
 				97C612EE26BF88C200C7879E /* User.swift in Sources */,
@@ -360,7 +381,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -416,7 +438,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -447,7 +470,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cube.pong;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -474,7 +497,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cube.pong;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

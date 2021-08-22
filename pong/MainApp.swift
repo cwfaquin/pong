@@ -7,10 +7,12 @@
 
 import SwiftUI
 import flic2lib
+import UserNotifications
 
 @main
 struct MainApp: App {
 	
+	@ObservedObject var viewModel = MainAppVM()
 	@State var settings = MatchSettings()
 	@State var match = Match()
 	
@@ -19,13 +21,31 @@ struct MainApp: App {
             ScoreboardView(viewModel: ScoreboardVM())
 							.environmentObject(settings)
 							.environmentObject(match)
+							.onAppear {
+								viewModel.requestNotificationAuthorization()
+							}
+							.onReceive(viewModel.$flicAction) { action in
+								switch action {
+								case .singleTapHome:
+									match.singleTapMiddle()
+								case .doubleTapHome:
+									match.singleTapMiddle()
+								case .singleTapLeft:
+									match.singleTap(.left)
+								case .doubleTapLeft:
+									match.doubleTap(.left)
+								case .singleTapRight:
+									match.singleTap(.right)
+								case .doubleTapRight:
+									match.doubleTap(.right)
+								default:
+									break 
+								}
+							}
+							.onOpenURL { url in
+								viewModel.handleURL(url)
+							}
 				}
 		}
-
-							/*.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-								SCLFlicManager.configure(with: self, defaultButtonDelegate: self, appID: SCL_APP_ID, appSecret: SCL_APP_SECRET, backgroundExecution: false)
-
-							}*/
-					
 }
 
