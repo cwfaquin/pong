@@ -8,44 +8,41 @@
 import SwiftUI
 
 struct ScoreboardView: View {
-	
+
+	@Environment(\.horizontalSizeClass) var horizontalSizeClass
+	@Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
+
 	@EnvironmentObject var settings: MatchSettings
 	@EnvironmentObject var match: Match
 	@ObservedObject var viewModel: ScoreboardVM
 	@State var showSettings: Bool = false
 	
 	var body: some View {
-		
-		ZStack {
-			GeometryReader { geo in
-				VStack {
-					VStack {
-						TeamsView(match: match, home: viewModel.home, guest: viewModel.guest)
-						MatchView(match: match)
-						SetView(match: match)
-					}
-					
-					HStack {
-						makeScoreView(.left)
-							.frame(width: geo.size.width/3)
-						Spacer()
-						makeScoreView(.right)
-							.frame(width: geo.size.width/3)
-					}
-				}
-				.onAppear {	match.geoSize = geo.size }
-			}
+			
 			VStack {
-				Rectangle()
-					.foregroundColor(.clear)
-					.frame(width: 0, height: match.middlePanelWidth/3)
-				Button(action: settingsButtonTapped) {
-					Image(systemName: "gear")
-						.resizable()
-						.foregroundColor(.pink)
-						.shadow(color: .pink, radius: 4, x: 0, y: 0)
-				}
-				.frame(width: 80, height: 80)
+					TeamsView(showSettings: $showSettings)
+					SeriesView(viewModel: SeriesVM(match, seriesType: .set))
+					SeriesView(viewModel: SeriesVM(match, seriesType: .match))
+				ScoresView(viewModel: ScoresVM(match))
+					.layoutPriority(1)
+			}
+			.background(Color.black)
+
+			.sheet(isPresented: $showSettings, onDismiss: nil, content: {
+				SettingsView(
+					viewModel: SettingsVM(),
+						gameType: $match.game.gameType,
+						setType: $match.set.setType,
+						matchType: $match.matchType,
+						showSettings: $showSettings
+				)
+			})
+	}
+				
+		
+		
+			
+		/*	VStack {
 				Spacer()
 				PossessionArrow(match: match)
 					.frame(width: match.middlePanelWidth * 3)
@@ -64,15 +61,11 @@ struct ScoreboardView: View {
 							showSettings: $showSettings
 					).padding(100)
 				}
-		}
+		
 		.background(Color.black)
-		
-	}
+		*/
 	
-	func settingsButtonTapped() {
-		showSettings = !showSettings
-		
-	}
+
 	
 	
 	

@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-class SeriesScoreVM: ObservableObject {
+final class SeriesScoreVM: ObservableObject {
 	
 	@Published var tableSide: TableSide
 	@Published var currentScore: Int
@@ -17,7 +17,7 @@ class SeriesScoreVM: ObservableObject {
 	private let empty: String = "circle"
 	private let filled: String = "largecircle.fill.circle"
 	
-	init(tableSide: TableSide = .left, currentScore: Int = 0, winningScore: Int = 3) {
+	init(_ tableSide: TableSide, currentScore: Int, winningScore: Int) {
 		self.tableSide = tableSide
 		self.currentScore = currentScore
 		self.winningScore = winningScore
@@ -45,6 +45,7 @@ class SeriesScoreVM: ObservableObject {
 		return array
 			.compactMap { $0 > winningScore ? .clear : Color(.cyan) }
 	}
+
 }
 
 

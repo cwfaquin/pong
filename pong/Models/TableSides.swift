@@ -10,6 +10,15 @@ import Foundation
 enum TableSide: Int, CaseIterable {
 	case left
 	case right
+	
+	var text: String {
+		switch self {
+		case .left:
+			return "left"
+		case .right:
+			return "right"
+		}
+	}
 }
 
 
