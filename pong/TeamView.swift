@@ -9,17 +9,17 @@ import SwiftUI
 
 struct TeamView: View {
 	
-	@EnvironmentObject var match: Match
+	@ObservedObject var match: Match
 	let tableSide: TableSide
 	
     var body: some View {
 			GroupBox {
 				Text(match.teamID(tableSide).rawValue.uppercased().spaced)
-					.font(.largeTitle)
-					.fontWeight(.semibold)
+					.font(.system(size: 50, weight: .regular, design: .monospaced))
+					//.minimumScaleFactor(0.75)
 					.lineLimit(1)
-					.padding()
 					.shadow(color: .white, radius: 2.5, x: 0, y: 0)
+					.padding()
 				Divider()
 				HStack {
 					switch tableSide {
@@ -51,6 +51,8 @@ extension TeamView {
 			Button(action: addUser, label: { Label("Player", systemImage: "plus.circle") })
 				.foregroundColor(Color(UIColor.systemTeal))
 				.font(.title3)
+				.minimumScaleFactor(0.75)
+				.lineLimit(1)
 		}
 	}
 	
@@ -89,6 +91,6 @@ extension TeamView {
 
 struct TeamView_Previews: PreviewProvider {
     static var previews: some View {
-			TeamView(tableSide: .left)
+			TeamView(match: Match(), tableSide: .left)
     }
 }

@@ -9,22 +9,31 @@ import SwiftUI
 
 struct TeamsView: View {
 	
-	@EnvironmentObject var match: Match
+	@ObservedObject var match: Match
 	@Binding var showSettings: Bool
+	@State var panelWidth: CGFloat
 	
 	var body: some View {
-		HStack {
-			TeamView(tableSide: .left)
-			VStack {
-				Button(action: { match.singleTapMiddle() }) {
-					ButtonImage(systemName: "house")
+			HStack {
+				TeamView(match: match, tableSide: .left)
+				
+				VStack {
+					Button(action: { match.singleTapMiddle() }) {
+						ButtonImage(systemName: "house")
+					}.padding()
+					Button(action: { showSettings = !showSettings }) {
+						ButtonImage(systemName: "gear")
+					}.padding()
 				}
-				Button(action: { showSettings = !showSettings }) {
-					ButtonImage(systemName: "gear")
-				}
+				.frame(width: panelWidth)
+				
+				TeamView(match: match, tableSide: .right)
 			}
-			TeamView(tableSide: .right)
-		}
+	
+		
+			
+		
+		
 	}
 	
 	
@@ -32,6 +41,6 @@ struct TeamsView: View {
 
 struct TeamsView_Previews: PreviewProvider {
 	static var previews: some View {
-		TeamsView(showSettings: .constant(false))
+		TeamsView(match: Match(), showSettings: .constant(false), panelWidth: 200)
 	}
 }

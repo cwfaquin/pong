@@ -12,9 +12,15 @@ extension View {
 		background(
 			GeometryReader { geoProxy in
 				Color.clear
-					.preference(key: PreferenceKeySize.self, value: geoProxy.size)
+					.preference(key: SizeKey.self, value: geoProxy.size)
 			}
 		)
-		.onPreferenceChange(PreferenceKeySize.self, perform: onChange)
+		.onPreferenceChange(SizeKey.self, perform: onChange)
+	}
+}
+
+extension GeometryProxy {
+	func middleWidth() -> CGFloat {
+		max(size.width/6, 100)
 	}
 }

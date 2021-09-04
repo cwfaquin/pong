@@ -11,7 +11,7 @@ import SwiftUI
 final class Match: ObservableObject {
 	
 	@Published var status: Status = .pregame
-	@Published var matchType: MatchType = .bestOfFive
+	@Published var matchType: MatchType = .singleSet
 
 	
 	@Published var tableSides = TableSides()

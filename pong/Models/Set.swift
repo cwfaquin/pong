@@ -11,7 +11,7 @@ struct Set {
 	let firstServe: TeamID
 	var home = [Game]()
 	var guest = [Game]()
-	var setType: SetType = .bestOfThree
+	var setType: SetType = .bestOfFive
 	
 	var setComplete: Bool {
 		home.count == setType.pointGoal || guest.count == setType.pointGoal

@@ -8,7 +8,9 @@
 import Foundation
 import SwiftUI
 
-struct PreferenceKeySize: PreferenceKey {
+struct SizeKey: PreferenceKey {
 	static var defaultValue: CGSize = .zero
-	static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+	static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+		value = nextValue()
+	}
 }

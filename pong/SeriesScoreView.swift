@@ -12,21 +12,23 @@ struct SeriesScoreView: View {
 	@ObservedObject var viewModel: SeriesScoreVM
 	
 	var body: some View {
-		HStack {
-			ForEach(0..<4) { index in
+		
+		HStack(alignment: .center, spacing: 20) {
+			ForEach(0..<viewModel.winningScore) { index in
 				Image(systemName: viewModel.imageNames[index])
 					.resizable()
-					.scaledToFit()
+					.aspectRatio(contentMode: .fit)
 					.foregroundColor(viewModel.foregoundColors[index])
 					.shadow(color: viewModel.foregoundColors[index], radius: 3, x: 0, y: 0)
-					.padding([.leading, .trailing])
+					.padding()
 			}
 		}
+		
 	}
 }
 
 struct SeriesScoreView_Previews: PreviewProvider {
 	static var previews: some View {
-		SeriesScoreView(viewModel: SeriesScoreVM(.left, currentScore: 0, winningScore: 3))
+		SeriesScoreView(viewModel: SeriesScoreVM(.left, currentScore: 0, winningScore: 3, circleCount: 3))
 	}
 }

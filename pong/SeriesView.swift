@@ -10,36 +10,49 @@ import SwiftUI
 struct SeriesView: View {
 	
 	@ObservedObject var viewModel: SeriesVM
-	@State var textWidth: CGFloat = 0
 	
 	var body: some View {
-		HStack {
-			SeriesScoreView(viewModel: viewModel.leftScoreVM)
-			Divider()
-				.padding()
-			Text(viewModel.text)
+			HStack(alignment: .center) {
+				Spacer()
+				SeriesScoreView(viewModel: viewModel.leftScoreVM)
+					.frame(minHeight: 40, idealHeight: 70, maxHeight: 100)
+					.padding(.trailing)
+
+				Divider()
+					.frame(minHeight: 40, idealHeight: 55, maxHeight: 60)
+
+				Text(viewModel.text)
 				.font(.largeTitle)
 				.fontWeight(.ultraLight)
-				.minimumScaleFactor(0.5)
+				.minimumScaleFactor(0.75)
 				.lineLimit(1)
-				.minimumScaleFactor(0.5)
 				.shadow(color: .white, radius: 2, x: 0, y: 0)
-				.frame(width: textWidth)
-				
-			Divider()
+				.frame(width: viewModel.panelWidth)
 				.padding()
-			SeriesScoreView(viewModel: viewModel.rightScoreVM)
-		}
-		.fixedSize(horizontal: false, vertical: true)
-		.readSize { size in
-			textWidth = max(50, size.width/5)
+				
+				
+				Divider()
+					.frame(minHeight: 40, idealHeight: 55, maxHeight: 60)
+
+
+				SeriesScoreView(viewModel: viewModel.rightScoreVM)
+					.frame(minHeight: 40, idealHeight: 70, maxHeight: 100)
+					.padding(.leading)
+
+				Spacer()
+			
+			
+		
 		}
 	}
-
+	
 }
+
 
 struct SeriesView_Previews: PreviewProvider {
 	static var previews: some View {
-		SeriesView(viewModel: SeriesVM(Match(), seriesType: .set))
+		SeriesView(viewModel: SeriesVM(Match(), seriesType: .set, panelWidth: 200))
 	}
 }
+
+

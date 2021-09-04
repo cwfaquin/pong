@@ -8,66 +8,60 @@
 import SwiftUI
 
 struct ScoreboardView: View {
-
-	@Environment(\.horizontalSizeClass) var horizontalSizeClass
-	@Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
-
+	
 	@EnvironmentObject var settings: MatchSettings
 	@EnvironmentObject var match: Match
 	@ObservedObject var viewModel: ScoreboardVM
 	@State var showSettings: Bool = false
+	@State var screenSize = UIScreen.main.bounds.size
+
 	
 	var body: some View {
-			
-			VStack {
-					TeamsView(showSettings: $showSettings)
-					SeriesView(viewModel: SeriesVM(match, seriesType: .set))
-					SeriesView(viewModel: SeriesVM(match, seriesType: .match))
-				ScoresView(viewModel: ScoresVM(match))
-					.layoutPriority(1)
+	
+		ZStack {
+		VStack {
+				TeamsView(match: match, showSettings: $showSettings, panelWidth: panelWidth)
+				SeriesView(viewModel: SeriesVM(match, seriesType: .set, panelWidth: panelWidth))
+				SeriesView(viewModel: SeriesVM(match, seriesType: .match, panelWidth: panelWidth))
+			ScoresView(viewModel: ScoresVM(match, screenSize: screenSize))
 			}
+
+			VStack {
+			Spacer()
+			ServiceView(viewModel: ServiceVM(match, panelWidth: panelWidth))
+				
+			}.padding()
+			
+			if let statusText = statusText {
+				makeStatusView(statusText)
+			}
+		}
+		
 			.background(Color.black)
+		
 
 			.sheet(isPresented: $showSettings, onDismiss: nil, content: {
 				SettingsView(
 					viewModel: SettingsVM(),
-						gameType: $match.game.gameType,
-						setType: $match.set.setType,
-						matchType: $match.matchType,
-						showSettings: $showSettings
+					gameType: $match.game.gameType,
+					setType: $match.set.setType,
+					matchType: $match.matchType,
+					showSettings: $showSettings
 				)
 			})
-	}
-				
 		
 		
+			.onRotate { newOrientation in
+				screenSize = UIScreen.main.bounds.size
+			}
 			
-		/*	VStack {
-				Spacer()
-				PossessionArrow(match: match)
-					.frame(width: match.middlePanelWidth * 3)
-					.padding()
-			}
-			if let statusText = statusText {
-				makeStatusView(statusText)
-					.padding()
-			}
-			if showSettings {
-					SettingsView(
-						viewModel: SettingsVM(),
-							gameType: $match.game.gameType,
-							setType: $match.set.setType,
-							matchType: $match.matchType,
-							showSettings: $showSettings
-					).padding(100)
-				}
-		
-		.background(Color.black)
-		*/
+	}
+	
+	var panelWidth: CGFloat {
+		.panelWidth(screenSize.width)
+	}
 	
 
-	
-	
 	
 	func makeStatusView(_ text: String) -> some View {
 		GroupBox {
@@ -75,16 +69,17 @@ struct ScoreboardView: View {
 				.font(.system(size: 50, weight: .regular, design: .monospaced))
 				.foregroundColor(.green)
 				.shadow(color: .green, radius: 1, x: 0, y: 0)
-				.frame(maxWidth: .infinity)
+				.fixedSize(horizontal: false, vertical: false)
 				.padding()
-		}
-		.frame(width: match.geoSize.width/2.25)
-		.groupBoxStyle(BlackGroupBoxStyle(color: .black.opacity(0.9)))
+		}.padding()
+			.groupBoxStyle(BlackGroupBoxStyle(color: .clear))
+			.background(Color.black.opacity(0.9))
+			.cornerRadius(12)
 		.overlay(
-					 RoundedRectangle(cornerRadius: 10)
-						.stroke(Color.white, lineWidth: 4)
-						.shadow(color: .white, radius: 2, x: 0, y: 0)
-			 )
+			RoundedRectangle(cornerRadius: 12)
+				.stroke(Color.white, lineWidth: 4)
+				.shadow(color: .white, radius: 2, x: 0, y: 0)
+		)
 	}
 	
 	func makeScoreView(_ tableSide: TableSide) -> some View {

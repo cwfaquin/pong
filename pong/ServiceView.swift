@@ -12,30 +12,35 @@ struct ServiceView: View {
 	@ObservedObject var viewModel: ServiceVM
 	
 	var body: some View {
+	
+			HStack {
+				arrowImage(.left)
+				
+				Text(viewModel.text)
+					.font(.system(size: 50, weight: .regular, design: .rounded))
+					.lineLimit(1)
+					.foregroundColor(viewModel.textColor)
+					.shadow(color: .white, radius: 3, x: 0, y: 0)
+					.padding()
+					.layoutPriority(2)
+				
+				arrowImage(.right)
+			}
+			.frame(width: viewModel.panelWidth * 2)
+			.padding()
 		
-		HStack {
-			arrowImage(.left)
-			
-			Text(viewModel.text)
-				.font(.largeTitle)
-				.fontWeight(.regular)
-				.minimumScaleFactor(0.5)
-				.foregroundColor(viewModel.textColor)
-				.shadow(color: .white, radius: 3, x: 0, y: 0)
-				.lineLimit(1)
-			
-			arrowImage(.right)
-		}
-		.fixedSize()
-		.padding()
+		Rectangle()
+			.foregroundColor(.clear)
+			.frame(height: 100)
+		
 	}
 	
 	func arrowImage(_ tableSide: TableSide) -> some View {
 		return Image(systemName: viewModel.imageName(tableSide))
-			.imageScale(.large)
-			.foregroundColor(viewModel.imageColor(.right))
-			.shadow(color: .green, radius: viewModel.shadowRadius(.right), x: 0, y: 0)
-			.padding()
+			.resizable()
+			.scaledToFit()
+			.foregroundColor(viewModel.imageColor(tableSide))
+			.shadow(color: .green, radius: viewModel.shadowRadius(tableSide), x: 0, y: 0)
 	}
 	
 
@@ -43,6 +48,6 @@ struct ServiceView: View {
 
 struct ServiceView_Previews: PreviewProvider {
 	static var previews: some View {
-		ServiceView(viewModel: ServiceVM(Match()))
+		ServiceView(viewModel: ServiceVM(Match(), panelWidth: 200))
 	}
 }

@@ -13,18 +13,28 @@ final class SeriesScoreVM: ObservableObject {
 	@Published var tableSide: TableSide
 	@Published var currentScore: Int
 	@Published var winningScore: Int
+	@Published var circleCount: Int
+	
+	let alignment: Alignment
 	
 	private let empty: String = "circle"
 	private let filled: String = "largecircle.fill.circle"
 	
-	init(_ tableSide: TableSide, currentScore: Int, winningScore: Int) {
+	init(_ tableSide: TableSide, currentScore: Int, winningScore: Int, circleCount: Int) {
 		self.tableSide = tableSide
 		self.currentScore = currentScore
 		self.winningScore = winningScore
+		switch tableSide {
+		case .left:
+			alignment = .trailing
+		case .right:
+			alignment = .leading
+		}
+		self.circleCount = circleCount
 	}
 
 	var imageNames: [String] {
-		let names = Array(1...4)
+		let names = Array(1...winningScore)
 			.compactMap { $0 > currentScore ? empty : filled }
 		switch tableSide {
 		case .left:
@@ -35,7 +45,7 @@ final class SeriesScoreVM: ObservableObject {
 	}
 	
 	var foregoundColors: [Color] {
-		var array = Array(1...4)
+		var array = Array(1...winningScore)
 		switch tableSide {
 		case .left:
 			array = array.reversed()

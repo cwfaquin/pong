@@ -13,10 +13,10 @@ struct ButtonImage: View {
 	
     var body: some View {
 				Image(systemName: systemName)
-					.imageScale(.large)
+					.resizable()
+					.frame(width: 50, height: 50)
 					.foregroundColor(.pink)
 					.shadow(color: .pink, radius: 4, x: 0, y: 0)
-					.padding()
     }
 }
 

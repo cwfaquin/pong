@@ -9,20 +9,19 @@ import SwiftUI
 
 struct ScoreView: View {
 	
-	@State var imageName: String
+	@State var score: String
 	
 	var body: some View {
-		
-		Image(systemName: imageName)
-			.resizable()
-			.foregroundColor(.white)
-			.aspectRatio(contentMode: .fit)
-			.padding()
+		GroupBox {
+			Text(score)
+				.font(.largeTitle)
+
+		}
 	}
 }
 
 struct ScoreView_Previews: PreviewProvider {
 	static var previews: some View {
-		ScoreView(imageName: "zero.circle")
+		ScoreView(score: "0")
 	}
 }

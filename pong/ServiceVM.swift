@@ -11,10 +11,11 @@ import SwiftUI
 final class ServiceVM: ObservableObject {
 	
 	@ObservedObject var match: Match
-
+	@Published var panelWidth: CGFloat
 	
-	init(_ match: Match) {
+	init(_ match: Match, panelWidth: CGFloat) {
 		self.match = match
+		self.panelWidth = panelWidth
 	}
 
 	var text: String {
@@ -29,10 +30,12 @@ final class ServiceVM: ObservableObject {
 	var textColor: Color {
 		switch match.status {
 		case .ping:
-			return .green
+			return .orange
+		case .pregame, .guestChooseSide:
+			return .gray
 		default:
-			return .white
-		}
+			return .green
+	}
 	}
 	
 	func imageName(_ tableSide: TableSide) -> String {
@@ -47,7 +50,9 @@ final class ServiceVM: ObservableObject {
 	
 	func imageColor(_ side: TableSide) -> Color {
 		switch match.status {
-		case .ping, .pregame, .guestChooseSide:
+		case .ping:
+			return .orange
+		case .pregame, .guestChooseSide:
 			return .gray
 		default:
 			return side == match.serviceSide ? .green : .gray

@@ -35,7 +35,6 @@ final class MainAppVM: NSObject, ObservableObject {
 
 extension MainAppVM: UNUserNotificationCenterDelegate {
 	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-		print("SHIT")
 		completionHandler([.sound])
 	}
 }
