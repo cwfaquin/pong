@@ -19,7 +19,7 @@
 		97302CB226C2C6C0002E70C2 /* TeamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CB126C2C6C0002E70C2 /* TeamsView.swift */; };
 		97302CB726C32995002E70C2 /* UsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CB626C32995002E70C2 /* UsersView.swift */; };
 		97302CB926C810C8002E70C2 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CB826C810C8002E70C2 /* Game.swift */; };
-		97302CBB26C8190B002E70C2 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CBA26C8190B002E70C2 /* Set.swift */; };
+		97302CBB26C8190B002E70C2 /* GameSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CBA26C8190B002E70C2 /* GameSet.swift */; };
 		97302CBD26C819A4002E70C2 /* TableSides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CBC26C819A4002E70C2 /* TableSides.swift */; };
 		97302CBF26C8223E002E70C2 /* ToastOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */; };
 		9752B55426C961A000F6B5A2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9752B55326C961A000F6B5A2 /* SettingsView.swift */; };
@@ -39,6 +39,9 @@
 		9798AFED26E1496B0046D40C /* DeviceOrientationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFEC26E1496B0046D40C /* DeviceOrientationModifier.swift */; };
 		9798AFEF26E258F40046D40C /* Text+Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFEE26E258F40046D40C /* Text+Font.swift */; };
 		97B68DCD26E3C30800EDA239 /* CGFloat+Sizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DCC26E3C30800EDA239 /* CGFloat+Sizing.swift */; };
+		97B68DCF26E520EF00EDA239 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DCE26E520EF00EDA239 /* StatusView.swift */; };
+		97B68DD126E5237400EDA239 /* Color+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DD026E5237400EDA239 /* Color+Theme.swift */; };
+		97B68DD326E526C200EDA239 /* AnyTransition+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DD226E526C200EDA239 /* AnyTransition+View.swift */; };
 		97C612CB26BF458300C7879E /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612CA26BF458300C7879E /* MainApp.swift */; };
 		97C612CF26BF458400C7879E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612CE26BF458400C7879E /* Assets.xcassets */; };
 		97C612D226BF458400C7879E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612D126BF458400C7879E /* Preview Assets.xcassets */; };
@@ -84,7 +87,7 @@
 		97302CB126C2C6C0002E70C2 /* TeamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsView.swift; sourceTree = "<group>"; };
 		97302CB626C32995002E70C2 /* UsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersView.swift; sourceTree = "<group>"; };
 		97302CB826C810C8002E70C2 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
-		97302CBA26C8190B002E70C2 /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
+		97302CBA26C8190B002E70C2 /* GameSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSet.swift; sourceTree = "<group>"; };
 		97302CBC26C819A4002E70C2 /* TableSides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSides.swift; sourceTree = "<group>"; };
 		97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastOverlayView.swift; sourceTree = "<group>"; };
 		9752B55326C961A000F6B5A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -105,6 +108,9 @@
 		9798AFEC26E1496B0046D40C /* DeviceOrientationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationModifier.swift; sourceTree = "<group>"; };
 		9798AFEE26E258F40046D40C /* Text+Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Font.swift"; sourceTree = "<group>"; };
 		97B68DCC26E3C30800EDA239 /* CGFloat+Sizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Sizing.swift"; sourceTree = "<group>"; };
+		97B68DCE26E520EF00EDA239 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
+		97B68DD026E5237400EDA239 /* Color+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Theme.swift"; sourceTree = "<group>"; };
+		97B68DD226E526C200EDA239 /* AnyTransition+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyTransition+View.swift"; sourceTree = "<group>"; };
 		97C612C726BF458300C7879E /* pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97C612CA26BF458300C7879E /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		97C612CE26BF458400C7879E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -157,6 +163,8 @@
 				97F9081826D43CCF0026F96A /* String+Utility.swift */,
 				9798AFEE26E258F40046D40C /* Text+Font.swift */,
 				97B68DCC26E3C30800EDA239 /* CGFloat+Sizing.swift */,
+				97B68DD026E5237400EDA239 /* Color+Theme.swift */,
+				97B68DD226E526C200EDA239 /* AnyTransition+View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -198,6 +206,7 @@
 				9778FFDD26D174C80005B941 /* MainAppVM.swift */,
 				97C612DC26BF5D8800C7879E /* ScoreboardVM.swift */,
 				97C612DA26BF59D300C7879E /* ScoreboardView.swift */,
+				97B68DCE26E520EF00EDA239 /* StatusView.swift */,
 				9717D18926D2C5B600B43D99 /* ScoresVM.swift */,
 				9717D18B26D2C5E100B43D99 /* ScoreView.swift */,
 				97F9082026D45C1B0026F96A /* ScoresView.swift */,
@@ -244,7 +253,7 @@
 				97C612F126BF99EE00C7879E /* MatchSettings.swift */,
 				97302CBC26C819A4002E70C2 /* TableSides.swift */,
 				97302CB826C810C8002E70C2 /* Game.swift */,
-				97302CBA26C8190B002E70C2 /* Set.swift */,
+				97302CBA26C8190B002E70C2 /* GameSet.swift */,
 				97C612F326C0306100C7879E /* Match.swift */,
 				9798AFEA26DE7F670046D40C /* WindowSize.swift */,
 			);
@@ -355,7 +364,7 @@
 				97C612E226BF5F8A00C7879E /* FlicAction.swift in Sources */,
 				97C612DD26BF5D8800C7879E /* ScoreboardVM.swift in Sources */,
 				9717D17E26D29B2B00B43D99 /* View+Sizing.swift in Sources */,
-				97302CBB26C8190B002E70C2 /* Set.swift in Sources */,
+				97302CBB26C8190B002E70C2 /* GameSet.swift in Sources */,
 				97C612EA26BF83A800C7879E /* Config.swift in Sources */,
 				9778FFDE26D174C80005B941 /* MainAppVM.swift in Sources */,
 				97F9081926D43CCF0026F96A /* String+Utility.swift in Sources */,
@@ -366,7 +375,9 @@
 				97C612EE26BF88C200C7879E /* User.swift in Sources */,
 				9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */,
 				97F9082126D45C1B0026F96A /* ScoresView.swift in Sources */,
+				97B68DD326E526C200EDA239 /* AnyTransition+View.swift in Sources */,
 				9752B56026CC293900F6B5A2 /* SettingsVM.swift in Sources */,
+				97B68DD126E5237400EDA239 /* Color+Theme.swift in Sources */,
 				97C6130026C0471900C7879E /* SeriesScoreView.swift in Sources */,
 				97302CB726C32995002E70C2 /* UsersView.swift in Sources */,
 				97C612DB26BF59D300C7879E /* ScoreboardView.swift in Sources */,
@@ -382,6 +393,7 @@
 				97C612CB26BF458300C7879E /* MainApp.swift in Sources */,
 				97302CBF26C8223E002E70C2 /* ToastOverlayView.swift in Sources */,
 				9798AFED26E1496B0046D40C /* DeviceOrientationModifier.swift in Sources */,
+				97B68DCF26E520EF00EDA239 /* StatusView.swift in Sources */,
 				97C612F426C0306100C7879E /* Match.swift in Sources */,
 				97302CAC26C2AFF0002E70C2 /* SeriesView.swift in Sources */,
 				97F9081B26D443C80026F96A /* ServiceVM.swift in Sources */,

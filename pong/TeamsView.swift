@@ -29,14 +29,8 @@ struct TeamsView: View {
 				
 				TeamView(match: match, tableSide: .right)
 			}
-	
-		
-			
-		
-		
 	}
-	
-	
+
 }
 
 struct TeamsView_Previews: PreviewProvider {

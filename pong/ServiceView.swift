@@ -12,27 +12,18 @@ struct ServiceView: View {
 	@ObservedObject var viewModel: ServiceVM
 	
 	var body: some View {
-	
-			HStack {
-				arrowImage(.left)
-				
-				Text(viewModel.text)
-					.font(.system(size: 50, weight: .regular, design: .rounded))
-					.lineLimit(1)
-					.foregroundColor(viewModel.textColor)
-					.shadow(color: .white, radius: 3, x: 0, y: 0)
-					.padding()
-					.layoutPriority(2)
-				
-				arrowImage(.right)
-			}
-			.frame(width: viewModel.panelWidth * 2)
-			.padding()
+		
+		HStack {
+			arrowImage(.left)
+			serviceTextBox
+			arrowImage(.right)
+		}
+		.frame(width: viewModel.panelWidth * 2)
+		.padding()
 		
 		Rectangle()
 			.foregroundColor(.clear)
 			.frame(height: 100)
-		
 	}
 	
 	func arrowImage(_ tableSide: TableSide) -> some View {
@@ -40,10 +31,29 @@ struct ServiceView: View {
 			.resizable()
 			.scaledToFit()
 			.foregroundColor(viewModel.imageColor(tableSide))
-			.shadow(color: .green, radius: viewModel.shadowRadius(tableSide), x: 0, y: 0)
+			.shadow(color: .green, radius: viewModel.arrowShadowRadius(tableSide), x: 0, y: 0)
+			.padding(tableSide == .left ? .trailing : .leading)
 	}
 	
-
+	var serviceTextBox: some View {
+		GroupBox {
+			Text(viewModel.text)
+				.font(.system(size: 50, weight: .regular, design: .rounded))
+				.minimumScaleFactor(0.1)
+				.lineLimit(1)
+				.foregroundColor(viewModel.textColor)
+				.shadow(color: viewModel.textColor, radius: viewModel.textShadowRadius, x: 0, y: 0)
+				.padding()
+		}
+		.groupBoxStyle(BlackGroupBoxStyle())
+		.overlay(
+			RoundedRectangle(cornerRadius: 10)
+				.stroke(viewModel.textColor, lineWidth: 1)
+				.shadow(color: viewModel.textColor, radius: viewModel.textShadowRadius, x: 0, y: 0)
+		)
+		.layoutPriority(2)
+		.frame(width: viewModel.panelWidth * 1.0)
+	}
 }
 
 struct ServiceView_Previews: PreviewProvider {

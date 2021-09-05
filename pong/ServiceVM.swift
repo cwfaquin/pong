@@ -17,7 +17,7 @@ final class ServiceVM: ObservableObject {
 		self.match = match
 		self.panelWidth = panelWidth
 	}
-
+	
 	var text: String {
 		switch match.status {
 		case .ping:
@@ -30,12 +30,21 @@ final class ServiceVM: ObservableObject {
 	var textColor: Color {
 		switch match.status {
 		case .ping:
-			return .orange
+			return .green
 		case .pregame, .guestChooseSide:
 			return .gray
 		default:
-			return .green
+			return .white
+		}
 	}
+	
+	var textShadowRadius: CGFloat {
+		switch match.status {
+		case .pregame, .guestChooseSide:
+			return 0
+		default:
+			return 3
+		}
 	}
 	
 	func imageName(_ tableSide: TableSide) -> String {
@@ -51,7 +60,7 @@ final class ServiceVM: ObservableObject {
 	func imageColor(_ side: TableSide) -> Color {
 		switch match.status {
 		case .ping:
-			return .orange
+			return .green
 		case .pregame, .guestChooseSide:
 			return .gray
 		default:
@@ -59,7 +68,8 @@ final class ServiceVM: ObservableObject {
 		}
 	}
 	
-	func shadowRadius(_ side: TableSide) -> CGFloat {
+	
+	func arrowShadowRadius(_ side: TableSide) -> CGFloat {
 		switch match.status {
 		case .ping, .pregame, .guestChooseSide:
 			return 0

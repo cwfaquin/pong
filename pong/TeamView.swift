@@ -49,11 +49,13 @@ extension TeamView {
 	var playerBox: some View {
 		GroupBox {
 			Button(action: addUser, label: { Label("Player", systemImage: "plus.circle") })
-				.foregroundColor(Color(UIColor.systemTeal))
+				.foregroundColor(._teal)
 				.font(.title3)
 				.minimumScaleFactor(0.75)
 				.lineLimit(1)
 		}
+		.cornerRadius(10)
+		.groupBoxStyle(BlackGroupBoxStyle(color: Color(UIColor.systemGray6)))
 	}
 	
 	var scoreStepper: some View {

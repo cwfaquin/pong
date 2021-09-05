@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Set {
+struct GameSet {
 	let firstServe: TeamID
 	var home = [Game]()
 	var guest = [Game]()

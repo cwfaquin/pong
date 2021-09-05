@@ -12,21 +12,13 @@ final class Match: ObservableObject {
 	
 	@Published var status: Status = .pregame
 	@Published var matchType: MatchType = .singleSet
-
-	
 	@Published var tableSides = TableSides()
 	@Published var game: Game = Game(firstService: .guest, tableSides: TableSides())
-	@Published var set: Set = Set(firstServe: .guest)
-	@Published var homeSets = [Set]()
-	@Published var guestSets = [Set]()
+	@Published var set: GameSet = GameSet(firstServe: .guest)
+	@Published var homeSets = [GameSet]()
+	@Published var guestSets = [GameSet]()
 	
-	@Published var geoSize: CGSize = .zero
 
-	
-	
-	var middlePanelWidth: CGFloat {
-		geoSize.width/8
-	}
 	
 	/* Single Tap player side buttons used for:
 	1. Choose side prematch
@@ -41,13 +33,15 @@ final class Match: ObservableObject {
 			status = .ping
 		case .ping:
 			let server = teamID(tableSide)
-			set = Set(firstServe: server)
+			set = GameSet(firstServe: server)
 			game = Game(firstService: server, tableSides: tableSides)
 			status = .playing
 		case .playing:
 			switch game.status {
 			case .gameOver:
 				print("Nothing game over.")
+			case .skunk:
+				game.status = .gameOver
 			default:
 				game.addPoint(teamID(tableSide))
 			}
@@ -71,9 +65,7 @@ final class Match: ObservableObject {
 	func singleTapMiddle() {
 		print("single tap middle")
 		switch status {
-		case .optionToExtend:
-			extendMatch()
-		case .matchComplete:
+		case .matchComplete, .optionToExtend:
 			status = .postgame
 			print("POST match and show stats")
 		case .postgame:
@@ -86,9 +78,20 @@ final class Match: ObservableObject {
 			switch game.status {
 			case .gameOver:
 				closeOutGame()
+			case .skunk:
+				game.status = .gameOver
 			default:
 				break
 			}
+		default:
+			break
+		}
+	}
+	
+	func doubleTapMiddle() {
+		switch status {
+		case .optionToExtend:
+			extendMatch()
 		default:
 			break
 		}
@@ -98,7 +101,7 @@ final class Match: ObservableObject {
 		homeSets = []
 		guestSets = []
 		tableSides = tableSides.switched()
-		set = Set(firstServe: .guest)
+		set = GameSet(firstServe: .guest)
 		game = Game(firstService: .guest, tableSides: tableSides.switched())
 	}
 	
@@ -209,6 +212,15 @@ final class Match: ObservableObject {
 			return tableSides.guest
 		}
 	}
+
+	var statusText: String? {
+		switch status {
+		case .playing:
+			return game.status.statusText
+		default:
+			return status.statusText
+		}
+	}
 }
 
 extension Match {
@@ -220,6 +232,20 @@ extension Match {
 		case optionToExtend
 		case matchComplete
 		case postgame
+	
+		var statusText: String? {
+			switch self {
+			case .ping:
+				return "Ping it up!"
+			case .guestChooseSide:
+				return "Guest, choose a side."
+			case .optionToExtend:
+				return "Do you want to extend the match?"
+			default:
+				return nil
+			}
+		}
 	}
 }
+	
 

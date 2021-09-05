@@ -138,7 +138,7 @@ extension Game {
 		}
 		/// MARK: Handle untied score
 		if skunk {
-			status = .gameOver
+			status = .skunk
 			return
 		}
 		if pointGoalReached && (advantage.score - disadvantage.score > 1) {
@@ -164,5 +164,23 @@ extension Game {
 		case deuceOT
 		case adOut
 		case gameOver
+		case skunk
+		
+		var statusText: String? {
+			switch self {
+			case .deuce, .deuceOT:
+				return "D E U C E!"
+			case .adOut:
+				return "Advantage Out"
+			case .gamePoint:
+				return "Game Point!"
+			case .gameOver:
+				return "G A M E  O V E R"
+			case .skunk:
+				return "🦨 Skunked!? You stink! 🦨"
+			default:
+				return nil
+			}
+		}
 	}
 }
