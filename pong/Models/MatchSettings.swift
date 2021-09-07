@@ -11,15 +11,18 @@ final class MatchSettings: ObservableObject {
 	@Published var gameType: GameType = .long
 	@Published var setType: SetType = .bestOfThree
 	@Published var matchType: MatchType = .singleSet
-	
+	@Published var showControlButtons = true
 	
 }
 
-protocol PointGoal {
+protocol ScoreSetting: Identifiable  {
+	var id: Int { get }
 	var pointGoal: Int { get }
+	var maxSeriesCount: Int { get }
+	var description: String { get }
 }
 
-enum GameType: Int, CaseIterable, PointGoal {
+enum GameType: Int, CaseIterable, ScoreSetting {
 	case short
 	case long
 	
@@ -32,9 +35,20 @@ enum GameType: Int, CaseIterable, PointGoal {
 		}
 	}
 	
+	var id: Int {
+		rawValue
+	}
+	
+	var maxSeriesCount: Int {
+		.zero
+	}
+	
+	var description: String {
+		"\(pointGoal) points"
+	}
 }
 
-enum SetType: Int, CaseIterable, PointGoal {
+enum SetType: Int, CaseIterable, Identifiable, ScoreSetting {
 	case singleGame
 	case bestOfThree
 	case bestOfFive
@@ -53,21 +67,34 @@ enum SetType: Int, CaseIterable, PointGoal {
 		}
 	}
 	
-	var bestOf: String {
+	var id: Int {
+		rawValue
+	}
+	
+	var description: String {
 		switch self {
 		case .singleGame:
-			return "Single Game"
+			return "1 Game"
+		default:
+			return "Best of \(maxSeriesCount)"
+		}
+	}
+	
+	var maxSeriesCount: Int {
+		switch self {
+		case .singleGame:
+			return 1
 		case .bestOfThree:
-			return "Best of Three"
+			return 3
 		case .bestOfFive:
-			return "Best of Five"
+			return 5
 		case .bestOfSeven:
-			return "Best of Seven"
+			return 7
 		}
 	}
 }
 
-enum MatchType: Int, CaseIterable, PointGoal {
+enum MatchType: Int, CaseIterable, ScoreSetting {
 	case singleSet
 	case bestOfThree
 	case bestOfFive
@@ -86,16 +113,29 @@ enum MatchType: Int, CaseIterable, PointGoal {
 		}
 	}
 	
-	var bestOf: String {
+	var id: Int {
+		rawValue
+	}
+	
+	var description: String {
 		switch self {
 		case .singleSet:
-			return "Single Set"
+			return "1 Set"
+		default:
+			return "Best of \(maxSeriesCount)"
+		}
+	}
+	
+	var maxSeriesCount: Int {
+		switch self {
+		case .singleSet:
+			return 1
 		case .bestOfThree:
-			return "Best of Three"
+			return 3
 		case .bestOfFive:
-			return "Best of Five"
+			return 5
 		case .bestOfSeven:
-			return "Best of Seven"
+			return 7
 		}
 	}
 }

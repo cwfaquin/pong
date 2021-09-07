@@ -42,6 +42,8 @@ final class ServiceVM: ObservableObject {
 		switch match.status {
 		case .pregame, .guestChooseSide:
 			return 0
+		case .ping:
+			return 1
 		default:
 			return 3
 		}
@@ -71,10 +73,12 @@ final class ServiceVM: ObservableObject {
 	
 	func arrowShadowRadius(_ side: TableSide) -> CGFloat {
 		switch match.status {
-		case .ping, .pregame, .guestChooseSide:
+		case .pregame, .guestChooseSide:
 			return 0
+		case .ping:
+			return 1
 		default:
-			return side == match.serviceSide ? 5 : 0
+			return side == match.serviceSide ? 10 : 0
 		}
 	}
 }

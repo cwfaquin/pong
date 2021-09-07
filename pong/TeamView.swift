@@ -9,14 +9,16 @@ import SwiftUI
 
 struct TeamView: View {
 	
-	@ObservedObject var match: Match
+	@EnvironmentObject var match: Match
+
 	let tableSide: TableSide
+	@Binding var showControlButtons: Bool
+	@State private var choosingSide = false
 	
     var body: some View {
 			GroupBox {
 				Text(match.teamID(tableSide).rawValue.uppercased().spaced)
 					.font(.system(size: 50, weight: .regular, design: .monospaced))
-					//.minimumScaleFactor(0.75)
 					.lineLimit(1)
 					.shadow(color: .white, radius: 2.5, x: 0, y: 0)
 					.padding()
@@ -26,9 +28,13 @@ struct TeamView: View {
 					case .left:
 						playerBox
 						Spacer()
-						scoreStepper
+						if showControlButtons {
+							scoreStepper
+						}
 					case .right:
-						scoreStepper
+						if showControlButtons {
+							scoreStepper
+						}
 						Spacer()
 						playerBox
 					}
@@ -38,10 +44,24 @@ struct TeamView: View {
 			.groupBoxStyle(BlackGroupBoxStyle(color: .black))
 			.overlay(
 					RoundedRectangle(cornerRadius: 10)
-						.stroke(borderColor(tableSide), lineWidth: 2)
-						.shadow(color: borderColor(tableSide), radius: shadowRadius(tableSide), x: 0, y: 0)
+						.stroke(borderColor(tableSide), lineWidth: choosingSide ? 10 : lineWidth(tableSide))
+						.shadow(color: borderColor(tableSide), radius: choosingSide ? 10 : 0, x: 0, y: 0)
 			)
 			.padding()
+			.onChange(of: match.status) { newValue in
+				switch newValue {
+				case .guestChooseSide where isGuest:
+					withAnimation(.linear(duration: 1.5).repeatForever()) {
+						choosingSide = true
+					}
+				default:
+					if choosingSide {
+						withAnimation(.easeOut) {
+							choosingSide = false
+						}
+					}
+				}
+			}
 		}
 }
 
@@ -63,26 +83,26 @@ extension TeamView {
 			.labelsHidden()
 	}
 	
-	func shadowRadius(_ side: TableSide) -> CGFloat {
+	var isGuest: Bool {
+		tableSide == match.tableSides.guest
+	}
+	
+	func lineWidth(_ side: TableSide) -> CGFloat {
 		switch match.status {
-		case .ping, .pregame:
-			return 0
 		case .guestChooseSide:
-			return side == match.tableSides.guest ? 3 : 0
+			return isGuest ? 0 : 1.5
 		default:
-			return side == match.serviceSide ? 3 : 0
+			return 1.5
 		}
 	}
 	
 	func borderColor(_ side: TableSide) -> Color {
 		let gray = Color(UIColor.secondarySystemFill)
 		switch match.status {
-		case .ping, .pregame:
-			return gray
 		case .guestChooseSide:
-			return side == match.tableSides.guest ? .green : gray
+			return isGuest ? .green : gray
 		default:
-			return side == match.serviceSide ? .green : gray
+			return gray
 		}
 	}
 	
@@ -93,6 +113,6 @@ extension TeamView {
 
 struct TeamView_Previews: PreviewProvider {
     static var previews: some View {
-			TeamView(match: Match(), tableSide: .left)
+			TeamView(tableSide: .left, showControlButtons: .constant(true))
     }
 }

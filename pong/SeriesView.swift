@@ -15,7 +15,7 @@ struct SeriesView: View {
 			HStack(alignment: .center) {
 				Spacer()
 				SeriesScoreView(viewModel: viewModel.leftScoreVM)
-					.frame(minHeight: 40, idealHeight: 70, maxHeight: 100)
+					.frame(minHeight: 40, idealHeight: 70, maxHeight: 140)
 					.padding(.trailing)
 
 				Divider()
@@ -36,7 +36,7 @@ struct SeriesView: View {
 
 
 				SeriesScoreView(viewModel: viewModel.rightScoreVM)
-					.frame(minHeight: 40, idealHeight: 70, maxHeight: 100)
+					.frame(minHeight: 40, idealHeight: 70, maxHeight: 140)
 					.padding(.leading)
 
 				Spacer()

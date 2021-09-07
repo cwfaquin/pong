@@ -14,9 +14,12 @@ final class SettingsVM: ObservableObject {
 	@Published var leftButton: FLICButton?
 	@Published var rightButton: FLICButton?
 	@Published var homeButton: FLICButton?
-	@Published var navText: String = "Settings"
 	
 	init() {
+		
+	}
+	
+	func initButtons() {
 		FLICManager.shared()?.buttons().forEach {
 			switch $0.nickname {
 			case FlicName.tableLeft.rawValue:
@@ -26,8 +29,17 @@ final class SettingsVM: ObservableObject {
 			case FlicName.home.rawValue:
 				homeButton = $0
 			default:
-				break 
+				break
 			}
+		}
+	}
+	
+	var flicConnectable: Bool {
+		switch UIDevice.current.userInterfaceIdiom {
+		case .pad, .phone:
+			return true
+		default:
+			return false
 		}
 	}
 	

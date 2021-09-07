@@ -11,9 +11,9 @@ import SwiftUI
 extension AnyTransition {
 		static var bottomToTop: AnyTransition {
 				let insertion = AnyTransition.move(edge: .bottom)
-				.combined(with: .scale)
+				//.combined(with: .scale)
 			let removal = AnyTransition.move(edge: .top)
-				.combined(with: .scale)
+				//.combined(with: .scale)
 				return .asymmetric(insertion: insertion, removal: removal)
 		}
 }

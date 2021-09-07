@@ -18,7 +18,8 @@ struct MainApp: App {
 	
 	var body: some Scene {
 		WindowGroup {
-			ScoreboardView(match: match)
+			ScoreboardView()
+				.environmentObject(match)
 				.environmentObject(settings)
 				.onAppear {
 					viewModel.requestNotificationAuthorization()

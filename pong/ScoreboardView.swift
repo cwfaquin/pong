@@ -10,7 +10,7 @@ import SwiftUI
 struct ScoreboardView: View {
 	
 	@EnvironmentObject var settings: MatchSettings
-	@ObservedObject var match: Match
+	@EnvironmentObject var match: Match
 	@State var showSettings: Bool = false
 	@State var statusText: String = ""
 	@State var showStatus: Bool = false
@@ -22,7 +22,7 @@ struct ScoreboardView: View {
 		ZStack {
 			
 			VStack {
-				TeamsView(match: match, showSettings: $showSettings, panelWidth: panelWidth)
+				TeamsView(showSettings: $showSettings, panelWidth: panelWidth)
 				SeriesView(viewModel: SeriesVM(match, seriesType: .set, panelWidth: panelWidth))
 				SeriesView(viewModel: SeriesVM(match, seriesType: .match, panelWidth: panelWidth))
 				ScoresView(viewModel: ScoresVM(match, screenSize: screenSize))
@@ -37,10 +37,10 @@ struct ScoreboardView: View {
 				VStack {
 					Spacer()
 					StatusView(statusText: $statusText)
-				
 					Spacer()
-				}		.animation(.easeInOut)
-					.transition(.bottomToTop)
+				}
+				.animation(.easeInOut)
+				.transition(.bottomToTop)
 			}
 				
 		}
@@ -51,7 +51,8 @@ struct ScoreboardView: View {
 				gameType: $match.game.gameType,
 				setType: $match.set.setType,
 				matchType: $match.matchType,
-				showSettings: $showSettings
+				showSettings: $showSettings,
+				showControlButtons: $settings.showControlButtons
 			)
 		})
 		.onRotate { newOrientation in
@@ -83,7 +84,7 @@ struct ScoreboardView: View {
 
 struct ScoreboardView_Previews: PreviewProvider {
 	static var previews: some View {
-		ScoreboardView(match: Match())
+		ScoreboardView()
 	}
 }
 

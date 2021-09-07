@@ -15,104 +15,83 @@ struct SettingsView: View {
 	@Binding var setType: SetType
 	@Binding var matchType: MatchType
 	@Binding var showSettings: Bool
+	@Binding var showControlButtons: Bool
 	
 	var flicButtonCount: Int {
 		FLICManager.shared()?.buttons().count ?? 1
 	}
 	
 	var body: some View {
-		NavigationView {
-		Form {
-			Section(header: Text("Points")) {
-				HStack {
-					ForEach(GameType.allCases, id: \.rawValue) { type in
-						GroupBox {
-							Button(
-								action: { gameType = type },
-								label: {
-									Text("\(type.pointGoal)")
-										.padding()
-								}
-							).lineLimit(1)
-								.cornerRadius(10)
-								.foregroundColor(gameType == type ? Color.pink : Color.white)
-								.font(.largeTitle)
-						}
-					}
+		VStack {
+			Button(
+				action: { showSettings.toggle() },
+				label: {
+					Text("O K").bold()
+					.foregroundColor(.pink)
+					.padding()
 				}
-			}.font(.largeTitle)
+			)
+			.overlay(
+					RoundedRectangle(cornerRadius: 10)
+						.stroke(.pink, lineWidth: 1)
+			)
+			.padding()
 			
-			Section(header: Text("Games")) {
-				HStack {
-					ForEach(SetType.allCases, id: \.rawValue) { type in
-						GroupBox {
-							Button(
-								action: { setType = type },
-								label: {
-									Text("\(type.pointGoal)")
-										.padding()
+		Form {
+			Section(header: Text("Match Settings".spaced).bold()) {
+					VStack(alignment: .leading) {
+							Text("Game Length")
+							Picker("Game Length", selection: $gameType) {
+								ForEach(GameType.allCases) { type in
+									Text(type.description).tag(type)
 								}
-							).lineLimit(1)
-								.cornerRadius(10)
-								.foregroundColor(setType == type ? Color.pink : Color.white)
-							//	.background(gameType == type ? Color.pink : Color.clear)
-								.font(.title)
-						}
+							}.pickerStyle(SegmentedPickerStyle())
 					}
-				}
-			}.font(.largeTitle)
-		
-		Section(header: Text("Sets")) {
-			HStack {
-				ForEach(MatchType.allCases, id: \.rawValue) { type in
-					GroupBox {
-						Button(
-							action: { matchType = type },
-							label: {
-								Text("\(type.pointGoal)")
-									.padding()
+				
+				VStack(alignment: .leading) {
+						Text("Set Length")
+						Picker("Set Length", selection: $setType) {
+							ForEach(SetType.allCases) { type in
+								Text(type.description).tag(type)
 							}
-						).lineLimit(1)
-							.cornerRadius(10)
-							.foregroundColor(matchType == type ? Color.pink : Color.white)
-						//	.background(gameType == type ? Color.pink : Color.clear)
-							.font(.title)
-					}
+						}.pickerStyle(SegmentedPickerStyle())
 				}
 				
+				VStack(alignment: .leading) {
+						Text("Match Length").bold()
+						Picker("Match Length", selection: $matchType) {
+							ForEach(MatchType.allCases) { type in
+								Text(type.description).tag(type)
+							}
+						}.pickerStyle(SegmentedPickerStyle())
+				}
 			}
 			
-		}.font(.largeTitle)
-		
-			Section(header: HStack {
-				Text("Flic Buttons")
-				Spacer()
-				if viewModel.needsScan {
-					Button(action: viewModel.scanForButtons, label: { Text("Scan") })
+			Section {
+				Toggle(isOn: $showControlButtons) {
+					Text("Always Show Scoreboard Buttons")
 				}
-			}) {
-				ForEach(FlicName.allCases, id: \.rawValue) { name in
-					flicView(name)
+			}
+				
+			if viewModel.flicConnectable {
+				Section(header: HStack {
+					Text("Flic Buttons".spaced)
+					Spacer()
+					if viewModel.needsScan {
+						Button(action: viewModel.scanForButtons, label: {
+							Text("Scan")
+								.padding(.trailing)
+						})
+					}
+				}) {
+					ForEach(FlicName.allCases, id: \.rawValue) { name in
+						flicView(name)
+					}
 				}
 			}
 		}
-		.navigationBarTitle(viewModel.navText)
-		.navigationBarItems(
-			trailing:
-				Button(
-					action: { showSettings = false },
-					label: {
-						Image(systemName: "xmark.circle")
-							.resizable()
-							.foregroundColor(Color.pink)
-							.frame(width: 40, height: 40)
-							.padding([.top, .trailing])
-					}
-				)
-		)
 		}
-		.navigationViewStyle(StackNavigationViewStyle())
-		.cornerRadius(15)
+		.cornerRadius(10)
 	}
 	
 	func flicView(_ name: FlicName) -> some View {
@@ -144,11 +123,12 @@ struct SettingsView: View {
 		})
 	}
 	
+	
 
 }
 
 struct SettingsView_Previews: PreviewProvider {
 	static var previews: some View {
-		SettingsView(viewModel: SettingsVM(), gameType: .constant(.long), setType: .constant(.bestOfThree), matchType: .constant(.bestOfFive), showSettings: .constant(true))
+		SettingsView(viewModel: SettingsVM(), gameType: .constant(.long), setType: .constant(.bestOfThree), matchType: .constant(.bestOfFive), showSettings: .constant(true), showControlButtons: .constant(true))
 	}
 }

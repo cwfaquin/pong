@@ -235,8 +235,6 @@ extension Match {
 	
 		var statusText: String? {
 			switch self {
-			case .ping:
-				return "Ping it up!"
 			case .guestChooseSide:
 				return "Guest, choose a side."
 			case .optionToExtend:
