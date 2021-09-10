@@ -20,7 +20,7 @@ struct TeamView: View {
 				Text(match.teamID(tableSide).rawValue.uppercased().spaced)
 					.font(.system(size: 50, weight: .regular, design: .monospaced))
 					.lineLimit(1)
-					.shadow(color: .white, radius: 2.5, x: 0, y: 0)
+					.shadow(color: .white, radius: 3, x: 0, y: 0)
 					.padding()
 				Divider()
 				HStack {
@@ -44,8 +44,8 @@ struct TeamView: View {
 			.groupBoxStyle(BlackGroupBoxStyle(color: .black))
 			.overlay(
 					RoundedRectangle(cornerRadius: 10)
-						.stroke(borderColor(tableSide), lineWidth: choosingSide ? 10 : lineWidth(tableSide))
-						.shadow(color: borderColor(tableSide), radius: choosingSide ? 10 : 0, x: 0, y: 0)
+						.stroke(borderColor(tableSide), lineWidth: choosingSide ? 8 : lineWidth(tableSide))
+						.shadow(color: borderColor(tableSide), radius: choosingSide ? 4 : 0, x: 0, y: 0)
 			)
 			.padding()
 			.onChange(of: match.status) { newValue in
@@ -114,5 +114,6 @@ extension TeamView {
 struct TeamView_Previews: PreviewProvider {
     static var previews: some View {
 			TeamView(tableSide: .left, showControlButtons: .constant(true))
+				.environmentObject(Match())
     }
 }

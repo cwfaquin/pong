@@ -11,11 +11,9 @@ import flic2lib
 struct SettingsView: View {
 	
 	@ObservedObject var viewModel: SettingsVM
-	@Binding var gameType: GameType
-	@Binding var setType: SetType
-	@Binding var matchType: MatchType
+	@Binding var settings: MatchSettings
 	@Binding var showSettings: Bool
-	@Binding var showControlButtons: Bool
+
 	
 	var flicButtonCount: Int {
 		FLICManager.shared()?.buttons().count ?? 1
@@ -23,54 +21,47 @@ struct SettingsView: View {
 	
 	var body: some View {
 		VStack {
-			Button(
-				action: { showSettings.toggle() },
-				label: {
-					Text("O K").bold()
-					.foregroundColor(.pink)
-					.padding()
-				}
-			)
-			.overlay(
-					RoundedRectangle(cornerRadius: 10)
-						.stroke(.pink, lineWidth: 1)
-			)
-			.padding()
+			Button("Dismsiss", action: { showSettings.toggle() })
+				.buttonStyle(RoundedRectangleButtonStyle())
+				.padding()
 			
 		Form {
-			Section(header: Text("Match Settings".spaced).bold()) {
+			Section(header: Text("Preferences".spaced)) {
+				Toggle(isOn: $settings.showControlButtons) {
+					Text("Always Show Scoreboard Buttons")
+				}
+				Toggle(isOn: $settings.recordMatchResults) {
+					Text("Report Match Results")
+				}.disabled(true)
+			}
+			
+			Section(header: Text("Match Settings".spaced)) {
 					VStack(alignment: .leading) {
 							Text("Game Length")
-							Picker("Game Length", selection: $gameType) {
+						Picker("Game Length", selection: $settings.gameType) {
 								ForEach(GameType.allCases) { type in
 									Text(type.description).tag(type)
 								}
 							}.pickerStyle(SegmentedPickerStyle())
-					}
+					}.padding(.top)
 				
 				VStack(alignment: .leading) {
-						Text("Set Length")
-						Picker("Set Length", selection: $setType) {
+						Text("Set Length (games)")
+					Picker("Set Length", selection: $settings.setType) {
 							ForEach(SetType.allCases) { type in
 								Text(type.description).tag(type)
 							}
 						}.pickerStyle(SegmentedPickerStyle())
-				}
+				}.padding(.top)
 				
 				VStack(alignment: .leading) {
-						Text("Match Length").bold()
-						Picker("Match Length", selection: $matchType) {
+						Text("Match Length (sets)")
+					Picker("Match Length", selection: $settings.matchType) {
 							ForEach(MatchType.allCases) { type in
 								Text(type.description).tag(type)
 							}
 						}.pickerStyle(SegmentedPickerStyle())
-				}
-			}
-			
-			Section {
-				Toggle(isOn: $showControlButtons) {
-					Text("Always Show Scoreboard Buttons")
-				}
+				}.padding(.top  )
 			}
 				
 			if viewModel.flicConnectable {
@@ -89,7 +80,7 @@ struct SettingsView: View {
 					}
 				}
 			}
-		}
+		}.padding([.top, .bottom])
 		}
 		.cornerRadius(10)
 	}
@@ -129,6 +120,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
 	static var previews: some View {
-		SettingsView(viewModel: SettingsVM(), gameType: .constant(.long), setType: .constant(.bestOfThree), matchType: .constant(.bestOfFive), showSettings: .constant(true), showControlButtons: .constant(true))
+		SettingsView(viewModel: SettingsVM(), settings: .constant(MatchSettings()), showSettings: .constant(true))
 	}
 }

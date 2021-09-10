@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TeamsView: View {
 	
-	@EnvironmentObject var settings: MatchSettings
 	@EnvironmentObject var match: Match
 	@Binding var showSettings: Bool
 	@State var panelWidth: CGFloat
@@ -33,7 +32,7 @@ struct TeamsView: View {
 			
 			TeamView(tableSide: .right, showControlButtons: $showControlButtons)
 		}
-		.onChange(of: settings.showControlButtons) { newValue in
+		.onChange(of: match.settings.showControlButtons) { newValue in
 			withAnimation(.spring()) {
 				showControlButtons = newValue
 			}
@@ -45,5 +44,6 @@ struct TeamsView: View {
 struct TeamsView_Previews: PreviewProvider {
 	static var previews: some View {
 		TeamsView(showSettings: .constant(false), panelWidth: 200)
+			.environmentObject(Match())
 	}
 }

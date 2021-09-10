@@ -9,56 +9,42 @@ import SwiftUI
 
 struct ScoresView: View {
 	
-	@ObservedObject var viewModel: ScoresVM
+	@EnvironmentObject var match: Match
+	@Binding var screenSize: CGSize
 	
-
-    var body: some View {
-			
-			HStack {
-				scoreText(.left)
-				Spacer(minLength: viewModel.screenSize.width/3)
-				scoreText(.right)
-			}.padding()
-    }
-	
-	
-	func scoreImage(_ tableSide: TableSide) -> some View {
-		Image(systemName: viewModel.scoreImageName(tableSide))
-			.resizable()
-			.scaledToFill()
-			.foregroundColor(.black)
-			.background(
-				Circle()
-					.foregroundColor(.white)
-					.padding(4)
-			)
-			.padding()
+	var body: some View {
+		HStack {
+			scoreText(.left)
+			Spacer(minLength: screenSize.width/3)
+			scoreText(.right)
+		}.padding()
 	}
 	
 	func scoreText(_ tableSide: TableSide) -> some View {
-		Text(viewModel.scoreText(tableSide))
+		Text(scoreText(tableSide))
 			.font(.system(size: 1000, weight: .bold, design: .rounded))
+			.foregroundColor(match.status.textColor)
+			.shadow(color: match.status.textColor, radius: match.status.shadowRadious, x: 0, y: 0)
 			.minimumScaleFactor(0.1)
 			.multilineTextAlignment(.center)
 			.padding([tableSide == .left ? .leading : .trailing, .bottom])
 			.frame(maxWidth: .infinity)
-		
 	}
 	
-	func arrowImage(_ tableSide: TableSide, width: CGFloat) -> some View {
-		Image(systemName: viewModel.arrowImageName(tableSide))
-			.resizable()
-			.scaledToFit()
-			.foregroundColor(viewModel.imageColor(.right))
-			.shadow(color: .green, radius: viewModel.shadowRadius(.right), x: 0, y: 0)
-			.frame(width: width)
-			.fixedSize()
-			.padding()
+	func scoreText(_ tableSide: TableSide) -> String {
+		switch match.teamID(tableSide) {
+		case .home:
+			return String(match.game.home)
+		case .guest:
+			return String(match.game.guest)
+		}
 	}
+
 }
 
 struct ScoresView_Previews: PreviewProvider {
-    static var previews: some View {
-			ScoresView(viewModel: ScoresVM(Match(), screenSize: CGSize(width: 500, height: 300)))
-    }
+	static var previews: some View {
+		ScoresView(screenSize: .constant(CGSize(width: 500, height: 300)))
+			.environmentObject(Match())
+	}
 }

@@ -14,13 +14,14 @@ struct Game {
 	let startDate = Date()
 	var home: Int = 0
 	var guest: Int = 0
-	var gameType: GameType = .long
+	var gameType: GameType
 	var service: TeamID
 	var status: Status = .normal
 	var deuceService: TeamID?
 	var endDate: Date?
 	
-	init(firstService: TeamID, tableSides: TableSides) {
+	init(_ gameType: GameType, firstService: TeamID, tableSides: TableSides) {
+		self.gameType = gameType
 		self.firstService = firstService
 		service = firstService
 		self.tableSides = tableSides
@@ -65,7 +66,15 @@ struct Game {
 // Computed and Helpers
 extension Game {
 	var pointGoalReached: Bool {
-		gameType.pointGoal > 0 && (home >= gameType.pointGoal || guest >= gameType.pointGoal)
+		home >= gameType.pointGoal || guest >= gameType.pointGoal
+	}
+	
+	var winner: TeamID? {
+		guard let ad = advantage, let disScore = disadvantage?.score else { return nil }
+		if skunk || (pointGoalReached && (ad.score - disScore > 1)) {
+			return ad.team
+		}
+		return nil 
 	}
 	
 	var disadvantage: (team: TeamID, score: Int)? {
@@ -166,18 +175,16 @@ extension Game {
 		case gameOver
 		case skunk
 		
-		var statusText: String? {
+		var statusVM: StatusVM? {
 			switch self {
 			case .deuce, .deuceOT:
-				return "D E U C E!"
+				return StatusVM(text: "D E U C E!", temporary: true)
 			case .adOut:
-				return "Advantage Out"
+				return StatusVM(text: "Advantage Out", temporary: true)
 			case .gamePoint:
-				return "Game Point!"
-			case .gameOver:
-				return "G A M E  O V E R"
+				return StatusVM(text: "Game Point!", temporary: true)
 			case .skunk:
-				return "🦨 Skunked!? You stink! 🦨"
+				return StatusVM(text: "🦨 Skunked!? You stink! 🦨", temporary: false)
 			default:
 				return nil
 			}

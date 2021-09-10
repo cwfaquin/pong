@@ -14,7 +14,7 @@ struct SeriesView: View {
 	var body: some View {
 			HStack(alignment: .center) {
 				Spacer()
-				SeriesScoreView(viewModel: viewModel.leftScoreVM)
+				SeriesScoreView(viewModels: $viewModel.leftScoreCircles)
 					.frame(minHeight: 40, idealHeight: 70, maxHeight: 140)
 					.padding(.trailing)
 
@@ -26,7 +26,8 @@ struct SeriesView: View {
 				.fontWeight(.ultraLight)
 				.minimumScaleFactor(0.75)
 				.lineLimit(1)
-				.shadow(color: .white, radius: 2, x: 0, y: 0)
+				.foregroundColor(viewModel.match.status.textColor)
+				.shadow(color: viewModel.match.status.textColor, radius: viewModel.textShadowRadius, x: 0, y: 0)
 				.frame(width: viewModel.panelWidth)
 				.padding()
 				
@@ -35,15 +36,22 @@ struct SeriesView: View {
 					.frame(minHeight: 40, idealHeight: 55, maxHeight: 60)
 
 
-				SeriesScoreView(viewModel: viewModel.rightScoreVM)
+				SeriesScoreView(viewModels: $viewModel.rightScoreCircles)
 					.frame(minHeight: 40, idealHeight: 70, maxHeight: 140)
 					.padding(.leading)
 
 				Spacer()
-			
-			
-		
-		}
+			}
+			.onChange(of: viewModel.match.settings.setType) { _ in
+				withAnimation(.easeOut) {
+					viewModel.updateScoreCircles()
+				}
+			}
+			.onChange(of: viewModel.match.settings.matchType) { _ in
+				withAnimation(.easeOut) {
+					viewModel.updateScoreCircles()
+				}
+			}
 	}
 	
 }

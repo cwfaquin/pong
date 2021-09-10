@@ -143,7 +143,7 @@ extension FLICButtonState {
 }
 
 enum FlicName: String, CaseIterable {
-	case home
+	case home = "Home"
 	case tableLeft = "Table Left"
 	case tableRight = "Table Right"
 	

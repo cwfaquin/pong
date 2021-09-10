@@ -9,10 +9,9 @@ import SwiftUI
 
 struct ScoreboardView: View {
 	
-	@EnvironmentObject var settings: MatchSettings
 	@EnvironmentObject var match: Match
 	@State var showSettings: Bool = false
-	@State var statusText: String = ""
+	@State var statusVM: StatusVM = StatusVM(text: "", temporary: true)
 	@State var showStatus: Bool = false
 	
 	@State var screenSize = UIScreen.main.bounds.size
@@ -25,7 +24,7 @@ struct ScoreboardView: View {
 				TeamsView(showSettings: $showSettings, panelWidth: panelWidth)
 				SeriesView(viewModel: SeriesVM(match, seriesType: .set, panelWidth: panelWidth))
 				SeriesView(viewModel: SeriesVM(match, seriesType: .match, panelWidth: panelWidth))
-				ScoresView(viewModel: ScoresVM(match, screenSize: screenSize))
+				ScoresView(screenSize: $screenSize)
 			}
 			
 			VStack {
@@ -36,7 +35,7 @@ struct ScoreboardView: View {
 			if showStatus {
 				VStack {
 					Spacer()
-					StatusView(statusText: $statusText)
+					StatusView(showStatus: $showStatus, viewModel: $statusVM)
 					Spacer()
 				}
 				.animation(.easeInOut)
@@ -48,21 +47,18 @@ struct ScoreboardView: View {
 		.sheet(isPresented: $showSettings, onDismiss: nil, content: {
 			SettingsView(
 				viewModel: SettingsVM(),
-				gameType: $match.game.gameType,
-				setType: $match.set.setType,
-				matchType: $match.matchType,
-				showSettings: $showSettings,
-				showControlButtons: $settings.showControlButtons
+				settings: $match.settings,
+				showSettings: $showSettings
 			)
 		})
 		.onRotate { newOrientation in
 			screenSize = UIScreen.main.bounds.size
 		}
-		.onChange(of: match.status) { _ in
-			handleStateChange()
+		.onChange(of: match.status) { matchStatus in
+			handleNewState(matchStatus, gameStatus: nil)
 		}
-		.onChange(of: match.game.status) { _ in
-			handleStateChange()
+		.onChange(of: match.game.status) { gameStatus in
+			handleNewState(nil, gameStatus: gameStatus)
 		}
 	}
 	
@@ -71,20 +67,21 @@ struct ScoreboardView: View {
 		.panelWidth(screenSize.width)
 	}
 	
-	func handleStateChange() {
-		withAnimation {
-			if let statusText = match.statusText {
-				self.statusText = statusText
+	func handleNewState(_ matchStatus: Match.Status?, gameStatus: Game.Status?) {
+		let newStatusVM = matchStatus?.statusVM ?? gameStatus?.statusVM
+		withAnimation(.easeInOut) {
+			if let newStatusVM = newStatusVM {
+				statusVM = newStatusVM
 			}
-			showStatus = match.statusText != nil
+			showStatus = newStatusVM != nil
 		}
 	}
-	
 }
 
 struct ScoreboardView_Previews: PreviewProvider {
 	static var previews: some View {
 		ScoreboardView()
+			.environmentObject(Match())
 	}
 }
 

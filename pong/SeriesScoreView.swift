@@ -9,26 +9,39 @@ import SwiftUI
 
 struct SeriesScoreView: View {
 	
-	@ObservedObject var viewModel: SeriesScoreVM
-	
+	@Binding var viewModels: [CircleScoreVM]
+
 	var body: some View {
 		
 		HStack(alignment: .center, spacing: 20) {
-			ForEach(0..<viewModel.winningScore) { index in
-				Image(systemName: viewModel.imageNames[index])
+			ForEach(viewModels, id: \.id) {
+				Image(systemName: $0.systemName)
 					.resizable()
 					.aspectRatio(contentMode: .fit)
-					.foregroundColor(viewModel.foregoundColors[index])
-					.shadow(color: viewModel.foregoundColors[index], radius: 3, x: 0, y: 0)
+					.foregroundColor($0.color)
+					.shadow(color: $0.color, radius: $0.shadowRadius, x: 0, y: 0)
 					.padding()
+					.animation(.spring())
 			}
-		}
-		
+		}.animation(.spring())
 	}
+	
 }
 
 struct SeriesScoreView_Previews: PreviewProvider {
 	static var previews: some View {
-		SeriesScoreView(viewModel: SeriesScoreVM(.left, currentScore: 0, winningScore: 3, circleCount: 3))
+		let viewModels = Array(0...3).compactMap { CircleScoreVM(index: $0, systemName: "circle", color: Color(UIColor.cyan), shadowRadius: 5) }
+		SeriesScoreView(viewModels: .constant(viewModels))
+	}
+}
+
+struct CircleScoreVM: Identifiable {
+	let index: Int
+	let systemName: String
+	let color: Color
+	let shadowRadius: CGFloat
+	
+	var id: Int {
+		index
 	}
 }

@@ -20,18 +20,18 @@ struct ServiceView: View {
 				serviceTextBox()
 				arrowImage(.right)
 			}
-			.frame(width: viewModel.panelWidth * 2)
+			.frame(width: viewModel.panelWidth * 2.5)
 			.padding()
-			.scaleEffect(isAnimating ? 1.5 : 1)
+			.scaleEffect(isAnimating ? 2 : 1)
 		
 			Rectangle()
 				.foregroundColor(.clear)
-				.frame(height: 100)
+				.frame(height: isAnimating ? UIScreen.main.bounds.height/3 : 100)
 				.fixedSize(horizontal: false, vertical: true)
 				.onChange(of: viewModel.match.status) { newValue in
 					switch newValue {
 					case .ping:
-						withAnimation(.easeInOut(duration: 2).repeatForever()) {
+						withAnimation(.easeInOut) {
 							isAnimating = true
 						}
 					default:
@@ -60,16 +60,17 @@ struct ServiceView: View {
 				.minimumScaleFactor(0.1)
 				.lineLimit(1)
 				.foregroundColor(viewModel.textColor)
-				.shadow(color: viewModel.textColor, radius: isAnimating ? 8 : viewModel.textShadowRadius, x: 0, y: 0)
+				.shadow(color: viewModel.textColor, radius: isAnimating ? 2 : viewModel.textShadowRadius, x: 0, y: 0)
 				.padding()
 		}
 		.groupBoxStyle(BlackGroupBoxStyle())
 		.cornerRadius(10)
-		.overlay(
+	/*	.overlay(
 			RoundedRectangle(cornerRadius: 10)
 				.stroke(viewModel.textColor, lineWidth: isAnimating ? 5 : 1)
-				.shadow(color: viewModel.textColor, radius: isAnimating ? 8 : viewModel.textShadowRadius, x: 0, y: 0)
+				.shadow(color: viewModel.textColor, radius: isAnimating ? 5 : viewModel.textShadowRadius, x: 0, y: 0)
 		)
+		*/
 		.layoutPriority(2)
 		.frame(width: viewModel.panelWidth * 1.0)
 	}

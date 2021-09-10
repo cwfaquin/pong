@@ -10,16 +10,23 @@ import SwiftUI
 
 final class Match: ObservableObject {
 	
+	@Published var settings = MatchSettings()
 	@Published var status: Status = .pregame
-	@Published var matchType: MatchType = .singleSet
 	@Published var tableSides = TableSides()
-	@Published var game: Game = Game(firstService: .guest, tableSides: TableSides())
-	@Published var set: GameSet = GameSet(firstServe: .guest)
+	@Published var game: Game = Game(.long, firstService: .guest, tableSides: TableSides())
+	@Published var set: GameSet = GameSet(.bestOfThree, firstServe: .guest)
 	@Published var homeSets = [GameSet]()
 	@Published var guestSets = [GameSet]()
-	
+	var cancellable = Set<AnyCancellable>()
 
-	
+	init() {
+		$settings
+			.sink { newValue in
+				self.game.gameType = newValue.gameType
+				self.set.setType = newValue.setType
+			}
+			.store(in: &cancellable)
+	}
 	/* Single Tap player side buttons used for:
 	1. Choose side prematch
 	2. Set ping winner preset
@@ -33,8 +40,8 @@ final class Match: ObservableObject {
 			status = .ping
 		case .ping:
 			let server = teamID(tableSide)
-			set = GameSet(firstServe: server)
-			game = Game(firstService: server, tableSides: tableSides)
+			set = GameSet(settings.setType, firstServe: server)
+			game = Game(settings.gameType, firstService: server, tableSides: tableSides)
 			status = .playing
 		case .playing:
 			switch game.status {
@@ -42,8 +49,27 @@ final class Match: ObservableObject {
 				print("Nothing game over.")
 			case .skunk:
 				game.status = .gameOver
+				postgameMatchStatus()
 			default:
+				print(game.status)
 				game.addPoint(teamID(tableSide))
+				print(game.status)
+				guard let gameWinner = game.winner else { return }
+				set.addGame(game, winner: gameWinner)
+				if let setWinner = set.winner {
+					switch setWinner {
+					case .home:
+						homeSets.append(set)
+					case .guest:
+						guestSets.append(set)
+					}
+				}
+				switch game.status {
+				case .gameOver:
+					postgameMatchStatus()
+				default:
+					break
+				}
 			}
 		default:
 			break
@@ -54,6 +80,23 @@ final class Match: ObservableObject {
 	1. Remove point in game
 	*/
 	func doubleTap(_ tableSide: TableSide) {
+		switch game.status {
+		case .gameOver, .skunk:
+			if let gameWinner = game.winner {
+				if let setWinner = set.winner {
+					switch setWinner {
+					case .home:
+						_ = homeSets.removeLast()
+					case .guest:
+						_ = guestSets.removeLast()
+					}
+				}
+				set.removeGame(gameWinner, startDate: game.startDate)
+				status = .playing
+			}
+		default:
+			break
+		}
 		let team = teamID(tableSide)
 		game.removePoint(team)
 	}
@@ -65,116 +108,46 @@ final class Match: ObservableObject {
 	func singleTapMiddle() {
 		print("single tap middle")
 		switch status {
-		case .matchComplete, .optionToExtend:
+		case .matchComplete:
 			status = .postgame
-			print("POST match and show stats")
 		case .postgame:
 			status = .pregame
 			resetMatch()
-			print("Select teams")
 		case .pregame:
 			status = .guestChooseSide
-		case .playing:
-			switch game.status {
-			case .gameOver:
-				closeOutGame()
-			case .skunk:
-				game.status = .gameOver
-			default:
-				break
+		case .gameOverSwitchSides:
+			let firstService = game.secondService
+			tableSides = tableSides.switched()
+			if set.setComplete {
+				status = .ping
+			} else {
+				status = .playing
+				game = Game(settings.gameType, firstService: firstService, tableSides: tableSides)
 			}
 		default:
 			break
 		}
+		print(status)
 	}
 	
 	func doubleTapMiddle() {
-		switch status {
-		case .optionToExtend:
-			extendMatch()
-		default:
-			break
-		}
+		print("double tap middle")
 	}
 	
 	func resetMatch() {
 		homeSets = []
 		guestSets = []
 		tableSides = tableSides.switched()
-		set = GameSet(firstServe: .guest)
-		game = Game(firstService: .guest, tableSides: tableSides.switched())
+		set = GameSet(settings.setType, firstServe: .guest)
+		game = Game(settings.gameType, firstService: .guest, tableSides: tableSides.switched())
 	}
 	
-	func closeOutGame() {
-		guard let winner = game.advantage?.team else {
-			assertionFailure("Game over and winner is nil.")
-			return
-		}
-		print("POST game results")
-		set.addGame(game, winner: winner)
-		if set.setComplete {
-			closeOutSet()
-		} else {
-			let firstService = game.secondService
-			tableSides = tableSides.switched()
-			game = Game(firstService: firstService, tableSides: tableSides)
-		}
-	}
-	
-	func closeOutSet() {
-		guard let setWinner = set.winner else {
-			assertionFailure("Must be a set winner to get here.")
-			return
-		}
-		print("Set Winner UI")
-		switch setWinner {
-		case .home:
-			homeSets.append(set)
-		case .guest:
-			guestSets.append(set)
-		}
+	func postgameMatchStatus() {
 		if matchTotalReached {
-			closeOutMatch()
-		} else {
-			print("Switch sides")
-			print("New Set")
-			tableSides = tableSides.switched()
-			status = .ping
-		}
-	}
-	
-	func closeOutMatch() {
-		guard let matchWinner = matchWinner else {
-			assertionFailure("No winner of match. Do you still want to close?")
-			return
-		}
-		if matchType.pointGoal < MatchType.bestOfSeven.pointGoal {
-			print("give option to extend")
-			status = .optionToExtend
-		} else {
-			print("Winner \(String(describing: matchWinner))")
 			status = .matchComplete
+		} else {
+			status = .gameOverSwitchSides
 		}
-	}
-	
-	func applySettings(_ settings: MatchSettings) {
-		game.gameType = settings.gameType
-		set.setType = settings.setType
-	}
-	
-	func extendMatch() {
-		switch matchType {
-		case .singleSet:
-			matchType = .bestOfThree
-		case .bestOfThree:
-			matchType = .bestOfFive
-		case .bestOfFive:
-			matchType = .bestOfSeven
-		default:
-			assertionFailure("Cannot extend best of 7")
-			return
-		}
-		status = .ping
 	}
 	
 	func teamID(_ tableSide: TableSide) -> TeamID {
@@ -200,8 +173,8 @@ final class Match: ObservableObject {
 	}
 	
 	var matchTotalReached: Bool {
-		homeSets.count == matchType.pointGoal ||
-			guestSets.count == matchType.pointGoal
+		homeSets.count == settings.matchType.pointGoal ||
+		guestSets.count == settings.matchType.pointGoal
 	}
 	
 	var serviceSide: TableSide {
@@ -212,15 +185,6 @@ final class Match: ObservableObject {
 			return tableSides.guest
 		}
 	}
-
-	var statusText: String? {
-		switch status {
-		case .playing:
-			return game.status.statusText
-		default:
-			return status.statusText
-		}
-	}
 }
 
 extension Match {
@@ -229,18 +193,49 @@ extension Match {
 		case guestChooseSide
 		case ping
 		case playing
-		case optionToExtend
+		case gameOverSwitchSides
 		case matchComplete
 		case postgame
 	
-		var statusText: String? {
+		var statusVM: StatusVM? {
 			switch self {
 			case .guestChooseSide:
-				return "Guest, choose a side."
-			case .optionToExtend:
-				return "Do you want to extend the match?"
+				return StatusVM(text: "Guest, choose a side.", temporary: false)
+			case .ping:
+				return StatusVM(text: "Ping it up!", temporary: true)
+			case .matchComplete:
+				return StatusVM(text: "GAME. SET. MATCH.", temporary: false)
+			case .gameOverSwitchSides:
+				return StatusVM(text: "GAME OVER\n\nSwitch Sides", temporary: true)
 			default:
 				return nil
+			}
+		}
+		
+		var textColor: Color {
+			switch self {
+			case .pregame, .ping, .guestChooseSide:
+				return .gray
+			default:
+				return .white
+			}
+		}
+		
+		var circleColor: Color {
+			switch self {
+			case .pregame, .ping, .guestChooseSide:
+				return .gray
+			default:
+				return Color(UIColor.cyan)
+			}
+		}
+		
+		var shadowRadious: CGFloat {
+			switch self {
+			case .pregame, .ping, .guestChooseSide:
+				return 0
+			default:
+				return 5
 			}
 		}
 	}

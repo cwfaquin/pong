@@ -12,6 +12,7 @@ final class MatchSettings: ObservableObject {
 	@Published var setType: SetType = .bestOfThree
 	@Published var matchType: MatchType = .singleSet
 	@Published var showControlButtons = true
+	@Published var recordMatchResults = false
 	
 }
 
@@ -74,7 +75,7 @@ enum SetType: Int, CaseIterable, Identifiable, ScoreSetting {
 	var description: String {
 		switch self {
 		case .singleGame:
-			return "1 Game"
+			return "1 game"
 		default:
 			return "Best of \(maxSeriesCount)"
 		}
@@ -120,7 +121,7 @@ enum MatchType: Int, CaseIterable, ScoreSetting {
 	var description: String {
 		switch self {
 		case .singleSet:
-			return "1 Set"
+			return "1 set"
 		default:
 			return "Best of \(maxSeriesCount)"
 		}

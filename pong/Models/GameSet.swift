@@ -11,7 +11,12 @@ struct GameSet {
 	let firstServe: TeamID
 	var home = [Game]()
 	var guest = [Game]()
-	var setType: SetType = .bestOfFive
+	var setType: SetType
+	
+	init(_ setType: SetType, firstServe: TeamID) {
+		self.setType = setType
+		self.firstServe = firstServe
+	}
 	
 	var setComplete: Bool {
 		home.count == setType.pointGoal || guest.count == setType.pointGoal
@@ -33,6 +38,15 @@ struct GameSet {
 			home.append(game)
 		case .guest:
 			guest.append(game)
+		}
+	}
+	
+	mutating func removeGame(_ winner: TeamID, startDate: Date) {
+		switch winner {
+		case .home:
+			home = home.filter { $0.startDate != startDate }
+		case .guest:
+			guest = guest.filter { $0.startDate != startDate }
 		}
 	}
 }
