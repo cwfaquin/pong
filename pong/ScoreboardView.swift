@@ -30,7 +30,8 @@ struct ScoreboardView: View {
 			VStack {
 				Spacer()
 				ServiceView(viewModel: ServiceVM(match, panelWidth: panelWidth))
-			}.padding()
+			}
+			.padding()
 			
 			if showStatus {
 				VStack {

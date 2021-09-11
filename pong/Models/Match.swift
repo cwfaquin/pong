@@ -43,32 +43,20 @@ final class Match: ObservableObject {
 			set = GameSet(settings.setType, firstServe: server)
 			game = Game(settings.gameType, firstService: server, tableSides: tableSides)
 			status = .playing
+		case .gameOverSwitchSides, .matchComplete:
+			break
 		case .playing:
 			switch game.status {
-			case .gameOver:
-				print("Nothing game over.")
 			case .skunk:
 				game.status = .gameOver
-				postgameMatchStatus()
-			default:
-				print(game.status)
-				game.addPoint(teamID(tableSide))
-				print(game.status)
-				guard let gameWinner = game.winner else { return }
-				set.addGame(game, winner: gameWinner)
-				if let setWinner = set.winner {
-					switch setWinner {
-					case .home:
-						homeSets.append(set)
-					case .guest:
-						guestSets.append(set)
-					}
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+					self.postgameMatchStatus()
 				}
-				switch game.status {
-				case .gameOver:
+			default:
+				game.addPoint(teamID(tableSide))
+				checkGameOver()
+				if game.status == .gameOver {
 					postgameMatchStatus()
-				default:
-					break
 				}
 			}
 		default:
@@ -132,6 +120,19 @@ final class Match: ObservableObject {
 	
 	func doubleTapMiddle() {
 		print("double tap middle")
+	}
+	
+	func checkGameOver() {
+		guard let gameWinner = game.winner else { return }
+		set.addGame(game, winner: gameWinner)
+		if let setWinner = set.winner {
+			switch setWinner {
+			case .home:
+				homeSets.append(set)
+			case .guest:
+				guestSets.append(set)
+			}
+		}
 	}
 	
 	func resetMatch() {
@@ -206,7 +207,7 @@ extension Match {
 			case .matchComplete:
 				return StatusVM(text: "GAME. SET. MATCH.", temporary: false)
 			case .gameOverSwitchSides:
-				return StatusVM(text: "GAME OVER\n\nSwitch Sides", temporary: true)
+				return StatusVM(text: "Switch sides".uppercased(), temporary: false)
 			default:
 				return nil
 			}

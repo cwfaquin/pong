@@ -9,6 +9,6 @@ import SwiftUI
 
 extension CGFloat {
 	static func panelWidth(_ screenWidth: CGFloat) -> CGFloat {
-		Swift.min(Swift.max(150, screenWidth/5), 300)
+		Swift.min(Swift.max(150, screenWidth/4.5), 350)
 	}
 }

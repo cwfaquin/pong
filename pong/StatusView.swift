@@ -19,6 +19,7 @@ struct StatusView: View {
 					.font(.system(size: 50, weight: .regular, design: .monospaced))
 					.foregroundColor(._teal)
 					.shadow(color: ._teal, radius: 2, x: 0, y: 0)
+					.multilineTextAlignment(.center)
 					.fixedSize(horizontal: false, vertical: false)
 					.padding()
 			}

@@ -17,7 +17,9 @@ struct ScoresView: View {
 			scoreText(.left)
 			Spacer(minLength: screenSize.width/3)
 			scoreText(.right)
-		}.padding()
+		}
+		.overlay(match.status == .ping ? Color.black.opacity(0.8) : nil)
+		.padding()
 	}
 	
 	func scoreText(_ tableSide: TableSide) -> some View {

@@ -13,35 +13,47 @@ struct ServiceView: View {
 	
 	@ObservedObject var viewModel: ServiceVM
 	
+	let screenHeight = UIScreen.main.bounds.height
+	
 	var body: some View {
-		
+	
+		VStack {
 			HStack {
 				arrowImage(.left)
-				serviceTextBox()
+				if isAnimating {
+					Text(isAnimating ? viewModel.text : "")
+						.font(.serviceFont)
+						.minimumScaleFactor(0.5)
+						.lineLimit(1)
+						.foregroundColor(viewModel.textColor)
+						.shadow(color: viewModel.textColor, radius: isAnimating ? 2 : viewModel.textShadowRadius, x: 0, y: 0)
+						.padding()
+				}
 				arrowImage(.right)
 			}
-			.frame(width: viewModel.panelWidth * 2.5)
+			Rectangle()
+				.foregroundColor(.black)
+				.frame(height: screenHeight/10)
+		}
+		
+			.frame(width: viewModel.panelWidth * 2)
 			.padding()
 			.scaleEffect(isAnimating ? 2 : 1)
-		
-			Rectangle()
-				.foregroundColor(.clear)
-				.frame(height: isAnimating ? UIScreen.main.bounds.height/3 : 100)
-				.fixedSize(horizontal: false, vertical: true)
-				.onChange(of: viewModel.match.status) { newValue in
-					switch newValue {
-					case .ping:
+			.onChange(of: viewModel.match.status) { newValue in
+				switch newValue {
+				case .ping:
+					withAnimation(.easeInOut) {
+						isAnimating = true
+					}
+				default:
+					if isAnimating {
 						withAnimation(.easeInOut) {
-							isAnimating = true
-						}
-					default:
-						if isAnimating {
-							withAnimation(.easeInOut) {
-								isAnimating = false
-							}
+							isAnimating = false
 						}
 					}
 				}
+			}
+				
 	}
 	
 	func arrowImage(_ tableSide: TableSide) -> some View {
@@ -56,8 +68,8 @@ struct ServiceView: View {
 	func serviceTextBox() -> some View {
 		GroupBox {
 			Text(viewModel.text)
-				.font(.system(size: 50, weight: .regular, design: .rounded))
-				.minimumScaleFactor(0.1)
+				.font(.serviceFont)
+				.minimumScaleFactor(0.5)
 				.lineLimit(1)
 				.foregroundColor(viewModel.textColor)
 				.shadow(color: viewModel.textColor, radius: isAnimating ? 2 : viewModel.textShadowRadius, x: 0, y: 0)

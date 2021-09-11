@@ -17,8 +17,9 @@ struct TeamView: View {
 	
     var body: some View {
 			GroupBox {
-				Text(match.teamID(tableSide).rawValue.uppercased().spaced)
-					.font(.system(size: 50, weight: .regular, design: .monospaced))
+				Text(match.teamID(tableSide).rawValue.uppercased())
+					.font(.teamFont)
+					.minimumScaleFactor(0.25)
 					.lineLimit(1)
 					.shadow(color: .white, radius: 3, x: 0, y: 0)
 					.padding()
