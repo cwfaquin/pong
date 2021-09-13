@@ -10,12 +10,13 @@ import SwiftUI
 struct ServiceView: View {
 	
 	@State var isAnimating = false
+	@State var isPulsing = false
 	@ObservedObject var viewModel: ServiceVM
+	let screenWidth = UIScreen.main.bounds.width
 	let screenHeight = UIScreen.main.bounds.height
 	@State var blink = false
-	@State var isMovingBall = false
 	@State var serviceSide: TableSide?
-	@State var isAnimatingBallShadow = false
+
 	
 	var body: some View {
 		
@@ -40,58 +41,69 @@ struct ServiceView: View {
 			.scaleEffect(isAnimating ? 2 : 1)
 			.frame(width: viewModel.panelWidth * 2)
 			.fixedSize()
-			
-			HStack {
-				if serviceSide == .right || serviceSide == nil  {
-					Spacer()
-				}
-				
-				Circle()
-					.foregroundColor(viewModel.textColor)
-					.shadow(color: isMovingBall ? .white : viewModel.ballColor, radius: viewModel.ballShadowRadius, x: isMovingBall ? viewModel.ballMovingShadowSize.width : viewModel.ballShadowSize.width, y: isMovingBall ? viewModel.ballMovingShadowSize.height : viewModel.ballShadowSize.height)
-					.padding([.top])
-					.scaledToFit()
-					.offset(x: 0, y: isAnimating ? screenHeight : 0)
-				
-				if serviceSide == .left || serviceSide == nil  {
-					Spacer()
+		
+				HStack {
+					if let serviceSide = serviceSide {
+
+					if serviceSide == .right {
+						Spacer()
+					}
+					Circle()
+						.fill(.green)
+						.shadow(color: .green, radius: 15, x: 0, y: 0)
+						.scaleEffect(isPulsing ? 0.9 : 1.0)
+						.frame(width: screenHeight/15, height: screenHeight/15)
+						.padding()
+
+					if serviceSide == .left {
+						Spacer()
+					}
 				}
 			}
-			.frame(height: isAnimating ? screenHeight/8 : screenHeight/10)
-			.padding([.top])
+				.fixedSize(horizontal: false, vertical: true)
+				.frame(height: isAnimating ? screenHeight/8 : screenHeight/10)
 		}
+		
 		.padding()
 		.onChange(of: viewModel.match.status) { newValue in
-			switch newValue {
-			case .ping:
-				withAnimation(.easeInOut(duration: 1)) {
-					isAnimating = true
-					withAnimation(.linear(duration: 1).repeatForever()) {
-						blink = true
-					}
+			handlePingAnimation()
+			updateServiceSide()
+		}
+		.onChange(of: viewModel.match.game.service) { newValue in
+			updateServiceSide()
+		}
+	}
+	
+	func updateServiceSide() {
+		withAnimation(.easeOut(duration: 1)) {
+			switch viewModel.match.status {
+			case .playing:
+				serviceSide = viewModel.match.serviceSide
+				withAnimation(.linear(duration: 1.5).repeatForever()) {
+					isPulsing = true
 				}
 			default:
-				if isAnimating {
-					withAnimation(.easeInOut) {
-						isAnimating = false
-						blink = false
-					}
+				serviceSide = nil
+				isPulsing = false
+			}
+		}
+	}
+	
+	func handlePingAnimation() {
+		switch viewModel.match.status {
+		case .ping:
+			withAnimation(.easeInOut(duration: 1)) {
+				isAnimating = true
+				withAnimation(.easeOut(duration: 1.2).repeatForever()) {
+					blink = true
 				}
 			}
-		}
-		
-		.onChange(of: viewModel.match.game.service) { newValue in
-			let moveDuration = serviceSide == nil ? 0.5 : 1.0
-			withAnimation(.easeOut(duration: moveDuration)) {
-				serviceSide = viewModel.match.serviceSide
-				isMovingBall = true
-			}
-			withAnimation(.linear(duration: 1).delay(moveDuration)) {
-				isAnimatingBallShadow = true
-				isMovingBall = false 
+		default:
+			withAnimation(.easeInOut) {
+				isAnimating = false
+				blink = false
 			}
 		}
-		
 	}
 	
 	func arrowImage(_ tableSide: TableSide) -> some View {
@@ -99,7 +111,7 @@ struct ServiceView: View {
 			.resizable()
 			.scaledToFit()
 			.foregroundColor(viewModel.imageColor(tableSide))
-			.opacity(blink ? 0.25 : 1)
+			.opacity(blink ? 0.1 : 1)
 			.shadow(color: .green, radius: isAnimating ? 8 : (blink ? 0 : viewModel.arrowShadowRadius(tableSide)), x: 0, y: 0)
 			.padding(tableSide == .left ? .trailing : .leading)
 	}
