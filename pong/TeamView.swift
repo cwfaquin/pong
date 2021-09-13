@@ -71,8 +71,7 @@ extension TeamView {
 		GroupBox {
 			Button(action: addUser, label: { Label("Player", systemImage: "plus.circle") })
 				.foregroundColor(._teal)
-				.font(.title3)
-				.minimumScaleFactor(0.75)
+				.font(UIDevice.current.userInterfaceIdiom == .phone ? .title3 : .title2)
 				.lineLimit(1)
 		}
 		.cornerRadius(10)

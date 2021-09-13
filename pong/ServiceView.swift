@@ -10,82 +10,100 @@ import SwiftUI
 struct ServiceView: View {
 	
 	@State var isAnimating = false
-	
 	@ObservedObject var viewModel: ServiceVM
-	
 	let screenHeight = UIScreen.main.bounds.height
+	@State var blink = false
+	@State var isMovingBall = false
+	@State var serviceSide: TableSide?
+	@State var isAnimatingBallShadow = false
 	
 	var body: some View {
-	
+		
 		VStack {
 			HStack {
 				arrowImage(.left)
 				if isAnimating {
 					Text(isAnimating ? viewModel.text : "")
 						.font(.serviceFont)
-						.minimumScaleFactor(0.5)
+						.minimumScaleFactor(0.25)
 						.lineLimit(1)
 						.foregroundColor(viewModel.textColor)
 						.shadow(color: viewModel.textColor, radius: isAnimating ? 2 : viewModel.textShadowRadius, x: 0, y: 0)
+						.layoutPriority(2)
 						.padding()
+				} else  {
+					Divider()
+						.padding([.leading, .trailing])
 				}
 				arrowImage(.right)
 			}
-			Rectangle()
-				.foregroundColor(.black)
-				.frame(height: screenHeight/10)
-		}
-		
-			.frame(width: viewModel.panelWidth * 2)
-			.padding()
 			.scaleEffect(isAnimating ? 2 : 1)
-			.onChange(of: viewModel.match.status) { newValue in
-				switch newValue {
-				case .ping:
-					withAnimation(.easeInOut) {
-						isAnimating = true
+			.frame(width: viewModel.panelWidth * 2)
+			.fixedSize()
+			
+			HStack {
+				if serviceSide == .right || serviceSide == nil  {
+					Spacer()
+				}
+				
+				Circle()
+					.foregroundColor(viewModel.textColor)
+					.shadow(color: isMovingBall ? .white : viewModel.ballColor, radius: viewModel.ballShadowRadius, x: isMovingBall ? viewModel.ballMovingShadowSize.width : viewModel.ballShadowSize.width, y: isMovingBall ? viewModel.ballMovingShadowSize.height : viewModel.ballShadowSize.height)
+					.padding([.top])
+					.scaledToFit()
+					.offset(x: 0, y: isAnimating ? screenHeight : 0)
+				
+				if serviceSide == .left || serviceSide == nil  {
+					Spacer()
+				}
+			}
+			.frame(height: isAnimating ? screenHeight/8 : screenHeight/10)
+			.padding([.top])
+		}
+		.padding()
+		.onChange(of: viewModel.match.status) { newValue in
+			switch newValue {
+			case .ping:
+				withAnimation(.easeInOut(duration: 1)) {
+					isAnimating = true
+					withAnimation(.linear(duration: 1).repeatForever()) {
+						blink = true
 					}
-				default:
-					if isAnimating {
-						withAnimation(.easeInOut) {
-							isAnimating = false
-						}
+				}
+			default:
+				if isAnimating {
+					withAnimation(.easeInOut) {
+						isAnimating = false
+						blink = false
 					}
 				}
 			}
-				
+		}
+		
+		.onChange(of: viewModel.match.game.service) { newValue in
+			let moveDuration = serviceSide == nil ? 0.5 : 1.0
+			withAnimation(.easeOut(duration: moveDuration)) {
+				serviceSide = viewModel.match.serviceSide
+				isMovingBall = true
+			}
+			withAnimation(.linear(duration: 1).delay(moveDuration)) {
+				isAnimatingBallShadow = true
+				isMovingBall = false 
+			}
+		}
+		
 	}
 	
 	func arrowImage(_ tableSide: TableSide) -> some View {
 		return Image(systemName: viewModel.imageName(tableSide))
 			.resizable()
 			.scaledToFit()
-			.foregroundColor(isAnimating ? .green : viewModel.imageColor(tableSide))
-			.shadow(color: .green, radius: isAnimating ? 8 : viewModel.arrowShadowRadius(tableSide), x: 0, y: 0)
+			.foregroundColor(viewModel.imageColor(tableSide))
+			.opacity(blink ? 0.25 : 1)
+			.shadow(color: .green, radius: isAnimating ? 8 : (blink ? 0 : viewModel.arrowShadowRadius(tableSide)), x: 0, y: 0)
 			.padding(tableSide == .left ? .trailing : .leading)
 	}
-	
-	func serviceTextBox() -> some View {
-		GroupBox {
-			Text(viewModel.text)
-				.font(.serviceFont)
-				.minimumScaleFactor(0.5)
-				.lineLimit(1)
-				.foregroundColor(viewModel.textColor)
-				.shadow(color: viewModel.textColor, radius: isAnimating ? 2 : viewModel.textShadowRadius, x: 0, y: 0)
-				.padding()
-		}
-		.groupBoxStyle(BlackGroupBoxStyle())
-		.cornerRadius(10)
-	/*	.overlay(
-			RoundedRectangle(cornerRadius: 10)
-				.stroke(viewModel.textColor, lineWidth: isAnimating ? 5 : 1)
-				.shadow(color: viewModel.textColor, radius: isAnimating ? 5 : viewModel.textShadowRadius, x: 0, y: 0)
-		)
-		*/
-		.layoutPriority(2)
-		.frame(width: viewModel.panelWidth * 1.0)
-	}
+
 }
 
 struct ServiceView_Previews: PreviewProvider {

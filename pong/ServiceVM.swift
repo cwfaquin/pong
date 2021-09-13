@@ -49,6 +49,47 @@ final class ServiceVM: ObservableObject {
 		}
 	}
 	
+	var ballMovingShadowSize: CGSize {
+		switch match.serviceSide {
+		case .left:
+			return CGSize(width: 17, height: 0)
+		case .right:
+			return CGSize(width: -17, height: 0)
+		}
+	}
+	
+	var ballShadowSize: CGSize {
+		switch match.status {
+		case .pregame, .guestChooseSide, .ping:
+			return .zero
+		default:
+			switch match.serviceSide {
+			case .left:
+				return CGSize(width: 17, height: -17)
+			case .right:
+				return CGSize(width: -17, height: -17)
+			}
+		}
+	}
+	
+	var ballColor: Color {
+		switch match.status {
+		case .pregame, .guestChooseSide, .ping:
+			return .gray
+		default:
+			return .green
+		}
+	}
+	
+	var ballShadowRadius: CGFloat {
+		switch match.status {
+		case .pregame, .guestChooseSide, .ping:
+			return 0
+		default:
+			return 20
+		}
+	}
+	
 	func imageName(_ tableSide: TableSide) -> String {
 		let base = "arrowtriangle.\(tableSide.text)"
 		switch match.status {

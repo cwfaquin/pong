@@ -32,6 +32,7 @@
 		9752B56B26D047B800F6B5A2 /* button5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9752B56A26D047B800F6B5A2 /* button5.mp3 */; };
 		9752B56D26D1579500F6B5A2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9752B56C26D1579500F6B5A2 /* ExternalAccessory.framework */; };
 		9772E79A26E788EE009E6BF5 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9772E79926E788EE009E6BF5 /* ButtonStyle.swift */; };
+		9772E79C26ED656D009E6BF5 /* CircleLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9772E79B26ED656D009E6BF5 /* CircleLineView.swift */; };
 		9778FFDE26D174C80005B941 /* MainAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9778FFDD26D174C80005B941 /* MainAppVM.swift */; };
 		9798AFE926DE69830046D40C /* SizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFE826DE69830046D40C /* SizeView.swift */; };
 		9798AFEB26DE7F670046D40C /* WindowSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFEA26DE7F670046D40C /* WindowSize.swift */; };
@@ -99,6 +100,7 @@
 		9752B56C26D1579500F6B5A2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		9752B56E26D15B8F00F6B5A2 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
 		9772E79926E788EE009E6BF5 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
+		9772E79B26ED656D009E6BF5 /* CircleLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleLineView.swift; sourceTree = "<group>"; };
 		9778FFDD26D174C80005B941 /* MainAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppVM.swift; sourceTree = "<group>"; };
 		9798AFE826DE69830046D40C /* SizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeView.swift; sourceTree = "<group>"; };
 		9798AFEA26DE7F670046D40C /* WindowSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSize.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				97302CAB26C2AFF0002E70C2 /* SeriesView.swift */,
 				9717D18526D2B0AA00B43D99 /* SeriesVM.swift */,
 				9752B55926CAA3F500F6B5A2 /* ServiceView.swift */,
+				9772E79B26ED656D009E6BF5 /* CircleLineView.swift */,
 				97F9081A26D443C80026F96A /* ServiceVM.swift */,
 				9752B55526C967B600F6B5A2 /* TeamBox.swift */,
 				97302CBE26C8223E002E70C2 /* ToastOverlayView.swift */,
@@ -365,6 +368,7 @@
 				97302CB926C810C8002E70C2 /* Game.swift in Sources */,
 				9798AFEF26E258F40046D40C /* Font+Sizing.swift in Sources */,
 				9717D18026D29B6000B43D99 /* SizeKey.swift in Sources */,
+				9772E79C26ED656D009E6BF5 /* CircleLineView.swift in Sources */,
 				97C612EE26BF88C200C7879E /* User.swift in Sources */,
 				9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */,
 				97F9082126D45C1B0026F96A /* ScoresView.swift in Sources */,
