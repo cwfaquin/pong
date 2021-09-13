@@ -35,7 +35,6 @@
 		9772E79C26ED656D009E6BF5 /* CircleLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9772E79B26ED656D009E6BF5 /* CircleLineView.swift */; };
 		9778FFDE26D174C80005B941 /* MainAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9778FFDD26D174C80005B941 /* MainAppVM.swift */; };
 		9798AFE926DE69830046D40C /* SizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFE826DE69830046D40C /* SizeView.swift */; };
-		9798AFEB26DE7F670046D40C /* WindowSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFEA26DE7F670046D40C /* WindowSize.swift */; };
 		9798AFED26E1496B0046D40C /* DeviceOrientationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFEC26E1496B0046D40C /* DeviceOrientationModifier.swift */; };
 		9798AFEF26E258F40046D40C /* Font+Sizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFEE26E258F40046D40C /* Font+Sizing.swift */; };
 		97B68DCD26E3C30800EDA239 /* CGFloat+Sizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DCC26E3C30800EDA239 /* CGFloat+Sizing.swift */; };
@@ -103,7 +102,6 @@
 		9772E79B26ED656D009E6BF5 /* CircleLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleLineView.swift; sourceTree = "<group>"; };
 		9778FFDD26D174C80005B941 /* MainAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppVM.swift; sourceTree = "<group>"; };
 		9798AFE826DE69830046D40C /* SizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeView.swift; sourceTree = "<group>"; };
-		9798AFEA26DE7F670046D40C /* WindowSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSize.swift; sourceTree = "<group>"; };
 		9798AFEC26E1496B0046D40C /* DeviceOrientationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationModifier.swift; sourceTree = "<group>"; };
 		9798AFEE26E258F40046D40C /* Font+Sizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Sizing.swift"; sourceTree = "<group>"; };
 		97B68DCC26E3C30800EDA239 /* CGFloat+Sizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Sizing.swift"; sourceTree = "<group>"; };
@@ -251,7 +249,6 @@
 				97302CB826C810C8002E70C2 /* Game.swift */,
 				97302CBA26C8190B002E70C2 /* GameSet.swift */,
 				97C612F326C0306100C7879E /* Match.swift */,
-				9798AFEA26DE7F670046D40C /* WindowSize.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -364,7 +361,6 @@
 				97C612EA26BF83A800C7879E /* Config.swift in Sources */,
 				9778FFDE26D174C80005B941 /* MainAppVM.swift in Sources */,
 				97F9081926D43CCF0026F96A /* String+Utility.swift in Sources */,
-				9798AFEB26DE7F670046D40C /* WindowSize.swift in Sources */,
 				97302CB926C810C8002E70C2 /* Game.swift in Sources */,
 				9798AFEF26E258F40046D40C /* Font+Sizing.swift in Sources */,
 				9717D18026D29B6000B43D99 /* SizeKey.swift in Sources */,

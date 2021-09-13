@@ -11,19 +11,23 @@ struct SeriesView: View {
 	
 	@ObservedObject var viewModel: SeriesVM
 	
+	var notMacApp: Bool {
+		UIScreen.main.bounds.width <= 1024
+	}
+	
 	var body: some View {
 		HStack(alignment: .center) {
 			Spacer()
 			SeriesScoreView(viewModels: $viewModel.leftScoreCircles)
-				.frame(minHeight: 40, idealHeight: 70, maxHeight: 120)
+				.frame(minHeight: 40, idealHeight: notMacApp ? 60 : 70, maxHeight: notMacApp ? 70 : 120)
 				.padding(.trailing)
 			
 			Divider()
-				.frame(minHeight: 40, idealHeight: 55, maxHeight: 60)
+				.frame(minHeight: notMacApp ? 10 : 40, idealHeight: notMacApp ? 30 : 55, maxHeight: notMacApp ? 44: 60)
 				.padding(.leading)
 			
 			Text(viewModel.text)
-				.font(.seriesFont)
+				.font(notMacApp ? .title : .seriesFont)
 				.fontWeight(.ultraLight)
 				.minimumScaleFactor(0.55)
 				.lineLimit(1)
@@ -33,11 +37,11 @@ struct SeriesView: View {
 				.padding()
 			
 			Divider()
-				.frame(minHeight: 40, idealHeight: 55, maxHeight: 60)
+				.frame(minHeight: notMacApp ? 10 : 40, idealHeight: notMacApp ? 30 : 55, maxHeight: notMacApp ? 44: 60)
 				.padding(.trailing)
 			
 			SeriesScoreView(viewModels: $viewModel.rightScoreCircles)
-				.frame(minHeight: 40, idealHeight: 70, maxHeight: 120)
+				.frame(minHeight: 40, idealHeight: notMacApp ? 60 : 70, maxHeight: notMacApp ? 70 : 120)
 				.padding(.leading)
 			
 			Spacer()

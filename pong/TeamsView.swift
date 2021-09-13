@@ -13,6 +13,9 @@ struct TeamsView: View {
 	@Binding var showSettings: Bool
 	@State var panelWidth: CGFloat
 	@State var showControlButtons = true
+	var notMacApp: Bool {
+		UIScreen.main.bounds.width <= 1024
+	}
 	
 	var body: some View {
 		HStack {

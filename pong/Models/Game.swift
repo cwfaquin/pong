@@ -17,7 +17,7 @@ struct Game {
 	var gameType: GameType
 	var service: TeamID
 	var status: Status = .normal
-	var deuceService: TeamID?
+	var nextDeuceService: TeamID?
 	var endDate: Date?
 	
 	init(_ gameType: GameType, firstService: TeamID, tableSides: TableSides) {
@@ -108,21 +108,41 @@ extension Game {
 			} else if (home + guest) % 10 > 4, service != secondService {
 				service = secondService
 			}
-		case .gamePoint, .adOut:
+		case .gamePoint:
+			guard let disadvantage = disadvantage else { return }
+			service = disadvantage.team
+		case .adOut:
 			guard let disadvantage = disadvantage else { return }
 			service = disadvantage.team
 		case .deuce:
-			if let deuceService = deuceService {
-				service = deuceService
-			} else if service == firstService {
+			if firstService == service {
 				service = secondService
-				deuceService = secondService
+				nextDeuceService = firstService
 			} else {
 				service = firstService
-				deuceService = secondService
+				nextDeuceService = secondService
 			}
+		case .deuceOT:
+			if let nextDeuceService = nextDeuceService, nextDeuceService != service {
+				service = nextDeuceService
+			}
+			switch service {
+			case .home:
+				nextDeuceService = .guest
+			case .guest:
+				nextDeuceService = .home
+			}
+			
 		default:
 			break
+		}
+	}
+	
+	private mutating func switchService() {
+		if service == firstService {
+			service = secondService
+		} else {
+			service = firstService
 		}
 	}
 	
@@ -177,10 +197,10 @@ extension Game {
 		
 		var statusVM: StatusVM? {
 			switch self {
-			case .deuce, .deuceOT:
+			case .deuce:
 				return StatusVM(text: "D E U C E!", temporary: true)
 			case .adOut:
-				return StatusVM(text: "Advantage Out", temporary: true)
+				return StatusVM(text: "A D - O U T", temporary: true)
 			case .gamePoint:
 				return StatusVM(text: "Game Point!", temporary: true)
 			case .skunk:

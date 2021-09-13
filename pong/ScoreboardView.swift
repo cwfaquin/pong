@@ -13,7 +13,6 @@ struct ScoreboardView: View {
 	@State var showSettings: Bool = false
 	@State var statusVM: StatusVM = StatusVM(text: "", temporary: true)
 	@State var showStatus: Bool = false
-	
 	@State var screenSize = UIScreen.main.bounds.size
 	
 	var body: some View {
@@ -64,9 +63,13 @@ struct ScoreboardView: View {
 	
 	
 	var panelWidth: CGFloat {
-		.panelWidth(screenSize.width)
+		if UIScreen.main.bounds.width <= 1024 {
+			return screenSize.width/6
+		} else {
+			return .panelWidth(screenSize.width)
+		}
 	}
-	
+
 	func handleNewState(_ matchStatus: Match.Status?, gameStatus: Game.Status?) {
 		let newStatusVM = matchStatus?.statusVM ?? gameStatus?.statusVM
 		withAnimation(.easeInOut) {

@@ -16,7 +16,10 @@ struct ServiceView: View {
 	let screenHeight = UIScreen.main.bounds.height
 	@State var blink = false
 	@State var serviceSide: TableSide?
-
+	
+	var notMacApp: Bool {
+		screenWidth <= 1024
+	}
 	
 	var body: some View {
 		
@@ -39,12 +42,10 @@ struct ServiceView: View {
 				arrowImage(.right)
 			}
 			.scaleEffect(isAnimating ? 2 : 1)
-			.frame(width: viewModel.panelWidth * 2)
+			.frame(width: notMacApp ? viewModel.panelWidth * 2 : viewModel.panelWidth * 2.5)
 			.fixedSize()
-		
-				HStack {
-					if let serviceSide = serviceSide {
-
+			HStack {
+				if let serviceSide = serviceSide {
 					if serviceSide == .right {
 						Spacer()
 					}
@@ -54,16 +55,15 @@ struct ServiceView: View {
 						.scaleEffect(isPulsing ? 0.9 : 1.0)
 						.frame(width: screenHeight/15, height: screenHeight/15)
 						.padding()
-
+					
 					if serviceSide == .left {
 						Spacer()
 					}
 				}
 			}
-				.fixedSize(horizontal: false, vertical: true)
-				.frame(height: isAnimating ? screenHeight/8 : screenHeight/10)
+			.fixedSize(horizontal: false, vertical: true)
+			.frame(height: isAnimating ? (notMacApp ? screenHeight/8 : screenHeight/4) : (notMacApp ? screenHeight/12 : screenHeight/7))
 		}
-		
 		.padding()
 		.onChange(of: viewModel.match.status) { newValue in
 			handlePingAnimation()
@@ -92,9 +92,9 @@ struct ServiceView: View {
 	func handlePingAnimation() {
 		switch viewModel.match.status {
 		case .ping:
-			withAnimation(.easeInOut(duration: 1)) {
+			withAnimation(.easeInOut(duration: 1).delay(1.5)) {
 				isAnimating = true
-				withAnimation(.easeOut(duration: 1.2).repeatForever()) {
+				withAnimation(.easeOut(duration: 1.2).repeatForever().delay(1.5)) {
 					blink = true
 				}
 			}
@@ -115,7 +115,7 @@ struct ServiceView: View {
 			.shadow(color: .green, radius: isAnimating ? 8 : (blink ? 0 : viewModel.arrowShadowRadius(tableSide)), x: 0, y: 0)
 			.padding(tableSide == .left ? .trailing : .leading)
 	}
-
+	
 }
 
 struct ServiceView_Previews: PreviewProvider {

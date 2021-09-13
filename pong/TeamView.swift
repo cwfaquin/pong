@@ -14,11 +14,14 @@ struct TeamView: View {
 	let tableSide: TableSide
 	@Binding var showControlButtons: Bool
 	@State private var choosingSide = false
+	var notMacApp: Bool {
+		UIScreen.main.bounds.width <= 1024
+	}
 	
     var body: some View {
 			GroupBox {
 				Text(match.teamID(tableSide).rawValue.uppercased())
-					.font(.teamFont)
+					.font(notMacApp ? .largeTitle : .teamFont)
 					.minimumScaleFactor(0.25)
 					.lineLimit(1)
 					.shadow(color: .white, radius: 3, x: 0, y: 0)
@@ -71,7 +74,7 @@ extension TeamView {
 		GroupBox {
 			Button(action: addUser, label: { Label("Player", systemImage: "plus.circle") })
 				.foregroundColor(._teal)
-				.font(UIDevice.current.userInterfaceIdiom == .phone ? .title3 : .title2)
+				.font(notMacApp ? .title3 : .title2)
 				.lineLimit(1)
 		}
 		.cornerRadius(10)
