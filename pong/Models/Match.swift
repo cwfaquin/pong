@@ -178,7 +178,7 @@ final class Match: ObservableObject {
 		guestSets.count == settings.matchType.pointGoal
 	}
 	
-	var serviceSide: TableSide {
+ 	var serviceSide: TableSide {
 		switch game.service {
 		case .home:
 			return tableSides.home

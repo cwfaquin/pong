@@ -23,23 +23,21 @@ enum TeamID: String, CaseIterable {
 }
 
 struct Team {
-	var user: User?
-	var opponent: User?
-	var color: UIColor
-	var tableSide: TableSide
-
+	
+	var playerOne: Player?
+	var playerTwo: Player?
 	let id: TeamID
 		
 	init(_ id: TeamID) {
 		self.id = id
-		switch id {
-		case .home:
-			color = .systemBlue
-			tableSide = .left
-		case .guest:
-			color = .systemPink
-			tableSide = .right
-		}
+	}
+	
+	mutating func updatePlayerOne(_ player: Player?) {
+		playerOne = player
+	}
+	
+	mutating func updatePlayerTwo(_ player: Player?) {
+		playerTwo = player
 	}
 }
 

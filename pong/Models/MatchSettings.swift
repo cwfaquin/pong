@@ -13,7 +13,8 @@ final class MatchSettings: ObservableObject {
 	@Published var matchType: MatchType = .singleSet
 	@Published var showControlButtons = true
 	@Published var recordMatchResults = false
-	
+	@Published var homeTeam = Team(.home)
+	@Published var guestTeam = Team(.guest)
 }
 
 protocol ScoreSetting: Identifiable  {
