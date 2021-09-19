@@ -19,7 +19,7 @@ struct TeamsView: View {
 	
 	var body: some View {
 		HStack {
-			TeamView(tableSide: .left, showControlButtons: $showControlButtons)
+			TeamView(player: match.tableSides.home == .left ? $match.settings.homeTeam.playerOne : $match.settings.guestTeam.playerOne, tableSide: .left, showControlButtons: $showControlButtons)
 			
 			VStack {
 				if showControlButtons {
@@ -33,7 +33,7 @@ struct TeamsView: View {
 			}
 			.frame(width: panelWidth)
 			
-			TeamView(tableSide: .right, showControlButtons: $showControlButtons)
+			TeamView(player: match.tableSides.home == .right ? $match.settings.homeTeam.playerOne : $match.settings.guestTeam.playerOne, tableSide: .right, showControlButtons: $showControlButtons)
 		}
 		.onChange(of: match.settings.showControlButtons) { newValue in
 			withAnimation(.spring()) {

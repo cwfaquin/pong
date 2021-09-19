@@ -10,17 +10,17 @@ import CloudKit
 
 final class GameRecord {
 	
-	let id: CKRecord.ID
+	var id: CKRecord.ID
 	private(set) var noteLabel: String?
-	let homePlayerReference: CKRecord.Reference?
-	let guestPlayerReference: CKRecord.Reference?
-	let deuce: Bool
-	let duration: Double
-	let firstService: TeamID
-	let gameType: GameType
-	let homeScore: Int
-	let guestScore: Int
-	let homeSide: TableSide
+	var homePlayerReference: CKRecord.Reference?
+	var guestPlayerReference: CKRecord.Reference?
+	var deuce: Bool = false
+	var duration: Double = 0
+	var firstService: TeamID?
+	var gameType: GameType?
+	var homeScore: Int?
+	var guestScore: Int?
+	var homeSide: TableSide?
 
 	
 	init(record: CKRecord) {

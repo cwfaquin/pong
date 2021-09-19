@@ -6,111 +6,105 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct PlayerSelectionView: View {
 	
-	//let selectedPlayer: Player?
 	@ObservedObject var viewModel: PlayerSelectionVM
+	@Binding var selectedPlayer: Player?
+	@State var editingPlayer: Player?
+	@Binding var isShowing: Bool
+
 	
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
 	}
 	
-    var body: some View {
-			VStack {
-						Button(action: createNewPlayer, label: { Label("New Player", systemImage: "plus") })
-							.foregroundColor(.pink)
-							.font(notMacApp ? .title3 : .title2)
-							.cornerRadius(10)
-							.border(Color.pink, width: 2)
-					
-				List {
-					ForEach($list.notes) { $note in
-							NavigationLink(
-								note.title,
-								destination:
-									NoteEditView(
-																note: $note
-														)
-												)
-										}
-				List {
-					ForEach($viewModel.players) { $player in
-						NavigationLink
-					}
-				}
-				
-			}
-		}
-	
-	func createNewPlayer() {
+	var body: some View {
 		
-	}
+		NavigationView {
+			/*		ZStack {
 
-	// MARK: - Dynamic Content
-	private var content: some View {
-			switch viewModel.state {
-			case .idle:
-					return AnyView(EmptyView())
-			case .loading:
-					return AnyView(ProgressView())
-			case .loaded(let names, let prefix):
-					return AnyView(filteredListView(of: names.sorted(), prefix: prefix))
-			case .error(let error):
-					return AnyView(Text("Error: \(error.localizedDescription)"))
-			}
-	}
-	
-	/// Build a list view of contact names with filtered state.
-	private func filteredListView(of contactNames: [String], prefix: String?) -> some View {
-			let headerText: String = {
-					if let prefix = prefix {
-							return "Contacts starting with “\(prefix)”"
-					} else {
-							return "All Contacts"
-					}
-			}()
-
-			return List {
-					Section(header: Text(headerText)) {
-							ForEach(contactNames) { name in
-									Text(name)
+			if viewModel.players.isEmpty {
+					Text("No Players Found")
+						.font(.title)
+						.bold()
+						.padding()
+				} else {
+			*/
+			ZStack {
+				List {
+					ForEach(viewModel.players, id: \.id) { player in
+						PlayerRow(player)
+							.onTapGesture {
+								selectedPlayer = player
+								isShowing = false
 							}
 					}
-			}.listStyle(GroupedListStyle())
+				
+				}
+				if viewModel.isLoading {
+					ZStack {
+						Rectangle()
+							.foregroundColor(.black.opacity(0.9))
+						ProgressView()
+							.progressViewStyle(.circular)
+					}
+				}
+			}
+			
+			.navigationTitle("Choose Player")
+		.navigationBarItems(trailing:
+													NavigationLink(
+														destination: {
+															EditPlayerView(player: newPlayer)
+																.environmentObject(viewModel)
+														},
+														label: {
+															Label("New Player", systemImage: "plus")
+																.foregroundColor(.pink)
+																.font(notMacApp ? .title3 : .title2)
+																.padding()
+														}
+													)
+													.navigationTitle("New Player")
+												)
+			
+			}
+		.accentColor(.pink)
+		.onAppear {
+			DispatchQueue.main.async {
+				viewModel.fetchPlayers()
+
+			}
+		}
+		.navigationViewStyle(StackNavigationViewStyle())
+		.onChange(of: viewModel.selectedPlayer) { newValue in
+			selectedPlayer = newValue
+			isShowing = false 
+		}
+
 	}
 	
-	/// View for adding a new Contact.
-	private var addPlayerView: some View {
-			
+	var newPlayer: Player {
+		Player(record: CKRecord(recordType: Player.recordType))
 	}
 }
-	
+
 
 
 struct PlayerRow: View {
-	
-	@State var image: Image = Image(systemName: "person.circle")
-	let player: Player
-	
+
+	@State var avatar: UIImage?
+	var player: Player
 	
 	init(_ player: Player) {
 		self.player = player
-		player.loadAvatar { photo in
-			image = photo ?? image
-		}
 	}
 	
 	var body: some View {
 		HStack {
-			image
-				.imageScale(.large)
-				.overlay(
-					Circle()
-						.strokeBorder(style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
-						.foregroundColor(.pink)
-				)
-				.padding()
+			avatarImage
 			VStack {
 				Text(player.username)
 					.font(.headline)
@@ -119,13 +113,35 @@ struct PlayerRow: View {
 			}
 			Text("")
 		}
+		.onAppear {
+			player.loadAvatar { image in
+				avatar = image
+			}
+		}
+	}
+	
+	var avatarImage: some View {
+		let image: Image
+		if let avatar = avatar {
+			image = Image(uiImage: avatar)
+		} else {
+			image = Image(systemName: "person.fill")
+		}
+		return image
+			.imageScale(.large)
+			.overlay(
+				Circle()
+					.strokeBorder(style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
+					.foregroundColor(.pink)
+			)
+			.padding()
 	}
 }
-	
-	
+
+
 
 struct PlayerSelectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlayerSelectionView(viewModel: PlayerSelectionVM())
-    }
+	static var previews: some View {
+		PlayerSelectionView(viewModel: PlayerSelectionVM(), selectedPlayer: .constant(nil), editingPlayer: nil, isShowing: .constant(true))
+	}
 }

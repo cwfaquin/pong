@@ -22,14 +22,15 @@ struct Player: Identifiable, Hashable {
 	static let recordType = "Player"
 
 	var id: CKRecord.ID
-	var username: String?
-	var firstName: String?
-	var lastName: String?
-	var pinRequired: Bool = false
-	var pin: Int?
+	var username = ""
+	var firstName = ""
+	var lastName = ""
+	var pinRequired = false
+	var pin = ""
 	var avatar: CKAsset?
 	var avatarUrl: URL?
 	
+
 	init(record: CKRecord) {
 		id = record.recordID
 		updateFrom(record)
@@ -37,10 +38,10 @@ struct Player: Identifiable, Hashable {
 	
 	mutating func updateFrom(_ record: CKRecord) {
 		id = record.recordID
-		username = record[PlayerKeys.username.rawValue] as? String
-		firstName = record[PlayerKeys.firstName.rawValue] as? String
-		lastName = record[PlayerKeys.lastName.rawValue] as? String
-		pin = record[PlayerKeys.pin.rawValue] as? Int
+		username = record[PlayerKeys.username.rawValue] as? String ?? username
+		firstName = record[PlayerKeys.firstName.rawValue] as? String ?? firstName
+		lastName = record[PlayerKeys.lastName.rawValue] as? String ?? lastName
+		pin = record[PlayerKeys.pin.rawValue] as? String ?? pin
 		pinRequired = record[PlayerKeys.pinRequired.rawValue] as? Bool ?? false
 		avatar = record[PlayerKeys.avatar.rawValue] as? CKAsset
 
@@ -58,15 +59,15 @@ struct Player: Identifiable, Hashable {
 		PlayerKeys.allCases.forEach {
 			switch $0 {
 			case .firstName:
-				value = firstName as CKRecordValue?
+				value = firstName as CKRecordValue
 			case .lastName:
-				value = lastName as CKRecordValue?
+				value = lastName as CKRecordValue
 			case .username:
-				value = username as CKRecordValue?
+				value = username as CKRecordValue
 			case .pinRequired:
-				value = pinRequired as CKRecordValue?
+				value = pinRequired as CKRecordValue
 			case .pin:
-				value = pin as CKRecordValue?
+				value = pin as CKRecordValue
 			case .avatar:
 				if let url = avatarUrl {
 					value = CKAsset(fileURL: url)
@@ -76,6 +77,7 @@ struct Player: Identifiable, Hashable {
 			}
 			record.setObject(value, forKey: $0.rawValue)
 		}
+		return record
 	}
 	
 	func loadImageFromDocumentDirectory(fileName: String) -> UIImage? {
@@ -107,9 +109,9 @@ struct Player: Identifiable, Hashable {
 		}
 	}
 	
-	func loadAvatar(completion: @escaping (_ photo: Image?) -> ()) {
+	func loadAvatar(completion: @escaping (_ photo: UIImage?) -> ()) {
 		DispatchQueue.global(qos: .utility).async {
-			var image: Image?
+			var image: UIImage?
 			defer {
 				DispatchQueue.main.async {
 					completion(image)
@@ -118,9 +120,7 @@ struct Player: Identifiable, Hashable {
 			guard let fileURL = self.avatar?.fileURL else { return }
 			do {
 				let imageData = try Data(contentsOf: fileURL)
-				if let uiImage = UIImage(data: imageData) {
-					image = Image(uiImage: uiImage)
-				}
+				image = UIImage(data: imageData)
 			} catch {
 				return
 			}
@@ -128,68 +128,9 @@ struct Player: Identifiable, Hashable {
 	}
 }
 
-
-
-
-
-
-
-class _Player {
-	
-	let record: CKRecord
-	let username: String
-	let avatar: CKAsset?
-	let firstName: String
-	let lastName: String
-	let pinRequired: Bool
-	let pin: Int
-	
-	private(set) var matches = [MatchRecord]()
-	
-
-	
-	
-	init?(record: CKRecord, database: CKDatabase) {
-		guard
-			let username = record["username"] as? String,
-			let firstName = record["firstName"] as? String,
-			let lastName = record["lastName"] as? String,
-			let pin = record["pin"] as? Int
-			else
-		{ return nil }
-		id = record.recordID
-		self.username = username
-		self.firstName = firstName
-		self.lastName = lastName
-		self.pin = pin
-		pinRequired = record["pinRequired"] as? Bool ?? false
-		avatar = record["avatar"] as? CKAsset
-
-		if let matchRecords = record["matches"] as? [CKRecord.Reference] {
-			MatchRecord.fetchMatches(for: matchRecords) { matches in
-				self.matches = matches
-			}
-		}
-	}
-	
-	func loadAvatar(completion: @escaping (_ photo: Image?) -> ()) {
-		DispatchQueue.global(qos: .utility).async {
-			var image: Image?
-			defer {
-				DispatchQueue.main.async {
-					completion(image)
-				}
-			}
-			guard let fileURL = self.avatar?.fileURL else { return }
-			do {
-				let imageData = try Data(contentsOf: fileURL)
-				if let uiImage = UIImage(data: imageData) {
-					image = Image(uiImage: uiImage)
-				}
-			} catch {
-				return
-			}
-		}
+extension String {
+	var isValidPIN: Bool {
+		guard trimmingCharacters(in: .whitespacesAndNewlines).count == 4 else { return false }
+		return rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) == nil
 	}
 }
-

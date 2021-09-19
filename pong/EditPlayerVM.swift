@@ -1,8 +1,8 @@
 //
-//  PlayerSelectionVM.swift
-//  PlayerSelectionVM
+//  EditPlayerVM.swift
+//  EditPlayerVM
 //
-//  Created by Charles Faquin on 9/17/21.
+//  Created by Charles Faquin on 9/18/21.
 //
 
 import os.log
@@ -10,64 +10,33 @@ import Foundation
 import CloudKit
 
 
-final class PlayerSelectionVM: ObservableObject {
+final class EditPlayerVM: ObservableObject {
 
 	private let container = CKContainer(identifier: Config.containerIdentifier)
 	private lazy var database = container.privateCloudDatabase
-	
-	@Published var players = [Player]()
+
 	@Published var isLoading = false
-	@Published var selectedPlayer: Player?
 
 	// MARK: - API
 	
 	func savePlayer(_ record: CKRecord, at index: Int?) {
 		isLoading = true
 		database.save(record) { record, error in
-			DispatchQueue.main.async {
-
-			defer {
-				self.isLoading = false
-			}
+			defer { self.isLoading = false }
 			guard let record = record else {
 				self.handleError(error, caller: #function)
 				return
 			}
-			let player = Player(record: record)
-			if let index = index {
-				self.players[index] = player
-			} else {
-				self.selectedPlayer = player
-			}
-			}
+			print(Player(record: record))
 		}
 	}
-	
-	func fetchPlayers() {
-		isLoading = true
-		let query = CKQuery(recordType: Player.recordType, predicate: NSPredicate(value: true))
-		database.perform(query, inZoneWith: nil) { records, error in
-			DispatchQueue.main.async {
-				defer { self.isLoading = false }
-				guard let records = records else {
-					self.handleError(error, caller: #function)
-					return
-				}
-				self.players = records.map(Player.init)
-				self.players.forEach { print($0) }
-			}
-		}
-	}
-	
+
 	func deletePlayer(_ id: CKRecord.ID) {
 		isLoading = true
 		database.delete(withRecordID: id) { recordId, error in
-			DispatchQueue.main.async {
-				defer { self.isLoading = false }
 			guard error == nil else {
 				self.handleError(error, caller: #function)
 				return
-			}
 			}
 		}
 	}

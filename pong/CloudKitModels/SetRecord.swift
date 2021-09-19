@@ -10,13 +10,13 @@ import CloudKit
 
 final class SetRecord {
 	
-	let id: CKRecord.ID
-	let homePlayerReference: CKRecord.Reference?
-	let guestPlayerReference: CKRecord.Reference?
-	let firstServe: TeamID
-	let setType: GameType
-	let homeGames: CKRecord.Reference?
-	let guestGames: CKRecord.Reference?
+	var id: CKRecord.ID
+	var homePlayerReference: CKRecord.Reference?
+	var guestPlayerReference: CKRecord.Reference?
+	var firstServe: TeamID?
+	var setType: GameType?
+	var homeGames: CKRecord.Reference?
+	var guestGames: CKRecord.Reference?
 	
 	init(record: CKRecord) {
 		id = record.recordID

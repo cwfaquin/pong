@@ -15,6 +15,7 @@ struct ScoreboardView: View {
 	@State var showStatus: Bool = false
 	@State var screenSize = UIScreen.main.bounds.size
 	
+	
 	var body: some View {
 		
 		ZStack {

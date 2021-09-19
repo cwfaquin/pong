@@ -15,7 +15,7 @@ class Model {
 	let privateDB: CKDatabase
 	
 	// MARK: - Properties
-	private(set) var establishments: [Establishment] = []
+	private(set) var establishments: [MatchRecord] = []
 	static var currentModel = Model()
 	
 	init() {
@@ -23,14 +23,14 @@ class Model {
 		publicDB = container.publicCloudDatabase
 		privateDB = container.privateCloudDatabase
 	}
-	
+	/*
 	@objc func refresh(_ completion: @escaping (Error?) -> Void) {
 		let predicate = NSPredicate(value: true)
 		let query = CKQuery(recordType: "Establishment", predicate: predicate)
 		establishments(forQuery: query, completion)
 	}
 
-	
+
 	private func establishments(forQuery query: CKQuery, _ completion: @escaping (Error?) -> Void) {
 		publicDB.perform(query, inZoneWith: CKRecordZone.default().zoneID) { [weak self] results, error in
 			guard let self = self else { return }
@@ -49,5 +49,6 @@ class Model {
 			}
 		}
 	}
+ */
 }
 

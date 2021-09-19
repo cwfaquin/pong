@@ -10,7 +10,8 @@ import SwiftUI
 struct TeamView: View {
 	
 	@EnvironmentObject var match: Match
-
+	@State var showPlayerSelection = false
+	@Binding var player: Player?
 	let tableSide: TableSide
 	@Binding var showControlButtons: Bool
 	@State private var choosingSide = false
@@ -72,13 +73,23 @@ struct TeamView: View {
 extension TeamView {
 	var playerBox: some View {
 		GroupBox {
-			Button(action: addUser, label: { Label("Player", systemImage: "plus.circle") })
+			if let player = player {
+				PlayerRow(player)
+					.onTapGesture {
+						showPlayerSelection = true 
+					}
+			} else {
+				Button(action: { showPlayerSelection = true }, label: { Label("Player", systemImage: "plus.circle") })
 				.foregroundColor(._teal)
 				.font(notMacApp ? .title3 : .title2)
 				.lineLimit(1)
+			}
 		}
 		.cornerRadius(10)
 		.groupBoxStyle(BlackGroupBoxStyle(color: Color(UIColor.systemGray6)))
+		.sheet(isPresented: $showPlayerSelection) {
+			PlayerSelectionView(viewModel: PlayerSelectionVM(), selectedPlayer: $player, isShowing: $showPlayerSelection)
+		}
 	}
 	
 	var scoreStepper: some View {
@@ -116,7 +127,7 @@ extension TeamView {
 
 struct TeamView_Previews: PreviewProvider {
     static var previews: some View {
-			TeamView(tableSide: .left, showControlButtons: .constant(true))
+			TeamView(player: .constant(nil), tableSide: .left, showControlButtons: .constant(true))
 				.environmentObject(Match())
     }
 }
