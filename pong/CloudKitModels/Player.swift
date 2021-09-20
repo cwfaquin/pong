@@ -21,7 +21,10 @@ enum PlayerKeys: String, CaseIterable {
 struct Player: Identifiable, Hashable {
 	static let recordType = "Player"
 
-	var id: CKRecord.ID
+	var id: String {
+		recordId.recordName
+	}
+	var recordId: CKRecord.ID
 	var username = ""
 	var firstName = ""
 	var lastName = ""
@@ -32,12 +35,12 @@ struct Player: Identifiable, Hashable {
 	
 
 	init(record: CKRecord) {
-		id = record.recordID
+		recordId = record.recordID
 		updateFrom(record)
 	}
 	
 	mutating func updateFrom(_ record: CKRecord) {
-		id = record.recordID
+		recordId = record.recordID
 		username = record[PlayerKeys.username.rawValue] as? String ?? username
 		firstName = record[PlayerKeys.firstName.rawValue] as? String ?? firstName
 		lastName = record[PlayerKeys.lastName.rawValue] as? String ?? lastName
@@ -54,7 +57,7 @@ struct Player: Identifiable, Hashable {
 	
 	
 	func makePlayerRecord() -> CKRecord {
-		let record = CKRecord(recordType: Self.recordType, recordID: id)
+		let record = CKRecord(recordType: Self.recordType, recordID: recordId)
 		var value: CKRecordValue?
 		PlayerKeys.allCases.forEach {
 			switch $0 {

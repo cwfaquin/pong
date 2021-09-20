@@ -9,12 +9,11 @@ import SwiftUI
 import CloudKit
 
 struct PlayerSelectionView: View {
-	
-	@ObservedObject var viewModel: PlayerSelectionVM
+	@StateObject var viewModel: PlayerSelectionVM
 	@Binding var selectedPlayer: Player?
 	@State var editingPlayer: Player?
 	@Binding var isShowing: Bool
-
+	
 	
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
@@ -23,25 +22,21 @@ struct PlayerSelectionView: View {
 	var body: some View {
 		
 		NavigationView {
-			/*		ZStack {
-
-			if viewModel.players.isEmpty {
+			ZStack {
+				if !viewModel.isLoading, viewModel.players.isEmpty {
 					Text("No Players Found")
 						.font(.title)
 						.bold()
 						.padding()
 				} else {
-			*/
-			ZStack {
-				List {
-					ForEach(viewModel.players, id: \.id) { player in
-						PlayerRow(player)
-							.onTapGesture {
-								selectedPlayer = player
-								isShowing = false
-							}
+					List(selection: $selectedPlayer) {
+						ForEach(viewModel.players, id: \.id) { player in
+							PlayerRow(player)
+								.onTapGesture {
+									selectedPlayer = player
+								}
+						}
 					}
-				
 				}
 				if viewModel.isLoading {
 					ZStack {
@@ -54,36 +49,33 @@ struct PlayerSelectionView: View {
 			}
 			
 			.navigationTitle("Choose Player")
-		.navigationBarItems(trailing:
-													NavigationLink(
-														destination: {
-															EditPlayerView(player: newPlayer)
-																.environmentObject(viewModel)
-														},
-														label: {
-															Label("New Player", systemImage: "plus")
-																.foregroundColor(.pink)
-																.font(notMacApp ? .title3 : .title2)
-																.padding()
-														}
-													)
-													.navigationTitle("New Player")
-												)
+			.navigationBarItems(trailing:
+														NavigationLink(
+															destination: {
+																EditPlayerView(player: newPlayer)
+																	.environmentObject(viewModel)
+															},
+															label: {
+																Label("New Player", systemImage: "plus")
+																	.foregroundColor(.pink)
+																	.font(notMacApp ? .title3 : .title2)
+																	.padding()
+															}
+														)
+														.navigationTitle("New Player")
+			)
 			
-			}
+		}
 		.accentColor(.pink)
 		.onAppear {
-			DispatchQueue.main.async {
-				viewModel.fetchPlayers()
-
-			}
+			viewModel.fetchPlayers()
 		}
 		.navigationViewStyle(StackNavigationViewStyle())
 		.onChange(of: viewModel.selectedPlayer) { newValue in
 			selectedPlayer = newValue
-			isShowing = false 
+			isShowing = false
 		}
-
+		
 	}
 	
 	var newPlayer: Player {
@@ -94,7 +86,7 @@ struct PlayerSelectionView: View {
 
 
 struct PlayerRow: View {
-
+	
 	@State var avatar: UIImage?
 	var player: Player
 	

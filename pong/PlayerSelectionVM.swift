@@ -48,13 +48,13 @@ final class PlayerSelectionVM: ObservableObject {
 		let query = CKQuery(recordType: Player.recordType, predicate: NSPredicate(value: true))
 		database.perform(query, inZoneWith: nil) { records, error in
 			DispatchQueue.main.async {
-				defer { self.isLoading = false }
 				guard let records = records else {
 					self.handleError(error, caller: #function)
+					self.isLoading = false
 					return
 				}
 				self.players = records.map(Player.init)
-				self.players.forEach { print($0) }
+				self.isLoading = false
 			}
 		}
 	}

@@ -88,9 +88,10 @@ extension TeamView {
 		.cornerRadius(10)
 		.groupBoxStyle(BlackGroupBoxStyle(color: Color(UIColor.systemGray6)))
 		.sheet(isPresented: $showPlayerSelection) {
-			PlayerSelectionView(viewModel: PlayerSelectionVM(), selectedPlayer: $player, isShowing: $showPlayerSelection)
+			PlayerSelectionView(viewModel: PlayerSelectionVM(), selectedPlayer: $player, isShowing: .init(get: { player == nil }, set: { showPlayerSelection = $0 }))
 		}
-	}
+		}
+
 	
 	var scoreStepper: some View {
 		Stepper("", onIncrement: { match.singleTap(tableSide) }, onDecrement: { match.doubleTap(tableSide) })
