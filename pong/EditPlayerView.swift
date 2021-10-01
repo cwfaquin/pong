@@ -16,7 +16,9 @@ struct EditPlayerView: View {
 	@State var pinPrompt = false
 	@State var alertMessage = ""
 	@State var validationError = false
+	@Binding var savedPlayer: Player?
 	@State var newPlayer = false
+
 	
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
@@ -96,7 +98,6 @@ struct EditPlayerView: View {
 		.accentColor(.pink)
 
 		}
-		.navigationTitle(newPlayer ? "New Player" : "Edit \(player.username)")
 		.navigationBarItems(trailing:
 				Button("Save", action: { save() })
 						.foregroundColor(.pink)
@@ -136,7 +137,8 @@ struct EditPlayerView: View {
 				.textContentType(.newPassword)
 				.font(.headline)
 				.textFieldStyle(RoundedBorderTextFieldStyle())
-				.overlay(RoundedRectangle(cornerRadius: 8).stroke(.pink, lineWidth: 1))
+				.border(Color.pink, width: 1)
+				.cornerRadius(8)
 				
 				Spacer()
 			}
@@ -182,7 +184,7 @@ struct EditPlayerView: View {
 
 struct EditPlayerView_Previews: PreviewProvider {
 	static var previews: some View {
-		EditPlayerView(player: Player(record: CKRecord(recordType: Player.recordType)))
+		EditPlayerView(player: Player(record: CKRecord(recordType: Player.recordType)), savedPlayer: .constant(nil))
 			.environmentObject(PlayerSelectionVM())
 	}
 }

@@ -6,16 +6,18 @@
 //
 
 import SwiftUI
+import flic2lib
 
 struct ScoreboardView: View {
 	
 	@EnvironmentObject var match: Match
+	@StateObject var buttonManager = ButtonManager()
 	@State var showSettings: Bool = false
 	@State var statusVM: StatusVM = StatusVM(text: "", temporary: true)
 	@State var showStatus: Bool = false
 	@State var screenSize = UIScreen.main.bounds.size
 	
-	
+
 	var body: some View {
 		
 		ZStack {
@@ -46,10 +48,9 @@ struct ScoreboardView: View {
 		.background(Color.black)
 		.sheet(isPresented: $showSettings, onDismiss: nil, content: {
 			SettingsView(
-				viewModel: SettingsVM(),
 				settings: $match.settings,
 				showSettings: $showSettings
-			)
+			).environmentObject(buttonManager)
 		})
 		.onRotate { newOrientation in
 			screenSize = UIScreen.main.bounds.size
@@ -59,6 +60,11 @@ struct ScoreboardView: View {
 		}
 		.onChange(of: match.game.status) { gameStatus in
 			handleNewState(nil, gameStatus: gameStatus)
+		}
+		.onAppear {
+			if !Storage.isMacApp {
+				buttonManager.configure(self)
+			}
 		}
 	}
 	
@@ -81,6 +87,31 @@ struct ScoreboardView: View {
 		}
 	}
 }
+
+extension ScoreboardView: ButtonContract {
+	func singleClick(_ tableSide: TableSide?) {
+		if let tableSide = tableSide {
+			match.singleTap(tableSide)
+		} else {
+			match.singleTapMiddle()
+		}
+	}
+	
+	func doubleClick(_ tableSide: TableSide?) {
+		if let tableSide = tableSide {
+			match.doubleTap(tableSide)
+		} else {
+			match.doubleTapMiddle()
+		}
+	}
+	
+	func longPress(_ tableSide: TableSide?) {
+		print(#function)
+	}
+}
+
+
+
 
 struct ScoreboardView_Previews: PreviewProvider {
 	static var previews: some View {

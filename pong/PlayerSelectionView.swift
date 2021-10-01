@@ -9,11 +9,13 @@ import SwiftUI
 import CloudKit
 
 struct PlayerSelectionView: View {
-	@StateObject var viewModel: PlayerSelectionVM
+	@StateObject var viewModel = PlayerSelectionVM()
 	@Binding var selectedPlayer: Player?
 	@State var editingPlayer: Player?
-	@Binding var isShowing: Bool
-	
+	@State var showAddNewPlayer: Bool = false
+	@State var editMode: EditMode = .active
+	@Environment(\.presentationMode) private var presentationMode
+
 	
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
@@ -30,41 +32,63 @@ struct PlayerSelectionView: View {
 						.padding()
 				} else {
 					List(selection: $selectedPlayer) {
-						ForEach(viewModel.players, id: \.id) { player in
-							PlayerRow(player)
-								.onTapGesture {
-									selectedPlayer = player
-								}
+						Section {
+						NavigationLink(destination:
+														EditPlayerView(player: newPlayer, savedPlayer: $selectedPlayer)
+															.environmentObject(viewModel),
+													 isActive: .init(
+														get: { showAddNewPlayer },
+														set: {_ in
+															showAddNewPlayer = selectedPlayer != nil
+														}
+													 )
+						) {
+							PlayerRow(player: nil)
+						}
+						}
+						Section(header: Text("Select Player")) {
+							ForEach(viewModel.players, id: \.id) { player in
+								PlayerRow(player: player)
+									.border(Color.blue, width: selectedPlayer == player ? 2 : 0)
+									.cornerRadius(selectedPlayer == player ? 8 : 0)
+									.background(selectedPlayer == player ? Color.black : nil)
+							}
 						}
 					}
+					.environment(\.editMode, $editMode)
+				
 				}
 				if viewModel.isLoading {
 					ZStack {
 						Rectangle()
 							.foregroundColor(.black.opacity(0.9))
 						ProgressView()
-							.progressViewStyle(.circular)
+							//.progressViewStyle(.circular)
 					}
 				}
 			}
-			
-			.navigationTitle("Choose Player")
-			.navigationBarItems(trailing:
-														NavigationLink(
-															destination: {
-																EditPlayerView(player: newPlayer)
-																	.environmentObject(viewModel)
-															},
-															label: {
-																Label("New Player", systemImage: "plus")
-																	.foregroundColor(.pink)
-																	.font(notMacApp ? .title3 : .title2)
-																	.padding()
-															}
-														)
-														.navigationTitle("New Player")
-			)
-			
+			.toolbar {
+				ToolbarItem(placement: .navigationBarTrailing) {
+					NavigationLink(destination:
+													EditPlayerView(player: newPlayer, savedPlayer: $selectedPlayer)
+													.environmentObject(viewModel),
+												 isActive: $showAddNewPlayer
+					) {
+						Image(systemName: "plus")
+							.resizable()
+							.foregroundColor(.pink)
+					}
+				}
+				ToolbarItem(placement: .navigationBarLeading) {
+					Button(action: { selectedPlayer = selectedPlayer }) {
+						Image(systemName: "xmark")
+							.resizable()
+							.foregroundColor(.pink)
+					}
+				}
+			}
+
+			.navigationTitle("Home Player")
 		}
 		.accentColor(.pink)
 		.onAppear {
@@ -73,10 +97,9 @@ struct PlayerSelectionView: View {
 		.navigationViewStyle(StackNavigationViewStyle())
 		.onChange(of: viewModel.selectedPlayer) { newValue in
 			selectedPlayer = newValue
-			isShowing = false
 		}
-		
 	}
+	
 	
 	var newPlayer: Player {
 		Player(record: CKRecord(recordType: Player.recordType))
@@ -88,44 +111,41 @@ struct PlayerSelectionView: View {
 struct PlayerRow: View {
 	
 	@State var avatar: UIImage?
-	var player: Player
-	
-	init(_ player: Player) {
-		self.player = player
+	@State var player: Player?
+
+	var isNew: Bool {
+		player == nil
 	}
 	
 	var body: some View {
 		HStack {
-			avatarImage
-			VStack {
-				Text(player.username)
-					.font(.headline)
-				Text("\(player.firstName) \(player.lastName)")
-					.font(.subheadline)
-			}
-			Text("")
+			if isNew { Spacer() }
+			image
+			Text(player?.username ?? "New Player")
+				.font(.title)
+				.foregroundColor(isNew ? .pink : .white)
+			Spacer()
+			
 		}
 		.onAppear {
-			player.loadAvatar { image in
+			player?.loadAvatar { image in
 				avatar = image
 			}
 		}
+		.navigationTitle(player?.username ?? "New Player")
 	}
 	
-	var avatarImage: some View {
+	var image: some View {
 		let image: Image
 		if let avatar = avatar {
 			image = Image(uiImage: avatar)
 		} else {
-			image = Image(systemName: "person.fill")
+			image = isNew ? Image(systemName: "plus") : Image(systemName: "person.circle")
 		}
 		return image
-			.imageScale(.large)
-			.overlay(
-				Circle()
-					.strokeBorder(style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
-					.foregroundColor(.pink)
-			)
+			.resizable()
+			.frame(width: isNew ? 30 : 40, height: isNew ? 30 : 40)
+			.foregroundColor(player == nil ? .pink : .blue)
 			.padding()
 	}
 }
@@ -134,6 +154,6 @@ struct PlayerRow: View {
 
 struct PlayerSelectionView_Previews: PreviewProvider {
 	static var previews: some View {
-		PlayerSelectionView(viewModel: PlayerSelectionVM(), selectedPlayer: .constant(nil), editingPlayer: nil, isShowing: .constant(true))
+		PlayerSelectionView(selectedPlayer: .constant(nil), editingPlayer: nil)
 	}
 }

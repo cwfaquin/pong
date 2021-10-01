@@ -15,10 +15,7 @@ final class SettingsVM: ObservableObject {
 	@Published var rightButton: FLICButton?
 	@Published var homeButton: FLICButton?
 	
-	init() {
-		
-	}
-	
+
 	func initButtons() {
 		FLICManager.shared()?.buttons().forEach {
 			switch $0.nickname {
@@ -33,16 +30,6 @@ final class SettingsVM: ObservableObject {
 			}
 		}
 	}
-	
-	var flicConnectable: Bool {
-		switch UIDevice.current.userInterfaceIdiom {
-		case .pad, .phone:
-			return true
-		default:
-			return false
-		}
-	}
-	
 
 	func scanForButtons() {
 		FLICManager.shared()?.scanForButtons(stateChangeHandler: { statusEvent in
@@ -90,7 +77,7 @@ final class SettingsVM: ObservableObject {
 						self.homeButton = button
 					}
 				}
-			}
+			} 
 			print("Set Nickname")
 		})
 	}
@@ -125,38 +112,3 @@ final class SettingsVM: ObservableObject {
 	}
 }
 
-extension FLICButtonState {
-	var description: String {
-		switch self {
-		case .connected:
-			return "Connected"
-		case .disconnected:
-			return "Disconnected"
-		case .disconnecting:
-			return "Disconnecting"
-		case .connecting:
-			return "Connecting"
-		default:
-			return "Status Unknown"
-		}
-	}
-}
-
-enum FlicName: String, CaseIterable {
-	case home = "Home"
-	case tableLeft = "Table Left"
-	case tableRight = "Table Right"
-	
-	var singleSound: ScoreboardVM.SoundType {
-		switch self {
-		case .home:
-			return .singleTapMiddle
-		default:
-			return .singleTapSide
-		}
-	}
-	
-	var doubleSound: ScoreboardVM.SoundType {
-		.doubleTap
-	}
-}

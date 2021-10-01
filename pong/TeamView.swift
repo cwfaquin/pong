@@ -74,7 +74,7 @@ extension TeamView {
 	var playerBox: some View {
 		GroupBox {
 			if let player = player {
-				PlayerRow(player)
+				PlayerRow(player: player)
 					.onTapGesture {
 						showPlayerSelection = true 
 					}
@@ -88,10 +88,18 @@ extension TeamView {
 		.cornerRadius(10)
 		.groupBoxStyle(BlackGroupBoxStyle(color: Color(UIColor.systemGray6)))
 		.sheet(isPresented: $showPlayerSelection) {
-			PlayerSelectionView(viewModel: PlayerSelectionVM(), selectedPlayer: $player, isShowing: .init(get: { player == nil }, set: { showPlayerSelection = $0 }))
+			PlayerSelectionView(
+				selectedPlayer: Binding.init(
+					get: { player },
+					set: {
+						player = $0
+						showPlayerSelection = false
+					})
+			)
 		}
 		}
 
+				
 	
 	var scoreStepper: some View {
 		Stepper("", onIncrement: { match.singleTap(tableSide) }, onDecrement: { match.doubleTap(tableSide) })

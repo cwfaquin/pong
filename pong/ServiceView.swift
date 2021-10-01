@@ -50,7 +50,7 @@ struct ServiceView: View {
 						Spacer()
 					}
 					Circle()
-						.fill(.green)
+						.fill(Color.green)
 						.shadow(color: .green, radius: 15, x: 0, y: 0)
 						.scaleEffect(isPulsing ? 0.9 : 1.0)
 						.frame(width: screenHeight/15, height: screenHeight/15)

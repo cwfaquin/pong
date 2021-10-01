@@ -27,11 +27,9 @@ struct StatusView: View {
 			.groupBoxStyle(BlackGroupBoxStyle(color: .clear))
 			.background(Color.black.opacity(0.9))
 			.cornerRadius(12)
-			.overlay(
-				RoundedRectangle(cornerRadius: 12)
-					.stroke(.blue, lineWidth: 4)
-					.shadow(color: .blue, radius: 2, x: 0, y: 0)
-			)
+			.border(Color.blue, width: 4)
+			.shadow(color: .blue, radius: 2, x: 0, y: 0)
+			
 			.onAppear {
 				checkAutoDismiss()
 			}

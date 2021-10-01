@@ -17,14 +17,7 @@ final class MatchSettings: ObservableObject {
 	@Published var guestTeam = Team(.guest)
 }
 
-protocol ScoreSetting: Identifiable  {
-	var id: Int { get }
-	var pointGoal: Int { get }
-	var maxSeriesCount: Int { get }
-	var description: String { get }
-}
-
-enum GameType: Int, CaseIterable, ScoreSetting {
+enum GameType: Int, CaseIterable, Identifiable {
 	case short
 	case long
 	
@@ -50,7 +43,7 @@ enum GameType: Int, CaseIterable, ScoreSetting {
 	}
 }
 
-enum SetType: Int, CaseIterable, Identifiable, ScoreSetting {
+enum SetType: Int, CaseIterable, Identifiable {
 	case singleGame
 	case bestOfThree
 	case bestOfFive
@@ -96,7 +89,7 @@ enum SetType: Int, CaseIterable, Identifiable, ScoreSetting {
 	}
 }
 
-enum MatchType: Int, CaseIterable, ScoreSetting {
+enum MatchType: Int, CaseIterable, Identifiable {
 	case singleSet
 	case bestOfThree
 	case bestOfFive

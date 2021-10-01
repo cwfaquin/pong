@@ -14,7 +14,17 @@ struct MainApp: App {
 	
 	@StateObject var viewModel = MainAppVM()
 	@StateObject var match = Match()
-
+	
+	#if targetEnvironment(macCatalyst)
+		let isMacApp: Bool = true
+	#else
+		let isMacApp: Bool = false
+	#endif
+	
+	init() {
+		Storage.isMacApp = isMacApp
+	}
+	
 	var body: some Scene {
 		WindowGroup {
 			ScoreboardView()
@@ -41,9 +51,20 @@ struct MainApp: App {
 					}
 				}
 				.onOpenURL { url in
-					viewModel.handleURL(url)
+						viewModel.handleURL(url)
 				}
 		}
 		
+	}
+}
+
+struct Storage {
+	static var isMacApp: Bool {
+		get {
+			UserDefaults.standard.bool(forKey: #function)
+		}
+		set {
+			UserDefaults.standard.set(newValue, forKey: #function)
+		}
 	}
 }
