@@ -13,83 +13,86 @@ struct SettingsView: View {
 	@Binding var settings: MatchSettings
 	@Binding var showSettings: Bool
 	
-	
-	var flicButtonCount: Int {
-		FLICManager.shared()?.buttons().count ?? 1
-	}
-	
 	var body: some View {
-			Form {
-				Button("Dismsiss", action: { showSettings.toggle() })
-					.buttonStyle(RoundedRectangleButtonStyle())
-					.padding()
-				
-				Section(header: Text("Preferences".spaced)) {
-					Toggle(isOn: $settings.showControlButtons) {
-						Text("Always Show Scoreboard Buttons")
+		Form {
+			Button("Dismsiss", action: { showSettings.toggle() })
+				.buttonStyle(RoundedRectangleButtonStyle())
+				.padding()
+			
+			Section(header: Text("Preferences".spaced)) {
+				Toggle(isOn: $settings.showControlButtons) {
+					Text("Always Show Scoreboard Buttons")
+				}
+				Toggle(isOn: $settings.recordMatchResults) {
+					Text("Report Match Results")
+				}.disabled(true)
+			}
+			
+			Section(header: Text("Match Settings".spaced)) {
+				VStack(alignment: .leading) {
+					HStack {
+						Text("Game Length")
+						Spacer()
+						Text("\(settings.gameType.pointGoal) Points to Win (+2pt Advantage)")
+							.fontWeight(.light)
+							.padding(.trailing)
+							.foregroundColor(.gray)
 					}
-					Toggle(isOn: $settings.recordMatchResults) {
-						Text("Report Match Results")
-					}.disabled(true)
-				}
+					Picker("Game Length", selection: $settings.gameType) {
+						ForEach(GameType.allCases) { type in
+							Text(type.description).tag(type)
+						}
+					}.pickerStyle(SegmentedPickerStyle())
+				}.padding(.top)
 				
-				Section(header: Text("Match Settings".spaced)) {
-					VStack(alignment: .leading) {
-						HStack {
-							Text("Game Length")
-							Spacer()
-							Text("\(settings.gameType.pointGoal)pts & 2pt advantage to win game")
-								.fontWeight(.ultraLight)
-								.padding(.trailing)
+				VStack(alignment: .leading) {
+					HStack {
+						Text("Set Length")
+						Spacer()
+						Text("\(settings.setType.pointGoal) Game(s) to Win")
+							.fontWeight(.light)
+							.padding(.trailing)
+							.foregroundColor(.gray)
+					}
+					Picker("Set Length", selection: $settings.setType) {
+						ForEach(SetType.allCases) { type in
+							Text(type.description).tag(type)
 						}
-						Picker("Game Length", selection: $settings.gameType) {
-							ForEach(GameType.allCases) { type in
-								Text(type.description).tag(type)
-							}
-						}.pickerStyle(SegmentedPickerStyle())
-					}.padding(.top)
-					
-					VStack(alignment: .leading) {
-						HStack {
-							Text("Set Length")
-							Spacer()
-							Text("\(settings.setType.pointGoal) games to win set")
-								.fontWeight(.ultraLight)
-								.padding(.trailing)
-						}
-						Picker("Set Length", selection: $settings.setType) {
-							ForEach(SetType.allCases) { type in
-								Text(type.description).tag(type)
-							}
-						}.pickerStyle(SegmentedPickerStyle())
-					}.padding(.top)
-					
-					VStack(alignment: .leading) {
-						HStack {
-							Text("Match Length")
-							Spacer()
-							Text("\(settings.matchType.pointGoal) sets to win")
-								.fontWeight(.ultraLight)
-								.padding(.trailing)
-						}
-						Picker("Match Length", selection: $settings.matchType) {
-							ForEach(MatchType.allCases) { type in
-								Text(type.description).tag(type)
-							}
-						}.pickerStyle(SegmentedPickerStyle())
-					}.padding(.top  )
-				}
+					}.pickerStyle(SegmentedPickerStyle())
+				}.padding(.top)
 				
-				if !Storage.isMacApp {
-					Section(header:
-										HStack {
-						Text("Flic Buttons".spaced)
+				VStack(alignment: .leading) {
+					HStack {
+						Text("Match Length")
+						Spacer()
+						Text("\(settings.matchType.pointGoal) Set(s) to Win")
+							.fontWeight(.light)
+							.padding(.trailing)
+							.foregroundColor(.gray)
+					}
+					Picker("Match Length", selection: $settings.matchType) {
+						ForEach(MatchType.allCases) { type in
+							Text(type.description).tag(type)
+						}
+					}.pickerStyle(SegmentedPickerStyle())
+				}.padding(.top  )
+			}
+		
+				Section(header: Text("Flic Buttons".spaced)) {
+					if Storage.isMacApp {
+						Text("Only available on iOS devices.")
+					} else {
+					HStack {
+						Text("Buttons Found:")
+							.foregroundColor(.white.opacity(0.9))
+						Text("\(buttonManager.buttonsFound.count)")
+							.bold()
+						Spacer()
+						Text(buttonManager.scanStatus)
 						Spacer()
 						if buttonManager.isScanning {
-							Text(buttonManager.scanStatus)
-								.italic()
-							ProgressView()
-								.progressViewStyle(CircularProgressViewStyle(tint: Color(UIColor.cyan)))
+						ProgressView()
+							.progressViewStyle(CircularProgressViewStyle(tint: Color(UIColor.cyan)))
 						} else {
 							Button(action: {
 								if buttonManager.allButtonsFound {
@@ -99,39 +102,86 @@ struct SettingsView: View {
 								}
 							}, label: {
 								Text(buttonManager.allButtonsFound ? "Forget All" : "Scan")
-									.padding(.trailing)
+									.foregroundColor(Color(UIColor.cyan))
 							})
 						}
-					})
-					{
+					}
 						ForEach(buttonManager.buttonsFound, id: \.identifier) { button in
-							buttonView(button)
+							if let pongName = button.pongName {
+								namedButtonView(button, name: pongName)
+							} else {
+								unnamedButtonView(button)
+							}
 						}
 					}
 				}
 			}
-			.cornerRadius(10)
-			.padding()
+		.onAppear {
+			buttonManager.updateButtons()
+		}
+		.cornerRadius(10)
+		.padding()
 	}
 	
-	func buttonView(_ button: FLICButton) -> some View {
-		HStack {
-			if let pongName = button.pongName {
-				Text(pongName.rawValue)
-					.padding()
-			} else {
-				VStack {
-					Text(button.nickname ?? button.uuid)
-					Text(button.nickname == nil ? button.uuid : button.bluetoothAddress)
-				}
-				ForEach(FlicName.allCases, id: \.rawValue) { name in
-					Button(action: { button.nickname = name.rawValue }, label: { Text(name.rawValue) })
-				}
+	func namedButtonView(_ button: FLICButton, name: FlicName) -> some View {
+			HStack {
+				Button(
+					action: {
+						button.nickname = nil
+						buttonManager.updateButtons()
+					},
+					label: {
+						Image(systemName: "\(name.imageName).fill")
+							.resizable()
+							.foregroundColor(button.isReady ? .green : .orange)
+							.frame(width: 40, height: 40)
+					}
+				)
+				buttonNameView(button.uuid)
+				rightButtonView(button)
 			}
-			Spacer()
-			Text(button.state.description)
-				.foregroundColor(button.state.color)
-				.fontWeight(.ultraLight)
+			.padding(.vertical)
+	}
+	
+	func unnamedButtonView(_ button: FLICButton) -> some View {
+		HStack {
+			HStack(alignment: .center, spacing: 15) {
+			ForEach(FlicName.allCases, id: \.rawValue) { name in
+				Button(
+					action: {
+						button.nickname = name.rawValue
+						buttonManager.updateButtons()
+					},
+					label: {
+						Image(systemName: name.imageName)
+							.resizable()
+							.foregroundColor(Color(UIColor.cyan))
+							.frame(width: 40, height: 40)
+					})
+			}
+			}
+			buttonNameView(button.uuid)
+			rightButtonView(button)
+		}
+		.padding(.vertical)
+	}
+	
+	func buttonNameView(_ name: String) -> some View {
+		VStack(alignment: .center, spacing: 10) {
+			Text("Button ID:")
+				.underline()
+			Text(name)
+				.font(.caption)
+		}
+		.padding(.horizontal)
+	}
+
+	func rightButtonView(_ button: FLICButton) -> some View {
+		HStack {
+			Text(buttonManager.statusFor(button))
+				.multilineTextAlignment(.center)
+				.lineLimit(0)
+				.padding(.horizontal)
 			Spacer()
 			switch button.state {
 			case .connected:
@@ -141,7 +191,7 @@ struct SettingsView: View {
 				}
 			case .disconnected:
 				Button(action: { button.connect() }) {
-					Text("Disconnect")
+					Text("Connect")
 						.foregroundColor(Color(UIColor.cyan))
 				}
 			default:
@@ -150,7 +200,6 @@ struct SettingsView: View {
 			}
 		}
 	}
-	
 	
 }
 
