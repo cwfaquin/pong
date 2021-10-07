@@ -285,11 +285,11 @@ enum FlicName: String, CaseIterable, Identifiable {
 		case .home:
 			return "Home Button"
 		case .tableLeft:
-			return "Left Table (facing scoreboard)"
+			return "Table Left (Facing Scoreboard)"
 		case .tableRight:
-			return "Right Table (facing scoreboard)"
+			return "Table Right (Facing Scoreboard)"
 		case .unassigned:
-			return "⚠️ Unassigned Button ⚠️"
+			return "Unassigned Button"
 		}
 	}
 	

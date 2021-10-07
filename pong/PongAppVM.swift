@@ -13,15 +13,21 @@ final class PongAppVM: NSObject, ObservableObject {
 	
 	@Published var flicAction: FlicAction?
 	@Published var managerState: FLICManagerState = .poweredOff
-	@Published var leftButton: FLICButton?
-	@Published var rightButton: FLICButton?
-	@Published var homeButton: FLICButton?
+//	@Published var leftButton: FLICButton?
+//	@Published var rightButton: FLICButton?
+//	@Published var homeButton: FLICButton?
 	@Published var buttonDict = [UUID: String]()
 	@Published var managerReady = false
 	@Published var isScanning = false
 	@Published var message = ""
 	@Published var scanViewVisible = false
 	@Published var pairedButtons = [FLICButton]()
+	private var pairedSet = Set<FLICButton>() {
+		didSet {
+			pairedButtons = Array(pairedSet)
+				.sorted { $0.uuid < $1.uuid }
+		}
+	}
 	
 	override init() {
 		super.init()
@@ -69,7 +75,7 @@ final class PongAppVM: NSObject, ObservableObject {
 			}
 			self.updatePaired(button)
 			self.message = "Buttons Found: \(self.pairedButtons.count)"
-			switch button.pongName {
+		/*	switch button.pongName {
 			case .tableLeft:
 				self.leftButton = button
 			case .tableRight:
@@ -78,7 +84,7 @@ final class PongAppVM: NSObject, ObservableObject {
 				self.homeButton = button
 			default:
 				print("Unassigned Button")
-			}
+			}*/
 			button.triggerMode = .clickAndDoubleClick
 			button.connect()
 		})
@@ -89,9 +95,13 @@ extension PongAppVM: FLICManagerDelegate {
 	func managerDidRestoreState(_ manager: FLICManager) {
 		print(#function)
 		managerReady = true
-		FLICManager.shared()?.buttons().forEach {
+		let buttons = FLICManager.shared()?.buttons() ?? []
+		if buttons.isEmpty {
+			message = "While Scanning, hold Flic Button for 6 seconds to enter pairing mode."
+		}
+		buttons.forEach {
 			updatePaired($0)
-			update($0)
+			$0.delegate = self 
 			$0.connect()
 		}
 	}
@@ -102,7 +112,7 @@ extension PongAppVM: FLICManagerDelegate {
 		managerState = state
 	}
 	
-	func update(_ button: FLICButton) {
+	/*func update(_ button: FLICButton) {
 		switch button.pongName {
 		case .tableLeft:
 			leftButton = button
@@ -113,42 +123,56 @@ extension PongAppVM: FLICManagerDelegate {
 		default:
 			print("Unassigned Button nickname: \(button.nickname ?? "")")
 		}
-	}
+	}*/
 	
 	func updatePaired(_ button: FLICButton) {
-		//guard scanViewVisible else { return }
-		if let index = pairedButtons.firstIndex(of: button) {
-			pairedButtons[index] = button
-		} else {
-			pairedButtons.append(button)
-		}
+		pairedSet.update(with: button)
 	}
 }
 
 extension PongAppVM: FLICButtonDelegate {
 	func buttonDidConnect(_ button: FLICButton) {
 		print(#function)
-		update(button)
+		//update(button)
 		updatePaired(button)
 	}
 	
 	func buttonIsReady(_ button: FLICButton) {
 		print(#function)
-		update(button)
+		//update(button)
 		updatePaired(button)
+		button.delegate = self
 	}
 	
 	func button(_ button: FLICButton, didUpdateNickname nickname: String) {
 		print(#function)
-		update(button)
+		//update(button)
 		updatePaired(button)
 	}
 	
 	func button(_ button: FLICButton, didReceiveButtonClick queued: Bool, age: Int) {
 		print(#function)
 		print("queued = \(queued), age = \(age)")
-		guard !scanViewVisible else { return }
-		switch button {
+		guard !scanViewVisible else {
+			buttonDict[button.identifier] = "Single Click Received"
+			return
+		}
+		switch button.pongName {
+		case .tableLeft:
+			flicAction = .singleTapLeft
+			playSound(.singleTapSide)
+		case .tableRight:
+			flicAction = .singleTapRight
+			playSound(.singleTapSide)
+		case .home:
+			flicAction = .singleTapHome
+			playSound(.singleTapMiddle)
+		default:
+			playSound(.button1)
+			flicAction = nil
+		}
+	}
+		/*switch button {
 		case leftButton where button.pongName == .tableLeft:
 			flicAction = .singleTapLeft
 			playSound(.singleTapSide)
@@ -163,24 +187,25 @@ extension PongAppVM: FLICButtonDelegate {
 			flicAction = nil
 			assertionFailure("Unnamed Button clicked")
 			return
-		}
-	}
+		}*/
+	
 	
 	func button(_ button: FLICButton, didReceiveButtonDoubleClick queued: Bool, age: Int) {
 		print(#function)
 		print("queued = \(queued), age = \(age)")
-		guard !scanViewVisible else { return }
-		switch button {
-		case leftButton where button.pongName == .tableLeft:
+		guard !scanViewVisible else {
+			buttonDict[button.identifier] = "Double Click Received"
+			return
+		}
+		switch button.pongName {
+		case .tableLeft:
 			flicAction = .doubleTapLeft
-		case rightButton where button.pongName == .tableRight:
+		case .tableRight:
 			flicAction = .doubleTapRight
-		case homeButton where button.pongName == .home:
+		case .home:
 			flicAction = .doubleTapHome
 		default:
 			playSound(.button1)
-			flicAction = nil 
-			assertionFailure("Unnamed Button double clicked")
 			return
 		}
 		playSound(.doubleTap)
@@ -189,19 +214,21 @@ extension PongAppVM: FLICButtonDelegate {
 	func button(_ button: FLICButton, didUnpairWithError error: Error?) {
 		print(#function)
 		print(String(describing: error))
-		update(button)
+		//update(button)
 		var text = "Unpaired"
 		if let error = error {
 			text += ". \(error.localizedDescription)"
 		}
 		buttonDict[button.identifier] = text
-		updatePaired(button)
+		if let index = pairedButtons.firstIndex(of: button) {
+			pairedButtons.remove(at: index)
+		}
 	}
 	
 	func button(_ button: FLICButton, didDisconnectWithError error: Error?) {
 		print(#function)
 		print(String(describing: error))
-		update(button)
+		//update(button)
 		var text = "Disconnected"
 		if let error = error {
 			text += ". \(error.localizedDescription)"
@@ -214,7 +241,7 @@ extension PongAppVM: FLICButtonDelegate {
 	func button(_ button: FLICButton, didFailToConnectWithError error: Error?) {
 		print(#function)
 		print(String(describing: error))
-		update(button)
+		//update(button)
 		var text = "Connection Failure"
 		if let error = error {
 			text += ". \(error.localizedDescription)"

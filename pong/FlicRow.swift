@@ -12,75 +12,162 @@ struct FlicRow: View {
 	
 	@Binding var button: FLICButton
 	@State var selectedName: FlicName
+	@Binding var message: String?
 	
 	let segmentHeight: CGFloat = 50
 	
 	var body: some View {
 		VStack {
-			HStack {
-				Text(button.name ?? button.uuid)
-					.bold()
-					.padding(.trailing)
-				Text(button.state.description)
-					.italic()
-					.foregroundColor(.gray)
-				Spacer()
-				Button(action: rightButtonTapped) {
-					Text(button.state == .connected ? "Disconnect" : "Forget")
-						.foregroundColor(button.isReady ? .green : .pink)
-				}
-			}
-			GroupBox(content: {
-				Divider()
+		HStack {
+			VStack(alignment: .leading) {
 				HStack {
-					Picker("Button Role", selection: $selectedName) {
-						ForEach(FlicName.allCases) { name in
-							Image(systemName: name.imageName)
-								.resizable()
-								.tag(name)
-								.accentColor(selectedName == name ? .black : .white)
-						}
-					}
-					.disabled(button.state == .connected)
-					.pickerStyle(SegmentedPickerStyle())
-					.frame(minWidth: segmentHeight * 3, idealWidth: segmentHeight * 6, maxWidth: UIScreen.main.bounds.width * 0.4, minHeight: 40, idealHeight: segmentHeight, maxHeight: segmentHeight * 2)
+					Text(button.name ?? button.uuid)
+						.bold()
+						.foregroundColor(stateColor)
+						.padding(.trailing)
+					Text(button.state.description)
+						.italic()
+						.foregroundColor(.gray)
 				}
-			}, label: {
-				Label(selectedName.description, systemImage: button.pongName == .unassigned ? "exclamationmark" : "checkmark")
-					.foregroundColor(button.pongName == .unassigned || !button.isReady ? .orange : .green)
-					.accentColor(button.pongName == .unassigned || !button.isReady ? .orange : .green)
-					.frame(alignment: .leading)
-			})
-				.groupBoxStyle(BlackGroupBoxStyle())
+				GroupBox(content: {
+					Divider()
+					HStack {
+						Picker("Button Role", selection: $selectedName) {
+							ForEach(FlicName.allCases) { name in
+								Image(systemName: name.imageName)
+									.resizable()
+									.tag(name)
+									.foregroundColor(button.isReady ? Color(UIColor.cyan) : .gray)
+							}
+						}
+						.pickerStyle(SegmentedPickerStyle())
+						.frame(minWidth: segmentHeight * 3, idealWidth: segmentHeight * 6, maxWidth: UIScreen.main.bounds.width * 0.4, minHeight: 40, idealHeight: segmentHeight, maxHeight: segmentHeight * 2)
+					}
+				}, label: {
+					Label(selectedName.description, systemImage: buttonUnassigned ? "xmark.circle" : "checkmark.circle")
+						.foregroundColor(buttonUnassigned ? .orange : .green)
+						.accentColor(buttonUnassigned ? .orange : .green)
+						.frame(alignment: .leading)
+				})
+					.disabled(!button.isReady)
+					.groupBoxStyle(BlackGroupBoxStyle())
+					.cornerRadius(10)
+			}
+			.padding()
+			Spacer()
+			VStack {
+					Button(action: rightButtonTapped) {
+						Text(rightButtonText)
+							.font(.body)
+							.foregroundColor(Color(UIColor.cyan))
+							.padding()
+							.background(
+								Color(UIColor.systemGray6)
+									.cornerRadius(10)
+							)
+							.overlay(
+								RoundedRectangle(cornerRadius: 10, style: .continuous)
+									.stroke(Color(UIColor.cyan), lineWidth: 1)
+								)
+					}
+					.disabled(rightButtonDisabled)
+					.padding()
+					
+					Button(action: forgetButton) {
+						Text("Forget")
+							.font(.body)
+							.foregroundColor(.pink)
+							.padding()
+							.background(
+								Color(UIColor.systemGray6)
+									.cornerRadius(10)
+							)
+							.overlay(
+								RoundedRectangle(cornerRadius: 10, style: .continuous)
+									.stroke(.pink, lineWidth: 1)
+								)
+					}
+					.padding()
+			}
+			.padding()
 		}
-		.padding()
+			if let message = message {
+				Divider()
+				Text(message)
+					.padding()
+			}
+			
+		}
 		.onChange(of: selectedName) { newValue in
 			button.nickname = newValue.rawValue
+			print(button.pongName)
+		}
+		.onAppear {
+			switch button.state {
+			case .connecting:
+				message = "TIP: While in 'Connecting' mode, tap FlicButton to connect."
+			default:
+				break
+			}
 		}
 	}
-
-	func rightButtonTapped() {
-		if button.isReady {
-			button.disconnect()
-		} else {
-			FLICManager.shared()?.forgetButton(button, completion: { uuid, error in
-				if let error = error {
-					print("Failed to forget button with error: \(error.localizedDescription).")
-				}
-			})
-		}
-	}
-}
-
-struct FlicDevice: Identifiable {
-	var pongName: FlicName?
-	var id: String
-	var message: String?
 	
+	var buttonUnassigned: Bool {
+		selectedName == .unassigned
+	}
+	
+	
+	var stateColor: Color {
+		switch button.state {
+		case .connected:
+			return .green
+		default:
+			return .orange
+		}
+	}
+	
+	func rightButtonTapped() {
+		switch button.state {
+		case .connected:
+			button.disconnect()
+		case .disconnected:
+			button.connect()
+		default:
+			break
+		}
+	}
+	
+	func forgetButton() {
+		FLICManager.shared()?.forgetButton(button, completion: { uuid, error in
+			if let error = error {
+				print("Failed to forget button with error: \(error.localizedDescription).")
+			}
+		})
+	}
+	
+	
+	var rightButtonText: String {
+		switch button.state {
+		case .connected, .disconnecting:
+			return "Disconnect"
+		default:
+			return "Connect"
+		}
+	}
+	
+	var rightButtonDisabled: Bool {
+		switch button.state {
+		case .connected, .disconnected:
+			return false
+		default:
+			return true
+		}
+	}
 }
+
 
 struct FlicRow_Previews: PreviewProvider {
 	static var previews: some View {
-		FlicRow(button: .constant(FLICButton()), selectedName: .unassigned)
+		FlicRow(button: .constant(FLICButton()), selectedName: .unassigned, message: .constant(nil))
 	}
 }

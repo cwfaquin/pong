@@ -41,7 +41,8 @@ struct ButtonsView: View {
 						get: { button },
 						set: { buttonManager.updatePaired($0) }
 					),
-					selectedName: button.pongName
+					selectedName: button.pongName,
+					message: $buttonManager.buttonDict[button.identifier]
 				)
 				}
 			}
