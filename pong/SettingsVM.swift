@@ -75,10 +75,11 @@ final class SettingsVM: ObservableObject {
 						self.rightButton = button
 					case .home:
 						self.homeButton = button
+					case .unassigned:
+						print("Set Nickname")
 					}
 				}
 			} 
-			print("Set Nickname")
 		})
 	}
 	
@@ -104,6 +105,8 @@ final class SettingsVM: ObservableObject {
 			return rightButton
 		case .home:
 			return homeButton
+		case .unassigned:
+			return nil
 		}
 	}
 	

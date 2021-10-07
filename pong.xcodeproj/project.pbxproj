@@ -45,15 +45,17 @@
 		9752B56D26D1579500F6B5A2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9752B56C26D1579500F6B5A2 /* ExternalAccessory.framework */; };
 		9772E79A26E788EE009E6BF5 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9772E79926E788EE009E6BF5 /* ButtonStyle.swift */; };
 		9772E79C26ED656D009E6BF5 /* CircleLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9772E79B26ED656D009E6BF5 /* CircleLineView.swift */; };
-		9778FFDE26D174C80005B941 /* MainAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9778FFDD26D174C80005B941 /* MainAppVM.swift */; };
+		9778FFDE26D174C80005B941 /* PongAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9778FFDD26D174C80005B941 /* PongAppVM.swift */; };
 		9798AFE926DE69830046D40C /* SizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFE826DE69830046D40C /* SizeView.swift */; };
 		9798AFED26E1496B0046D40C /* DeviceOrientationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFEC26E1496B0046D40C /* DeviceOrientationModifier.swift */; };
 		9798AFEF26E258F40046D40C /* Font+Sizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798AFEE26E258F40046D40C /* Font+Sizing.swift */; };
+		97A2E5F127090E8C006CCA17 /* ButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A2E5F027090E8C006CCA17 /* ButtonsView.swift */; };
+		97A2E5F52709E09B006CCA17 /* FlicRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A2E5F42709E09B006CCA17 /* FlicRow.swift */; };
 		97B68DCD26E3C30800EDA239 /* CGFloat+Sizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DCC26E3C30800EDA239 /* CGFloat+Sizing.swift */; };
 		97B68DCF26E520EF00EDA239 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DCE26E520EF00EDA239 /* StatusView.swift */; };
 		97B68DD126E5237400EDA239 /* Color+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DD026E5237400EDA239 /* Color+Theme.swift */; };
 		97B68DD326E526C200EDA239 /* AnyTransition+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B68DD226E526C200EDA239 /* AnyTransition+View.swift */; };
-		97C612CB26BF458300C7879E /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612CA26BF458300C7879E /* MainApp.swift */; };
+		97C612CB26BF458300C7879E /* PongApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612CA26BF458300C7879E /* PongApp.swift */; };
 		97C612CF26BF458400C7879E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612CE26BF458400C7879E /* Assets.xcassets */; };
 		97C612D226BF458400C7879E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C612D126BF458400C7879E /* Preview Assets.xcassets */; };
 		97C612DB26BF59D300C7879E /* ScoreboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C612DA26BF59D300C7879E /* ScoreboardView.swift */; };
@@ -125,16 +127,18 @@
 		9752B56E26D15B8F00F6B5A2 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
 		9772E79926E788EE009E6BF5 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		9772E79B26ED656D009E6BF5 /* CircleLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleLineView.swift; sourceTree = "<group>"; };
-		9778FFDD26D174C80005B941 /* MainAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppVM.swift; sourceTree = "<group>"; };
+		9778FFDD26D174C80005B941 /* PongAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PongAppVM.swift; sourceTree = "<group>"; };
 		9798AFE826DE69830046D40C /* SizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeView.swift; sourceTree = "<group>"; };
 		9798AFEC26E1496B0046D40C /* DeviceOrientationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOrientationModifier.swift; sourceTree = "<group>"; };
 		9798AFEE26E258F40046D40C /* Font+Sizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Sizing.swift"; sourceTree = "<group>"; };
+		97A2E5F027090E8C006CCA17 /* ButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsView.swift; sourceTree = "<group>"; };
+		97A2E5F42709E09B006CCA17 /* FlicRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlicRow.swift; sourceTree = "<group>"; };
 		97B68DCC26E3C30800EDA239 /* CGFloat+Sizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Sizing.swift"; sourceTree = "<group>"; };
 		97B68DCE26E520EF00EDA239 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		97B68DD026E5237400EDA239 /* Color+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Theme.swift"; sourceTree = "<group>"; };
 		97B68DD226E526C200EDA239 /* AnyTransition+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyTransition+View.swift"; sourceTree = "<group>"; };
 		97C612C726BF458300C7879E /* pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		97C612CA26BF458300C7879E /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
+		97C612CA26BF458300C7879E /* PongApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PongApp.swift; sourceTree = "<group>"; };
 		97C612CE26BF458400C7879E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C612D126BF458400C7879E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		97C612D326BF458400C7879E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -238,8 +242,8 @@
 			isa = PBXGroup;
 			children = (
 				97C612D926BF45D800C7879E /* pong.entitlements */,
-				97C612CA26BF458300C7879E /* MainApp.swift */,
-				9778FFDD26D174C80005B941 /* MainAppVM.swift */,
+				97C612CA26BF458300C7879E /* PongApp.swift */,
+				9778FFDD26D174C80005B941 /* PongAppVM.swift */,
 				97C612DC26BF5D8800C7879E /* ScoreboardVM.swift */,
 				97C612DA26BF59D300C7879E /* ScoreboardView.swift */,
 				97B68DCE26E520EF00EDA239 /* StatusView.swift */,
@@ -265,6 +269,8 @@
 				9720C4F126F68F7A00136A1A /* EditPlayerVM.swift */,
 				9720C4E726F4C54E00136A1A /* PlayerSelectionView.swift */,
 				9720C4E926F4C56600136A1A /* PlayerSelectionVM.swift */,
+				97A2E5F027090E8C006CCA17 /* ButtonsView.swift */,
+				97A2E5F42709E09B006CCA17 /* FlicRow.swift */,
 				9752B56126D0478C00F6B5A2 /* Sounds */,
 				97C612E826BF838900C7879E /* Utility */,
 				9720C4DC26F26F2A00136A1A /* CloudKitModels */,
@@ -408,7 +414,7 @@
 				97302CBB26C8190B002E70C2 /* GameSet.swift in Sources */,
 				97C612EA26BF83A800C7879E /* Config.swift in Sources */,
 				9720C4E026F26FB100136A1A /* MatchRecord.swift in Sources */,
-				9778FFDE26D174C80005B941 /* MainAppVM.swift in Sources */,
+				9778FFDE26D174C80005B941 /* PongAppVM.swift in Sources */,
 				97F9081926D43CCF0026F96A /* String+Utility.swift in Sources */,
 				97302CB926C810C8002E70C2 /* Game.swift in Sources */,
 				9798AFEF26E258F40046D40C /* Font+Sizing.swift in Sources */,
@@ -420,6 +426,7 @@
 				9752B55C26CAB2D200F6B5A2 /* BlackGroupBoxStyle.swift in Sources */,
 				97F9082126D45C1B0026F96A /* ScoresView.swift in Sources */,
 				97B68DD326E526C200EDA239 /* AnyTransition+View.swift in Sources */,
+				97A2E5F127090E8C006CCA17 /* ButtonsView.swift in Sources */,
 				9752B56026CC293900F6B5A2 /* SettingsVM.swift in Sources */,
 				9720C4EC26F50BFE00136A1A /* SetRecord.swift in Sources */,
 				97B68DD126E5237400EDA239 /* Color+Theme.swift in Sources */,
@@ -437,7 +444,7 @@
 				97302CB226C2C6C0002E70C2 /* TeamsView.swift in Sources */,
 				9798AFE926DE69830046D40C /* SizeView.swift in Sources */,
 				97C612E026BF5F3D00C7879E /* Team.swift in Sources */,
-				97C612CB26BF458300C7879E /* MainApp.swift in Sources */,
+				97C612CB26BF458300C7879E /* PongApp.swift in Sources */,
 				97302CBF26C8223E002E70C2 /* ToastOverlayView.swift in Sources */,
 				9720C4E826F4C54E00136A1A /* PlayerSelectionView.swift in Sources */,
 				97C6BDA32706313C00F34DDC /* ButtonManager.swift in Sources */,
@@ -450,6 +457,7 @@
 				97302CAC26C2AFF0002E70C2 /* SeriesView.swift in Sources */,
 				97F9081B26D443C80026F96A /* ServiceVM.swift in Sources */,
 				97B68DCD26E3C30800EDA239 /* CGFloat+Sizing.swift in Sources */,
+				97A2E5F52709E09B006CCA17 /* FlicRow.swift in Sources */,
 				9720C4F226F68F7A00136A1A /* EditPlayerVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,7 +517,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -566,7 +574,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

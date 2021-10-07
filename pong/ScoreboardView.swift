@@ -11,10 +11,10 @@ import flic2lib
 struct ScoreboardView: View {
 	
 	@EnvironmentObject var match: Match
-	@StateObject var buttonManager = ButtonManager()
-	@State var showSettings: Bool = false
-	@State var statusVM: StatusVM = StatusVM(text: "", temporary: true)
-	@State var showStatus: Bool = false
+	@EnvironmentObject var buttonManager: PongAppVM
+	@State var showSettings = false
+	@State var statusVM = StatusVM(text: "", temporary: true)
+	@State var showStatus = false
 	@State var screenSize = UIScreen.main.bounds.size
 	
 
@@ -23,7 +23,7 @@ struct ScoreboardView: View {
 		ZStack {
 			
 			VStack {
-				TeamsView(showSettings: $showSettings, panelWidth: panelWidth)
+				TeamsView(showSettings: $showSettings, showButtonManager: $buttonManager.scanViewVisible, panelWidth: panelWidth)
 				SeriesView(viewModel: SeriesVM(match, seriesType: .set, panelWidth: panelWidth))
 				SeriesView(viewModel: SeriesVM(match, seriesType: .match, panelWidth: panelWidth))
 				ScoresView(screenSize: $screenSize)
@@ -50,8 +50,18 @@ struct ScoreboardView: View {
 			SettingsView(
 				settings: $match.settings,
 				showSettings: $showSettings
-			).environmentObject(buttonManager)
+			)
 		})
+		.sheet(
+			isPresented: $buttonManager.scanViewVisible,
+			onDismiss: {
+				
+			},
+			content: {
+				ButtonsView()
+					.environmentObject(buttonManager)
+			}
+		)
 		.onRotate { newOrientation in
 			screenSize = UIScreen.main.bounds.size
 		}
@@ -61,13 +71,7 @@ struct ScoreboardView: View {
 		.onChange(of: match.game.status) { gameStatus in
 			handleNewState(nil, gameStatus: gameStatus)
 		}
-		.onAppear {
-			if !Storage.isMacApp {
-				buttonManager.configure(self)
-			}
-		}
 	}
-	
 	
 	var panelWidth: CGFloat {
 		if UIScreen.main.bounds.width <= 1024 {
@@ -88,35 +92,12 @@ struct ScoreboardView: View {
 	}
 }
 
-extension ScoreboardView: ButtonContract {
-	func singleClick(_ tableSide: TableSide?) {
-		if let tableSide = tableSide {
-			match.singleTap(tableSide)
-		} else {
-			match.singleTapMiddle()
-		}
-	}
-	
-	func doubleClick(_ tableSide: TableSide?) {
-		if let tableSide = tableSide {
-			match.doubleTap(tableSide)
-		} else {
-			match.doubleTapMiddle()
-		}
-	}
-	
-	func longPress(_ tableSide: TableSide?) {
-		print(#function)
-	}
-}
-
-
-
 
 struct ScoreboardView_Previews: PreviewProvider {
 	static var previews: some View {
 		ScoreboardView()
 			.environmentObject(Match())
+			.environmentObject(PongAppVM())
 	}
 }
 

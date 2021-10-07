@@ -1,5 +1,5 @@
 //
-//  pongApp.swift
+//  PongApp.swift
 //  pong
 //
 //  Created by Charles Faquin on 8/7/21.
@@ -10,9 +10,9 @@ import flic2lib
 import UserNotifications
 
 @main
-struct MainApp: App {
+struct PongApp: App {
 	
-	@StateObject var viewModel = MainAppVM()
+	@StateObject var viewModel = PongAppVM()
 	@StateObject var match = Match()
 	
 	#if targetEnvironment(macCatalyst)
@@ -29,9 +29,7 @@ struct MainApp: App {
 		WindowGroup {
 			ScoreboardView()
 				.environmentObject(match)
-				.onAppear {
-					viewModel.requestNotificationAuthorization()
-				}
+				.environmentObject(viewModel)
 				.onReceive(viewModel.$flicAction) { action in
 					switch action {
 					case .singleTapHome:

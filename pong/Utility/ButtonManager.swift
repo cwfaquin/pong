@@ -15,67 +15,59 @@ protocol ButtonContract {
 	func longPress(_ tableSide: TableSide?)
 }
 
+
+
 final class ButtonManager: NSObject, ObservableObject {
 	
 	@Published var isScanning: Bool = false
-	@Published var buttonsFound: [FLICButton] = []
 	@Published var scanStatus: String = ""
-	@Published var status1: String = ""
-	@Published var status2: String = ""
-	@Published var status3: String = ""
+	@Published var statusDict = [UUID: String]()
+	@Published var connected = Set<FLICButton>()
+	@Published var paired = [FLICButton]()
 	
 	var contract: ButtonContract?
 	
-	func configure(_ contract: ButtonContract) {
-		self.contract = contract
-		FLICManager.configure(with: self, buttonDelegate: self, background: false)
-		updateButtons()
-	}
 	
-	var allButtonsFound: Bool {
-		(FLICManager.shared()?.buttons() ?? []).count == FlicName.allCases.count
-	}
-	
-	func updateButtons() {
-		buttonsFound = FLICManager.shared()?.buttons() ?? []
-	}
-	
-	func numberFor(_ button: FLICButton) -> Int {
-		(buttonsFound.firstIndex(of: button) ?? 0) + 1
-	}
-
-	func scanForButtons() {
-		updateButtons()
-		scanStatus = "Scanning"
-		isScanning = true
-		FLICManager.shared()?.scanForButtons(stateChangeHandler: { statusEvent in
-			self.updateScanStatus(statusEvent)
-		}, completion: { button, error in
-			guard let button = button else {
-				self.scanStatus = error?.localizedDescription ?? "Try scanning again"
-				self.isScanning = false
-				return
-			}
-			button.triggerMode = .clickAndDoubleClick
-			self.updateButtons()
-			self.scanStatus = ""
-			self.isScanning = false
-		})
+	func configure() {
+		FLICManager.configure(with: self, buttonDelegate: self, background: true)
+		paired = FLICManager.shared()?.buttons() ?? []
+		if paired.isEmpty {
+			scanForButtons()
+		}
 	}
 	
 	func removeButton(_ button: FLICButton) {
 		FLICManager.shared()?.forgetButton(button, completion: { uuid, error in
 			if let error = error {
-				let name = "B\(self.numberFor(button))"
-				let nickname = button.nickname ?? button.uuid
-				self.updateStatus("Failed to forget button: \(name) - \(nickname) with error: \(error.localizedDescription).", for: button)
+				self.statusDict[uuid] = "Failed to forget button with error: \(error.localizedDescription)."
+			} else {
+				self.statusDict.removeValue(forKey: uuid)
 			}
-			self.updateButtons()
 		})
 	}
 	
 	func forgetAllButtons() {
 		FLICManager.shared()?.buttons().forEach { removeButton($0) }
+	}
+	
+	func scanForButtons() {
+		isScanning = true
+		scanStatus = "Scanning"
+		FLICManager.shared()?.scanForButtons(stateChangeHandler: { statusEvent in
+			self.updateScanStatus(statusEvent)
+		}, completion: { button, error in
+			self.isScanning = false
+			guard let button = button else {
+				self.scanStatus = error?.localizedDescription ?? "Try scanning again"
+				return
+			}
+			button.triggerMode = .clickAndDoubleClick
+			button.connect()
+			if !self.paired.contains(button) {
+				self.paired.append(button)
+			}
+			self.scanStatus = ""
+		})
 	}
 	
 	func updateScanStatus(_ statusEvent: FLICButtonScannerStatusEvent) {
@@ -115,19 +107,23 @@ extension ButtonManager: FLICManagerDelegate {
 				scanStatus = managerState.description
 			}
 	}
+	
+	func removeFromConnected(_ button: FLICButton) {
+		if let index = connected.firstIndex(of: button) {
+			connected.remove(at: index)
+		}
+	}
 }
 
 extension ButtonManager: FLICButtonDelegate {
 	func buttonDidConnect(_ button: FLICButton) {
 		print(#function)
-		updateStatus("Connected", for: button)
-		updateButtons()
+		statusDict[button.identifier] = "Connected"
 	}
 	
 	func buttonIsReady(_ button: FLICButton) {
 		print(#function)
-		updateStatus("Ready", for: button)
-		updateButtons()
+		connected.update(with: button)
 	}
 	
 	func button(_ button: FLICButton, didDisconnectWithError error: Error?) {
@@ -136,77 +132,58 @@ extension ButtonManager: FLICButtonDelegate {
 		if let error = error {
 			text += ". \(error.localizedDescription)"
 		}
-		updateStatus(text, for: button)
-		updateButtons()
+		statusDict[button.identifier] = text
+		removeFromConnected(button)
 	}
 	
 	func button(_ button: FLICButton, didFailToConnectWithError error: Error?) {
 		print(#function)
-		let errorText = "Button failed to connect. \(error?.localizedDescription ?? "")"
-		updateStatus(errorText, for: button)
-		updateButtons()
+		var text = "Connection Failure"
+		if let error = error {
+			text += ". \(error.localizedDescription)"
+		}
+		statusDict[button.identifier] = text
+		removeFromConnected(button)
 	}
 	
 	func button(_ button: FLICButton, didUnpairWithError error: Error?) {
 		print(#function)
-		let errorText = "Button unpaired. \(error?.localizedDescription ?? "")"
-		updateStatus(errorText, for: button)
-		updateButtons()
+		var text = "Unpaired"
+		if let error = error {
+			text += ". \(error.localizedDescription)"
+		}
+		statusDict[button.identifier] = text
+		removeFromConnected(button)
 	}
 	
 	func button(_ button: FLICButton, didUpdateNickname nickname: String) {
 		print(#function)
-		updateButtons()
+		statusDict[button.identifier] = "\(nickname)"
+		if let pongName = FlicName(rawValue: nickname), let index = paired.firstIndex(where: { $0.pongName == pongName && $0.identifier != button.identifier}) {
+			paired[index].nickname = ""
+		}
+		paired.first(where: {$0.identifier == button.identifier})?.nickname = nickname
 	}
-	
-	func button(_ button: FLICButton, didUpdateBatteryVoltage voltage: Float) {
-		print(#function)
-		updateButtons()
-	}
-	
+
 	func button(_ button: FLICButton, didReceiveButtonClick queued: Bool, age: Int) {
 		print(#function)
-		updateStatus("Single-Click Received", for: button)
+		statusDict[button.identifier] = "Single-Click Received"
+		contract?.singleClick(button.pongName.tableSide)
+		
 	}
 	
 	func button(_ button: FLICButton, didReceiveButtonDoubleClick queued: Bool, age: Int) {
 		print(#function)
-		updateStatus("Double-Click Received", for: button)
+		statusDict[button.identifier] = "Double-Click Received"
+			contract?.doubleClick(button.pongName.tableSide)
+		
 	}
 	
 	func button(_ button: FLICButton, didReceiveButtonHold queued: Bool, age: Int) {
 		print(#function)
-		updateStatus("Hold Received", for: button)
-	}
-	
-	func updateStatus(_ status: String?, for button: FLICButton) {
-		guard let status = status else {
-			updateButtons()
-			return
-		}
-		switch numberFor(button) {
-		case 1:
-			status1 = status
-		case 2:
-			status2 = status
-		case 3:
-			status3 = status
-		default:
-			break
-		}
-	}
-	
-	func statusFor(_ button: FLICButton) -> String {
-		switch numberFor(button) {
-		case 1:
-			return status1
-		case 2:
-			return status2
-		case 3:
-			return status3
-		default:
-			return "3 button max. Disconnect/forget one before adding another."
-		}
+		statusDict[button.identifier] = "Hold Received"
+		contract?.longPress(button.pongName.tableSide)
+		
 	}
 }
 
@@ -214,9 +191,9 @@ extension FLICManagerState {
 	var description: String {
 		switch self {
 		case .poweredOff:
-			return "Powered Off"
+			return "Bluetooth is turned off"
 		case .poweredOn:
-			return "Powered On"
+			return "Bluetooth is turned on"
 		case .unsupported:
 			return "Unsupported"
 		case .resetting:
@@ -230,9 +207,9 @@ extension FLICManagerState {
 }
 
 extension FLICButton {
-	var pongName: FlicName? {
-		guard let nickname = nickname else { return nil }
-		return FlicName(rawValue: nickname)
+	var pongName: FlicName {
+		guard let nickname = nickname else { return .unassigned }
+		return FlicName(rawValue: nickname) ?? .unassigned
 	}
 }
 
@@ -264,32 +241,72 @@ extension FLICButtonState {
 	}
 }
 
-enum FlicName: String, CaseIterable {
-	case home = "Home"
-	case tableLeft = "Table Left"
-	case tableRight = "Table Right"
+enum FlicName: String, CaseIterable, Identifiable {
+	case tableLeft
+	case home
+	case tableRight
+	case unassigned
 	
 	var singleSound: ScoreboardVM.SoundType {
 		switch self {
 		case .home:
 			return .singleTapMiddle
+		case .unassigned:
+			return .button1
 		default:
 			return .singleTapSide
 		}
 	}
 	
+	var tableSide: TableSide? {
+		switch self {
+		case .home:
+			return nil
+		case .tableLeft:
+			return .left
+		case .tableRight:
+			return .right
+		case .unassigned:
+			return nil
+		}
+	}
+	
 	var doubleSound: ScoreboardVM.SoundType {
-		.doubleTap
+		switch self {
+		case .unassigned:
+			return .button1
+		default:
+			return .doubleTap
+		}
+	}
+	
+	var description: String {
+		switch self {
+		case .home:
+			return "Home Button"
+		case .tableLeft:
+			return "Left Table (facing scoreboard)"
+		case .tableRight:
+			return "Right Table (facing scoreboard)"
+		case .unassigned:
+			return "⚠️ Unassigned Button ⚠️"
+		}
 	}
 	
 	var imageName: String {
 		switch self {
 		case .home:
-			return "house.circle"
+			return "house"
 		case .tableLeft:
-			return "l.circle"
+			return "lt.rectangle.roundedtop"
 		case .tableRight:
-			return "r.circle"
+			return "rt.rectangle.roundedtop"
+		case .unassigned:
+			return "minus"
 		}
+	}
+	
+	var id: String {
+		rawValue
 	}
 }

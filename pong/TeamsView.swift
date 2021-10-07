@@ -11,8 +11,9 @@ struct TeamsView: View {
 	
 	@EnvironmentObject var match: Match
 	@Binding var showSettings: Bool
+	@Binding var showButtonManager: Bool
 	@State var panelWidth: CGFloat
-	@State var showControlButtons = true
+	@State var showControlButtons = false
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
 	}
@@ -26,6 +27,11 @@ struct TeamsView: View {
 					Button(action: { match.singleTapMiddle() }) {
 						ButtonImage(systemName: "house")
 					}.padding()
+				}
+				if !Storage.isMacApp {
+					Button(action: { showButtonManager = !showButtonManager }) {
+						ButtonImage(systemName: "airplayaudio")
+					}
 				}
 				Button(action: { showSettings = !showSettings }) {
 					ButtonImage(systemName: "gear")
@@ -46,7 +52,7 @@ struct TeamsView: View {
 
 struct TeamsView_Previews: PreviewProvider {
 	static var previews: some View {
-		TeamsView(showSettings: .constant(false), panelWidth: 200)
+		TeamsView(showSettings: .constant(false), showButtonManager: .constant(false), panelWidth: 200)
 			.environmentObject(Match())
 	}
 }
