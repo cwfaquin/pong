@@ -92,6 +92,7 @@ extension PongAppVM: FLICManagerDelegate {
 		FLICManager.shared()?.buttons().forEach {
 			updatePaired($0)
 			update($0)
+			$0.connect()
 		}
 	}
 	
