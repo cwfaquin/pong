@@ -28,11 +28,11 @@ struct TeamsView: View {
 						ButtonImage(systemName: "house")
 					}.padding()
 				}
-				if !Storage.isMacApp {
+				//if !Storage.isMacApp {
 					Button(action: { showButtonManager = !showButtonManager }) {
 						ButtonImage(systemName: "airplayaudio")
 					}
-				}
+				//}
 				Button(action: { showSettings = !showSettings }) {
 					ButtonImage(systemName: "gear")
 				}.padding()

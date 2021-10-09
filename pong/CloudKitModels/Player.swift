@@ -20,6 +20,8 @@ enum PlayerKeys: String, CaseIterable {
 
 struct Player: Identifiable, Hashable {
 	static let recordType = "Player"
+	static let newPlayer = Player(record: CKRecord(recordType: Player.recordType))
+
 
 	var id: String {
 		recordId.recordName

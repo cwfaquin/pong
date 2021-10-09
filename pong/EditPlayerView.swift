@@ -10,14 +10,14 @@ import CloudKit
 
 struct EditPlayerView: View {
 	
+	@Environment(\.presentationMode) private var presentationMode
 	@EnvironmentObject var viewModel: PlayerSelectionVM
-	@State var player: Player
 	@State var confirmPin = ""
-	@State var pinPrompt = false
 	@State var alertMessage = ""
 	@State var validationError = false
-	@Binding var savedPlayer: Player?
-	@State var newPlayer = false
+	@State var player: Player
+	@State var newPlayer: Bool
+	@State var showPinPrompt: Bool
 
 	
 	var notMacApp: Bool {
@@ -97,17 +97,14 @@ struct EditPlayerView: View {
 		}
 		.accentColor(.pink)
 
+			if showPinPrompt {
+				pinPromptView
+			}
 		}
 		.navigationBarItems(trailing:
 				Button("Save", action: { save() })
 						.foregroundColor(.pink)
 		)
-		
-
-		.onAppear {
-			newPlayer = !player.pin.isValidPIN
-			pinPrompt = !newPlayer
-		}
 		.alert(isPresented: $validationError) {
 			Alert(
 				title: Text("Invalid Entry"),
@@ -116,8 +113,8 @@ struct EditPlayerView: View {
 			)
 		}
 		.onChange(of: confirmPin) { newValue in
-			if !newPlayer {
-				pinPrompt = newValue.trimmingCharacters(in: .whitespacesAndNewlines) == player.pin
+			if showPinPrompt {
+				showPinPrompt = newValue.trimmingCharacters(in: .whitespacesAndNewlines) == player.pin
 			}
 		}
 		
@@ -130,7 +127,7 @@ struct EditPlayerView: View {
 			
 			HStack {
 				Spacer()
-				
+			
 				SecureField("4 Digit PIN", text: $confirmPin)
 				.multilineTextAlignment(.center)
 				.keyboardType(.numberPad)
@@ -184,7 +181,7 @@ struct EditPlayerView: View {
 
 struct EditPlayerView_Previews: PreviewProvider {
 	static var previews: some View {
-		EditPlayerView(player: Player(record: CKRecord(recordType: Player.recordType)), savedPlayer: .constant(nil))
+		EditPlayerView(player: .newPlayer, newPlayer: true, showPinPrompt: false)
 			.environmentObject(PlayerSelectionVM())
 	}
 }

@@ -13,10 +13,9 @@ struct PlayerSelectionView: View {
 	@Binding var selectedPlayer: Player?
 	@State var editingPlayer: Player?
 	@State var showAddNewPlayer: Bool = false
-	@State var editMode: EditMode = .active
+	@State var editMode: EditMode = .inactive
 	@Environment(\.presentationMode) private var presentationMode
 
-	
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
 	}
@@ -24,61 +23,38 @@ struct PlayerSelectionView: View {
 	var body: some View {
 		
 		NavigationView {
-			ZStack {
-				if !viewModel.isLoading, viewModel.players.isEmpty {
-					Text("No Players Found")
-						.font(.title)
-						.bold()
-						.padding()
-				} else {
-					List(selection: $selectedPlayer) {
-						Section {
-						NavigationLink(destination:
-														EditPlayerView(player: newPlayer, savedPlayer: $selectedPlayer)
-															.environmentObject(viewModel),
-													 isActive: .init(
-														get: { showAddNewPlayer },
-														set: {_ in
-															showAddNewPlayer = selectedPlayer != nil
-														}
-													 )
-						) {
-							PlayerRow(player: nil)
-						}
-						}
-						Section(header: Text("Select Player")) {
-							ForEach(viewModel.players, id: \.id) { player in
-								PlayerRow(player: player)
-									.border(Color.blue, width: selectedPlayer == player ? 2 : 0)
-									.cornerRadius(selectedPlayer == player ? 8 : 0)
-									.background(selectedPlayer == player ? Color.black : nil)
+			List {
+				Section {
+					NavigationLink(destination: editPlayerView(nil)) {
+						PlayerRow(player: nil)
+					}
+				}
+				Section(header: Text("Select Player")) {
+					if viewModel.isLoading {
+						loadingView
+					} else if viewModel.players.isEmpty {
+						Text("No Players Found")
+							.font(.title)
+							.bold()
+							.padding()
+					} else {
+						ForEach(viewModel.players, id: \.id) { player in
+							switch editMode {
+							case .active:
+								NavigationLink(destination: editPlayerView(player)) {
+									playerRow(player)
+								}
+							default:
+								playerRow(player)
 							}
 						}
-					}
-					.environment(\.editMode, $editMode)
-				
-				}
-				if viewModel.isLoading {
-					ZStack {
-						Rectangle()
-							.foregroundColor(.black.opacity(0.9))
-						ProgressView()
-							//.progressViewStyle(.circular)
+						.onDelete(perform: viewModel.deletePlayers)
+						.listItemTint(.pink)
 					}
 				}
 			}
 			.toolbar {
-				ToolbarItem(placement: .navigationBarTrailing) {
-					NavigationLink(destination:
-													EditPlayerView(player: newPlayer, savedPlayer: $selectedPlayer)
-													.environmentObject(viewModel),
-												 isActive: $showAddNewPlayer
-					) {
-						Image(systemName: "plus")
-							.resizable()
-							.foregroundColor(.pink)
-					}
-				}
+				ToolbarItem(placement: .navigationBarTrailing) { EditButton() }
 				ToolbarItem(placement: .navigationBarLeading) {
 					Button(action: { selectedPlayer = selectedPlayer }) {
 						Image(systemName: "xmark")
@@ -87,22 +63,45 @@ struct PlayerSelectionView: View {
 					}
 				}
 			}
-
-			.navigationTitle("Home Player")
+			.navigationBarTitle("Home Team")
+			.environment(\.editMode, $editMode)
+			.accentColor(.pink)
 		}
-		.accentColor(.pink)
+		.navigationViewStyle(StackNavigationViewStyle())
 		.onAppear {
 			viewModel.fetchPlayers()
 		}
-		.navigationViewStyle(StackNavigationViewStyle())
-		.onChange(of: viewModel.selectedPlayer) { newValue in
-			selectedPlayer = newValue
+	}
+	
+	func editPlayerView(_ player: Player?) -> some View {
+			EditPlayerView(
+				player: player ?? .newPlayer,
+				newPlayer: player == nil,
+				showPinPrompt: player != nil && player?.pinRequired == true
+			).environmentObject(viewModel)
+	}
+
+	var loadingView: some View {
+		ZStack {
+			Rectangle()
+				.foregroundColor(.black.opacity(0.9))
+			ProgressView()
+				.progressViewStyle(CircularProgressViewStyle())
 		}
 	}
 	
-	
-	var newPlayer: Player {
-		Player(record: CKRecord(recordType: Player.recordType))
+	func playerRow(_ player: Player) -> some View {
+		PlayerRow(player: player)
+			.border(Color.blue, width: selectedPlayer == player ? 2 : 0)
+			.cornerRadius(selectedPlayer == player ? 8 : 0)
+			.background(selectedPlayer == player ? Color.black : nil)
+			.onTapGesture {
+					 print("Shit")
+					 guard editMode != .active else { return }
+					 withAnimation {
+						 selectedPlayer = player
+					 }
+				 }
 	}
 }
 
@@ -112,7 +111,7 @@ struct PlayerRow: View {
 	
 	@State var avatar: UIImage?
 	@State var player: Player?
-
+	
 	var isNew: Bool {
 		player == nil
 	}

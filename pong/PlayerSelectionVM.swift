@@ -17,7 +17,6 @@ final class PlayerSelectionVM: ObservableObject {
 	
 	@Published var players = [Player]()
 	@Published var isLoading = false
-	@Published var selectedPlayer: Player?
 
 	// MARK: - API
 	
@@ -36,8 +35,6 @@ final class PlayerSelectionVM: ObservableObject {
 			let player = Player(record: record)
 			if let index = index {
 				self.players[index] = player
-			} else {
-				self.selectedPlayer = player
 			}
 			}
 		}
@@ -59,9 +56,17 @@ final class PlayerSelectionVM: ObservableObject {
 		}
 	}
 	
-	func deletePlayer(_ id: CKRecord.ID) {
+	func deletePlayers(at offsets: IndexSet) {
+		let playersToDelete = offsets.compactMap { players[$0] }
+		players.remove(atOffsets: offsets)
+		playersToDelete.forEach {
+			deletePlayer($0)
+		}
+	}
+	
+	private func deletePlayer(_ player: Player) {
 		isLoading = true
-		database.delete(withRecordID: id) { recordId, error in
+		database.delete(withRecordID: player.recordId) { recordId, error in
 			DispatchQueue.main.async {
 				defer { self.isLoading = false }
 			guard error == nil else {

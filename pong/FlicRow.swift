@@ -29,7 +29,11 @@ struct FlicRow: View {
 						.italic()
 						.foregroundColor(.gray)
 				}
-				GroupBox(content: {
+				GroupBox {
+					Label(selectedName.description, systemImage: buttonUnassigned ? "xmark.circle" : "checkmark.circle")
+						.foregroundColor(buttonUnassigned ? .orange : .green)
+						.accentColor(buttonUnassigned ? .orange : .green)
+						.frame(alignment: .leading)
 					Divider()
 					HStack {
 						Picker("Button Role", selection: $selectedName) {
@@ -43,12 +47,7 @@ struct FlicRow: View {
 						.pickerStyle(SegmentedPickerStyle())
 						.frame(minWidth: segmentHeight * 3, idealWidth: segmentHeight * 6, maxWidth: UIScreen.main.bounds.width * 0.4, minHeight: 40, idealHeight: segmentHeight, maxHeight: segmentHeight * 2)
 					}
-				}, label: {
-					Label(selectedName.description, systemImage: buttonUnassigned ? "xmark.circle" : "checkmark.circle")
-						.foregroundColor(buttonUnassigned ? .orange : .green)
-						.accentColor(buttonUnassigned ? .orange : .green)
-						.frame(alignment: .leading)
-				})
+				}
 					.disabled(!button.isReady)
 					.groupBoxStyle(BlackGroupBoxStyle())
 					.cornerRadius(10)
@@ -84,7 +83,7 @@ struct FlicRow: View {
 							)
 							.overlay(
 								RoundedRectangle(cornerRadius: 10, style: .continuous)
-									.stroke(.pink, lineWidth: 1)
+									.stroke(Color(UIColor.systemPink), lineWidth: 1)
 								)
 					}
 					.padding()
