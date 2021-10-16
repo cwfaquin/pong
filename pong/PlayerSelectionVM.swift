@@ -11,24 +11,27 @@ import CloudKit
 
 
 final class PlayerSelectionVM: ObservableObject {
+	
+	enum State: Int {
+		case loading
+		case noResults
+		case results
+	}
 
 	private let container = CKContainer(identifier: Config.containerIdentifier)
 	private lazy var database = container.privateCloudDatabase
 	
+	@Published var state: PlayerSelectionVM.State = .loading
 	@Published var players = [Player]()
-	@Published var isLoading = false
 
 	// MARK: - API
 	
 	func savePlayer(_ record: CKRecord, at index: Int?) {
-		isLoading = true
+		state = .loading
 		database.save(record) { record, error in
 			DispatchQueue.main.async {
-
-			defer {
-				self.isLoading = false
-			}
-			guard let record = record else {
+				defer { self.state = self.players.isEmpty ? .noResults : .results }
+				guard let record = record else {
 				self.handleError(error, caller: #function)
 				return
 			}
@@ -41,17 +44,16 @@ final class PlayerSelectionVM: ObservableObject {
 	}
 	
 	func fetchPlayers() {
-		isLoading = true
+		state = .loading
 		let query = CKQuery(recordType: Player.recordType, predicate: NSPredicate(value: true))
 		database.perform(query, inZoneWith: nil) { records, error in
 			DispatchQueue.main.async {
+				defer { self.state = self.players.isEmpty ? .noResults : .results }
 				guard let records = records else {
 					self.handleError(error, caller: #function)
-					self.isLoading = false
 					return
 				}
 				self.players = records.map(Player.init)
-				self.isLoading = false
 			}
 		}
 	}
@@ -64,12 +66,15 @@ final class PlayerSelectionVM: ObservableObject {
 		}
 	}
 	
-	private func deletePlayer(_ player: Player) {
-		isLoading = true
+	func deletePlayer(_ player: Player) {
+		if let index = players.firstIndex(of: player) {
+			players.remove(at: index)
+		}
+		state = .loading
 		database.delete(withRecordID: player.recordId) { recordId, error in
 			DispatchQueue.main.async {
-				defer { self.isLoading = false }
-			guard error == nil else {
+				self.state = self.players.isEmpty ? .noResults : .results
+				guard error == nil else {
 				self.handleError(error, caller: #function)
 				return
 			}

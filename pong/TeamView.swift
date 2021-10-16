@@ -10,96 +10,120 @@ import SwiftUI
 struct TeamView: View {
 	
 	@EnvironmentObject var match: Match
+	@State var player: Player?
 	@State var showPlayerSelection = false
-	@Binding var player: Player?
 	let tableSide: TableSide
 	@Binding var showControlButtons: Bool
 	@State private var choosingSide = false
+	
+	
+	
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
 	}
 	
-    var body: some View {
-			GroupBox {
-				Text(match.teamID(tableSide).rawValue.uppercased())
-					.font(notMacApp ? .largeTitle : .teamFont)
-					.minimumScaleFactor(0.25)
-					.lineLimit(1)
-					.shadow(color: .white, radius: 3, x: 0, y: 0)
-					.padding()
-				Divider()
-				HStack {
-					switch tableSide {
-					case .left:
-						playerBox
-						Spacer()
-						if showControlButtons {
-							scoreStepper
-						}
-					case .right:
-						if showControlButtons {
-							scoreStepper
-						}
-						Spacer()
-						playerBox
+	
+	var body: some View {
+		GroupBox {
+			Text(match.teamID(tableSide).rawValue.uppercased())
+				.font(notMacApp ? .largeTitle : .teamFont)
+				.minimumScaleFactor(0.25)
+				.lineLimit(1)
+				.shadow(color: .white, radius: 3, x: 0, y: 0)
+				.padding()
+			Divider()
+			HStack {
+				switch tableSide {
+				case .left:
+					playerBox
+					Spacer()
+					if showControlButtons {
+						scoreStepper
 					}
-				}
-			}
-			.cornerRadius(10)
-			.groupBoxStyle(BlackGroupBoxStyle(color: .black))
-			.overlay(
-					RoundedRectangle(cornerRadius: 10)
-						.stroke(borderColor(tableSide), lineWidth: choosingSide ? 8 : lineWidth(tableSide))
-						.shadow(color: borderColor(tableSide), radius: choosingSide ? 4 : 0, x: 0, y: 0)
-			)
-			.padding()
-			.onChange(of: match.status) { newValue in
-				switch newValue {
-				case .guestChooseSide where isGuest:
-					withAnimation(.linear(duration: 1.5).repeatForever()) {
-						choosingSide = true
+				case .right:
+					if showControlButtons {
+						scoreStepper
 					}
-				default:
-					if choosingSide {
-						withAnimation(.easeOut) {
-							choosingSide = false
-						}
-					}
+					Spacer()
+					playerBox
 				}
 			}
 		}
+		.cornerRadius(10)
+		.groupBoxStyle(BlackGroupBoxStyle(color: .black))
+		.overlay(
+			RoundedRectangle(cornerRadius: 10)
+				.stroke(borderColor(tableSide), lineWidth: choosingSide ? 8 : lineWidth(tableSide))
+				.shadow(color: borderColor(tableSide), radius: choosingSide ? 4 : 0, x: 0, y: 0)
+		)
+		.padding()
+		.onChange(of: match.status) { onStatusChange($0) }
+		.onChange(of: player) { onPlayerChange($0) }
+	}
+	
+	func onStatusChange(_ newValue: Match.Status) {
+		switch newValue {
+		case .guestChooseSide where isGuest:
+			withAnimation(.linear(duration: 1.5).repeatForever()) {
+				choosingSide = true
+			}
+		default:
+			if choosingSide {
+				withAnimation(.easeOut) {
+					choosingSide = false
+				}
+			}
+		}
+	}
+	
+	func onPlayerChange(_ newValue: Player?) {
+		switch match.teamID(tableSide) {
+		case .home:
+			match.settings.homeTeam.playerOne = player
+		case .guest:
+			return match.settings.guestTeam.playerOne = player
+		}
+	}
 }
 
 extension TeamView {
+	
+	var addPlayerView: some View {
+		Button(action: { showPlayerSelection = true }, label: { Label("Player", systemImage: "plus.circle") })
+			.foregroundColor(._teal)
+			.font(notMacApp ? .title3 : .title2)
+			.lineLimit(1)
+	}
+	
+	func playerView(_ player: Player) -> some View {
+		ZStack {
+			PlayerRow(player: player, selectedPlayer: .constant(nil), selectionDisabled: .constant(true))
+			Button(action: { showPlayerSelection = true }) {
+				Image(uiImage: UIImage())
+					.resizable()
+			}
+		}
+	}
+
 	var playerBox: some View {
 		GroupBox {
 			if let player = player {
-				PlayerRow(player: player)
-					.onTapGesture {
-						showPlayerSelection = true 
-					}
+				playerView(player)
 			} else {
-				Button(action: { showPlayerSelection = true }, label: { Label("Player", systemImage: "plus.circle") })
-				.foregroundColor(._teal)
-				.font(notMacApp ? .title3 : .title2)
-				.lineLimit(1)
+				addPlayerView
 			}
 		}
 		.cornerRadius(10)
 		.groupBoxStyle(BlackGroupBoxStyle(color: Color(UIColor.systemGray6)))
 		.sheet(isPresented: $showPlayerSelection) {
 			PlayerSelectionView(
-				selectedPlayer: Binding.init(
-					get: { player },
-					set: {
-						player = $0
-						showPlayerSelection = false
-					})
+				selectedPlayer: $player,
+				teamID: match.teamID(tableSide)
 			)
 		}
-		}
-
-				
+	}
+	
+	
 	
 	var scoreStepper: some View {
 		Stepper("", onIncrement: { match.singleTap(tableSide) }, onDecrement: { match.doubleTap(tableSide) })
@@ -129,14 +153,11 @@ extension TeamView {
 		}
 	}
 	
-	func addUser() {
-	
-	}
 }
 
 struct TeamView_Previews: PreviewProvider {
-    static var previews: some View {
-			TeamView(player: .constant(nil), tableSide: .left, showControlButtons: .constant(true))
-				.environmentObject(Match())
-    }
+	static var previews: some View {
+		TeamView(tableSide: .left, showControlButtons: .constant(true))
+			.environmentObject(Match())
+	}
 }

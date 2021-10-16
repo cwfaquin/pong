@@ -11,11 +11,12 @@ import CloudKit
 struct PlayerSelectionView: View {
 	@StateObject var viewModel = PlayerSelectionVM()
 	@Binding var selectedPlayer: Player?
+	let teamID: TeamID
 	@State var editingPlayer: Player?
-	@State var showAddNewPlayer: Bool = false
-	@State var editMode: EditMode = .inactive
+	@State var showAddNewPlayer = false
+	@State var editingMode = false
 	@Environment(\.presentationMode) private var presentationMode
-
+	
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
 	}
@@ -23,64 +24,98 @@ struct PlayerSelectionView: View {
 	var body: some View {
 		
 		NavigationView {
-			List {
-				Section {
-					NavigationLink(destination: editPlayerView(nil)) {
-						PlayerRow(player: nil)
-					}
-				}
-				Section(header: Text("Select Player")) {
-					if viewModel.isLoading {
-						loadingView
-					} else if viewModel.players.isEmpty {
-						Text("No Players Found")
-							.font(.title)
-							.bold()
-							.padding()
-					} else {
-						ForEach(viewModel.players, id: \.id) { player in
-							switch editMode {
-							case .active:
-								NavigationLink(destination: editPlayerView(player)) {
-									playerRow(player)
-								}
-							default:
-								playerRow(player)
-							}
-						}
-						.onDelete(perform: viewModel.deletePlayers)
-						.listItemTint(.pink)
-					}
-				}
+
+			List(selection: $selectedPlayer) {
+				NavigationLink(destination: editPlayerView(nil), tag: .newPlayer, selection: $editingPlayer) { EmptyView() }
+
+				listContent
+				
 			}
 			.toolbar {
-				ToolbarItem(placement: .navigationBarTrailing) { EditButton() }
-				ToolbarItem(placement: .navigationBarLeading) {
-					Button(action: { selectedPlayer = selectedPlayer }) {
-						Image(systemName: "xmark")
-							.resizable()
-							.foregroundColor(.pink)
-					}
-				}
+				ToolbarItem(placement: .navigationBarTrailing) { newPlayerButton }
+				ToolbarItem(placement: .navigationBarLeading) { closeButton }
 			}
-			.navigationBarTitle("Home Team")
-			.environment(\.editMode, $editMode)
-			.accentColor(.pink)
+			.navigationBarTitle("\(teamID.rawValue.capitalized) Team")
+			
 		}
+		.accentColor(.pink)
 		.navigationViewStyle(StackNavigationViewStyle())
 		.onAppear {
 			viewModel.fetchPlayers()
 		}
+		.onChange(of: selectedPlayer) { selected in
+			guard selected != nil else { return }
+			presentationMode.wrappedValue.dismiss()
+		}
+	}
+	
+	var newPlayerButton: some View {
+		Button(action: { editingPlayer = .newPlayer }) {
+			HStack {
+				Image(systemName: "plus.circle")
+					.imageScale(.large)
+					.foregroundColor(.pink)
+				Text("New Player")
+					.font(.title3)
+					.foregroundColor(.pink)
+			}
+		}
+	}
+	
+	var closeButton: some View {
+		Button(action: { presentationMode.wrappedValue.dismiss() }) {
+			Image(systemName: "xmark")
+				.resizable()
+				.foregroundColor(.pink)
+		}
+	}
+	
+	var playerRows: some View {
+		ForEach(viewModel.players, id: \.id) { player in
+			HStack {
+				playerRow(player)
+				if editingMode {
+					NavigationLink(destination: editPlayerView(player), tag: player, selection: $editingPlayer) { EmptyView() }
+				}
+			}
+			.listRowBackground(player == selectedPlayer ? Color.black : Color.clear)
+		}
+		.onDelete(perform: viewModel.deletePlayers)
+	}
+	
+	var listContent: some View {
+		Section(header:
+							HStack {
+			Text(editingMode ? "Edit Player" : "Select Player")
+				.padding()
+			Spacer()
+			Toggle("", isOn: $editingMode)
+			Text("Edit")
+				.padding(.leading)
+		}
+		) {
+			switch viewModel.state {
+			case .loading:
+				loadingView
+			case .noResults:
+				Text("No Players Found")
+					.font(.title)
+					.bold()
+					.padding()
+			case .results:
+				playerRows
+			}
+		}
 	}
 	
 	func editPlayerView(_ player: Player?) -> some View {
-			EditPlayerView(
-				player: player ?? .newPlayer,
-				newPlayer: player == nil,
-				showPinPrompt: player != nil && player?.pinRequired == true
-			).environmentObject(viewModel)
+		EditPlayerView(
+			player: player ?? .newPlayer,
+			newPlayer: player == nil,
+			showPinPrompt: player != nil && player?.pinRequired == true
+		).environmentObject(viewModel)
 	}
-
+	
 	var loadingView: some View {
 		ZStack {
 			Rectangle()
@@ -91,47 +126,52 @@ struct PlayerSelectionView: View {
 	}
 	
 	func playerRow(_ player: Player) -> some View {
-		PlayerRow(player: player)
-			.border(Color.blue, width: selectedPlayer == player ? 2 : 0)
-			.cornerRadius(selectedPlayer == player ? 8 : 0)
-			.background(selectedPlayer == player ? Color.black : nil)
-			.onTapGesture {
-					 print("Shit")
-					 guard editMode != .active else { return }
-					 withAnimation {
-						 selectedPlayer = player
-					 }
-				 }
+		PlayerRow(
+			player: player,
+			selectedPlayer: $selectedPlayer,
+			selectionDisabled: $editingMode
+		)
 	}
 }
-
-
 
 struct PlayerRow: View {
 	
 	@State var avatar: UIImage?
-	@State var player: Player?
+	@State var player: Player
+	@Binding var selectedPlayer: Player?
+	@Binding var selectionDisabled: Bool
 	
-	var isNew: Bool {
-		player == nil
+	var isSelected: Bool {
+		player == selectedPlayer
 	}
 	
 	var body: some View {
 		HStack {
-			if isNew { Spacer() }
 			image
-			Text(player?.username ?? "New Player")
+			Text(player.username)
 				.font(.title)
-				.foregroundColor(isNew ? .pink : .white)
+				.foregroundColor(.white)
 			Spacer()
-			
 		}
 		.onAppear {
-			player?.loadAvatar { image in
-				avatar = image
-			}
+			updateAvatar()
 		}
-		.navigationTitle(player?.username ?? "New Player")
+		.onTapGesture {
+			guard !selectionDisabled else { return }
+			selectedPlayer = selectedPlayer == player ? nil : player
+		}
+		
+		.onChange(of: player) { newValue in
+			updateAvatar()
+		}
+	}
+	
+	func updateAvatar() {
+		avatar = nil
+		player.loadAvatar { image in
+			guard let image = image else { return }
+			avatar = image
+		}
 	}
 	
 	var image: some View {
@@ -139,20 +179,25 @@ struct PlayerRow: View {
 		if let avatar = avatar {
 			image = Image(uiImage: avatar)
 		} else {
-			image = isNew ? Image(systemName: "plus") : Image(systemName: "person.circle")
+			image = Image(systemName: "person.circle")
 		}
 		return image
 			.resizable()
-			.frame(width: isNew ? 30 : 40, height: isNew ? 30 : 40)
-			.foregroundColor(player == nil ? .pink : .blue)
+			.frame(width: 50, height: 50)
+			.foregroundColor(.blue)
+			.clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 			.padding()
 	}
+	
+	
+	
+	
 }
 
 
 
 struct PlayerSelectionView_Previews: PreviewProvider {
 	static var previews: some View {
-		PlayerSelectionView(selectedPlayer: .constant(nil), editingPlayer: nil)
+		PlayerSelectionView(selectedPlayer: .constant(nil), teamID: .home)
 	}
 }

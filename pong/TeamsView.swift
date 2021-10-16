@@ -18,9 +18,18 @@ struct TeamsView: View {
 		UIScreen.main.bounds.width <= 1024
 	}
 	
+	func player(_ tableSide: TableSide) -> Player? {
+		switch match.teamID(tableSide) {
+		case .home:
+			return match.settings.homeTeam.playerOne
+		case .guest:
+			return match.settings.guestTeam.playerOne
+		}
+	}
+	
 	var body: some View {
 		HStack {
-			TeamView(player: match.tableSides.home == .left ? $match.settings.homeTeam.playerOne : $match.settings.guestTeam.playerOne, tableSide: .left, showControlButtons: $showControlButtons)
+			TeamView(player: player(.left), tableSide: .left, showControlButtons: $showControlButtons)
 			
 			VStack {
 				if showControlButtons {
@@ -39,7 +48,7 @@ struct TeamsView: View {
 			}
 			.frame(width: panelWidth)
 			
-			TeamView(player: match.tableSides.home == .right ? $match.settings.homeTeam.playerOne : $match.settings.guestTeam.playerOne, tableSide: .right, showControlButtons: $showControlButtons)
+			TeamView(player: player(.right), tableSide: .right, showControlButtons: $showControlButtons)
 		}
 		.onChange(of: match.settings.showControlButtons) { newValue in
 			withAnimation(.spring()) {
