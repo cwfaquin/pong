@@ -97,7 +97,7 @@ extension TeamView {
 	
 	func playerView(_ player: Player) -> some View {
 		ZStack {
-			PlayerRow(player: player, selectedPlayer: .constant(nil), selectionDisabled: .constant(true))
+			PlayerRow(player: player)
 			Button(action: { showPlayerSelection = true }) {
 				Image(uiImage: UIImage())
 					.resizable()

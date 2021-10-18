@@ -34,6 +34,7 @@ struct Player: Identifiable, Hashable {
 	var pin = ""
 	var avatar: CKAsset?
 	var avatarUrl: URL?
+	var avatarImage: UIImage?
 	
 
 	init(record: CKRecord) {
