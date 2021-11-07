@@ -14,35 +14,35 @@ struct PinEntryView: View {
 	@State var tryAgain: Bool = false
 	@Binding var didCancel: Bool
 	@Binding var didSucceed: Bool
-	@Environment(\.presentationMode) private var presentationMode
 	
     var body: some View {
 		
 				VStack {
+					Text("Enter PIN to delete")
+						.font(.title2)
 				SecureField("4 Digit PIN", text: $confirmPin)
 					.multilineTextAlignment(.center)
 					.keyboardType(.numberPad)
 					.textContentType(.newPassword)
-					.font(.headline)
+					.font(.title2)
 					.textFieldStyle(RoundedBorderTextFieldStyle())
-					.padding()
-					.border(Color.pink, width: 1)
-					.cornerRadius(10)
-					.padding()
-					
-					Button("Cancel") {
-						didCancel = true
-						presentationMode.wrappedValue.dismiss()
+					.padding([.leading, .trailing, .bottom])
+		
+					Button(action: { didCancel = true }) {
+						Text("Cancel")
+							.font(.title3)
+							.foregroundColor(.black)
+							.padding()
+							.background(Color(UIColor.cyan))
+							.cornerRadius(10)
 					}
-						.buttonStyle(RoundedRectangleButtonStyle())
-						.padding()
+					.padding()
 				}
-				.background(Color.black.opacity(0.8))
+				.padding()
 			.onChange(of: confirmPin) { newValue in
 				guard newValue.count > 3 else { return }
 				if confirmPin == pin {
 					didSucceed = true 
-					presentationMode.wrappedValue.dismiss()
 				} else {
 					confirmPin = ""
 					tryAgain = true

@@ -26,6 +26,7 @@ struct PlayerSelectionView: View {
 
 	var body: some View {
 		NavigationView {
+			ZStack {
 			VStack {
 				header
 				switch viewModel.state {
@@ -39,7 +40,7 @@ struct PlayerSelectionView: View {
 				case .results:
 					List {
 						ForEach(viewModel.players, id: \.id) { player in
-							playerRow(player)      
+							playerRow(player)
 							.listRowBackground(player == selectedPlayer ? Color.black : Color.clear)
 							.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
 						}
@@ -48,6 +49,10 @@ struct PlayerSelectionView: View {
 			}
 				NavigationLink(destination: editPlayerView(editingPlayer), isActive: $showEditor) {
 					EmptyView()
+				}
+			}
+				if let deletePlayer = deletePlayer {
+					pinOverlay(deletePlayer: deletePlayer)
 				}
 			}
 			
@@ -62,13 +67,8 @@ struct PlayerSelectionView: View {
 			}
 			.navigationBarTitle("\(teamID.rawValue.capitalized) Team")
 		}
-		
 		.navigationViewStyle(StackNavigationViewStyle())
-		
-		
-		
 		.accentColor(.pink)
-		
 		.onAppear {
 			viewModel.fetchPlayers()
 		}
@@ -76,6 +76,9 @@ struct PlayerSelectionView: View {
 	}
 	
 	func pinOverlay(deletePlayer: Player) -> some View {
+		VStack {
+			Spacer()
+		
 		PinEntryView(
 			pin: deletePlayer.pin,
 			didCancel: .init(
@@ -92,6 +95,9 @@ struct PlayerSelectionView: View {
 				}
 			)
 		)
+			Spacer()
+		}
+		.background(Color.black.opacity(0.95))
 	}
 	
 	func playerRow(_ player: Player) -> some View {
