@@ -18,7 +18,9 @@ enum PlayerKeys: String, CaseIterable {
 	case pin
 }
 
-struct Player: Identifiable, Hashable {
+struct Player {
+
+	
 	static let recordType = "Player"
 	static let newPlayer = Player(record: CKRecord(recordType: Player.recordType))
 
@@ -40,6 +42,7 @@ struct Player: Identifiable, Hashable {
 	init(record: CKRecord) {
 		recordId = record.recordID
 		updateFrom(record)
+
 	}
 	
 	mutating func updateFrom(_ record: CKRecord) {
@@ -50,6 +53,15 @@ struct Player: Identifiable, Hashable {
 		pin = record[PlayerKeys.pin.rawValue] as? String ?? pin
 		pinRequired = record[PlayerKeys.pinRequired.rawValue] as? Bool ?? false
 		avatar = record[PlayerKeys.avatar.rawValue] as? CKAsset
+		guard
+			let fileURL = avatar?.fileURL,
+			let imageData = try? Data(contentsOf: fileURL),
+			let image = UIImage(data: imageData)
+		else {
+			avatarImage = UIImage(systemName: "person.circle")?.withRenderingMode(.alwaysTemplate)
+			return
+		}
+		avatarImage = image
 
 		/*if let matchRecords = record["matches"] as? [CKRecord.Reference] {
 			MatchRecord.fetchMatches(for: matchRecords) { matches in
@@ -85,20 +97,23 @@ struct Player: Identifiable, Hashable {
 		}
 		return record
 	}
-	
+	/*
 	func loadImageFromDocumentDirectory(fileName: String) -> UIImage? {
 					
 					let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!;
 					let fileURL = documentsUrl.appendingPathComponent(fileName)
 					do {
 							let imageData = try Data(contentsOf: fileURL)
-							return UIImage(data: imageData)
-					} catch {}
+							avatarImage = UIImage(data: imageData)
+					} catch {
+						avatarImage = UIImage(systemName: "person.circle")
+					}
 					return nil
 			}
 	
 	
-	mutating func saveImageInDocumentDirectory(image: UIImage?, fileName: String) {
+	func saveImageInDocumentDirectory(image: UIImage?, fileName: String) {
+		
 			guard
 				let image = image,
 				let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
@@ -113,7 +128,7 @@ struct Player: Identifiable, Hashable {
 		} else {
 			avatarUrl = nil
 		}
-	}
+	}*/
 	
 	func loadAvatar(completion: @escaping (_ photo: UIImage?) -> ()) {
 		DispatchQueue.global(qos: .utility).async {
@@ -131,6 +146,12 @@ struct Player: Identifiable, Hashable {
 				return
 			}
 		}
+	}
+}
+
+extension Player: Identifiable, Hashable, Equatable {
+	static func == (lhs: Player, rhs: Player) -> Bool {
+		lhs.id == rhs.id
 	}
 }
 

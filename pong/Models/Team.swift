@@ -22,7 +22,7 @@ enum TeamID: String, CaseIterable {
 	}
 }
 
-struct Team {
+struct Team: Equatable {
 	
 	var playerOne: Player?
 	var playerTwo: Player?
@@ -40,5 +40,4 @@ struct Team {
 		playerTwo = player
 	}
 }
-
 

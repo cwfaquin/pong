@@ -12,6 +12,7 @@ final class MatchSettings: ObservableObject {
 	@Published var setType: SetType = .bestOfThree
 	@Published var matchType: MatchType = .singleSet
 	@Published var showControlButtons = true
+	@Published var showPlayerSelection = false 
 	@Published var recordMatchResults = false
 	@Published var homeTeam = Team(.home)
 	@Published var guestTeam = Team(.guest)

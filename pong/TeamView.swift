@@ -10,9 +10,9 @@ import SwiftUI
 struct TeamView: View {
 	
 	@EnvironmentObject var match: Match
-	@State var player: Player?
-	@State var showPlayerSelection = false
 	let tableSide: TableSide
+	@Binding var showPlayerSelection: Bool
+	@State var player: Player?
 	@Binding var showControlButtons: Bool
 	@State private var choosingSide = false
 	
@@ -58,7 +58,6 @@ struct TeamView: View {
 		)
 		.padding()
 		.onChange(of: match.status) { onStatusChange($0) }
-		.onChange(of: player) { onPlayerChange($0) }
 	}
 	
 	func onStatusChange(_ newValue: Match.Status) {
@@ -75,15 +74,6 @@ struct TeamView: View {
 			}
 		}
 	}
-	
-	func onPlayerChange(_ newValue: Player?) {
-		switch match.teamID(tableSide) {
-		case .home:
-			match.settings.homeTeam.playerOne = player
-		case .guest:
-			return match.settings.guestTeam.playerOne = player
-		}
-	}
 }
 
 extension TeamView {
@@ -93,21 +83,20 @@ extension TeamView {
 			.foregroundColor(._teal)
 			.font(notMacApp ? .title3 : .title2)
 			.lineLimit(1)
+			.frame(height: 44)
 	}
 	
 	func playerView(_ player: Player) -> some View {
-		ZStack {
 			PlayerRow(player: player)
-			Button(action: { showPlayerSelection = true }) {
-				Image(uiImage: UIImage())
-					.resizable()
-			}
-		}
+				.onTapGesture {
+					showPlayerSelection = true
+				}
+				.frame(height: 44)
 	}
 
 	var playerBox: some View {
 		GroupBox {
-			if let player = player {
+			if let player = match.player(tableSide) {
 				playerView(player)
 			} else {
 				addPlayerView
@@ -115,12 +104,6 @@ extension TeamView {
 		}
 		.cornerRadius(10)
 		.groupBoxStyle(BlackGroupBoxStyle(color: Color(UIColor.systemGray6)))
-		.sheet(isPresented: $showPlayerSelection) {
-			PlayerSelectionView(
-				selectedPlayer: $player,
-				teamID: match.teamID(tableSide)
-			)
-		}
 	}
 	
 	
@@ -157,7 +140,7 @@ extension TeamView {
 
 struct TeamView_Previews: PreviewProvider {
 	static var previews: some View {
-		TeamView(tableSide: .left, showControlButtons: .constant(true))
+		TeamView(tableSide: .left, showPlayerSelection: .constant(false), showControlButtons: .constant(true))
 			.environmentObject(Match())
 	}
 }

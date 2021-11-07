@@ -156,6 +156,15 @@ final class Match: ObservableObject {
 		tableSides.home == tableSide ? .home : .guest
 	}
 	
+	func player(_ tableSide: TableSide) -> Player? {
+		switch teamID(tableSide) {
+		case .home:
+			return settings.homeTeam.playerOne
+		case .guest:
+			return settings.guestTeam.playerOne
+		}
+	}
+	
 	var matchLoser: (team: TeamID, score: Int)? {
 		if homeSets.count > guestSets.count {
 			return (.guest, guestSets.count)

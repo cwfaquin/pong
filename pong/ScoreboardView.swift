@@ -13,17 +13,19 @@ struct ScoreboardView: View {
 	@EnvironmentObject var match: Match
 	@EnvironmentObject var buttonManager: PongAppVM
 	@State var showSettings = false
+	@State var showPlayerSelection = false
 	@State var statusVM = StatusVM(text: "", temporary: true)
 	@State var showStatus = false
 	@State var screenSize = UIScreen.main.bounds.size
-	
+	@State var showHomeSelection = false
+	@State var showGuestSelection = false
 
 	var body: some View {
 		
 		ZStack {
 			
 			VStack {
-				TeamsView(showSettings: $showSettings, showButtonManager: $buttonManager.scanViewVisible, panelWidth: panelWidth)
+				TeamsView(showSettings: $showSettings, showButtonManager: $buttonManager.scanViewVisible, panelWidth: panelWidth, showHomeSelection: $showHomeSelection, showGuestSelection: $showGuestSelection)
 				SeriesView(viewModel: SeriesVM(match, seriesType: .set, panelWidth: panelWidth))
 				SeriesView(viewModel: SeriesVM(match, seriesType: .match, panelWidth: panelWidth))
 				ScoresView(screenSize: $screenSize)
@@ -52,6 +54,7 @@ struct ScoreboardView: View {
 				showSettings: $showSettings
 			)
 		})
+
 		.sheet(
 			isPresented: $buttonManager.scanViewVisible,
 			onDismiss: {
@@ -62,6 +65,12 @@ struct ScoreboardView: View {
 					.environmentObject(buttonManager)
 			}
 		)
+		.sheet(isPresented: $showHomeSelection) {
+			PlayerSelectionView(selectedPlayer: $match.settings.homeTeam.playerOne, isShowing: $showHomeSelection, teamID: .home)
+		}
+		.sheet(isPresented: $showGuestSelection) {
+			PlayerSelectionView(selectedPlayer: $match.settings.guestTeam.playerOne, isShowing: $showGuestSelection, teamID: .guest)
+		}
 		.onRotate { newOrientation in
 			screenSize = UIScreen.main.bounds.size
 		}

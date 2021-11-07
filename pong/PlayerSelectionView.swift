@@ -11,6 +11,7 @@ import CloudKit
 struct PlayerSelectionView: View {
 	@StateObject var viewModel = PlayerSelectionVM()
 	@Binding var selectedPlayer: Player?
+	@Binding var isShowing: Bool
 	let teamID: TeamID
 	@State var editingPlayer: Player?
 	@State var showEditor = false
@@ -22,7 +23,7 @@ struct PlayerSelectionView: View {
 	var notMacApp: Bool {
 		UIScreen.main.bounds.width <= 1024
 	}
-	
+
 	var body: some View {
 		NavigationView {
 			VStack {
@@ -37,12 +38,17 @@ struct PlayerSelectionView: View {
 						.padding()
 				case .results:
 					List {
-						ForEach(viewModel.players, id: \.self) { player in
+						ForEach(viewModel.players, id: \.id) { player in
 							playerRow(player)      
 							.listRowBackground(player == selectedPlayer ? Color.black : Color.clear)
+							.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
 						}
 					}
+					.listItemTint(.blue)
 			}
+				NavigationLink(destination: editPlayerView(editingPlayer), isActive: $showEditor) {
+					EmptyView()
+				}
 			}
 			
 			.toolbar {
@@ -66,10 +72,7 @@ struct PlayerSelectionView: View {
 		.onAppear {
 			viewModel.fetchPlayers()
 		}
-		.onChange(of: selectedPlayer) { selected in
-			guard selected != nil else { return }
-			presentationMode.wrappedValue.dismiss()
-		}
+	
 	}
 	
 	func pinOverlay(deletePlayer: Player) -> some View {
@@ -93,13 +96,42 @@ struct PlayerSelectionView: View {
 	
 	func playerRow(_ player: Player) -> some View {
 		HStack {
+			if editingMode {
+				Button(action: { deletePlayer = player }) {
+					Image(systemName: "minus.circle")
+						.resizable()
+						.foregroundColor(.pink)
+						.frame(width: 30, height: 30)
+				}.padding(.leading)
+			}
+			HStack {
 			PlayerRow(player: player)
-			Divider()
-			NavigationLink(
-				destination: editPlayerView(player),
-				label: { HStack(alignment: .center) { Image(systemName: "pencil"); Text("Edit") }}
-			).frame(width: 100)
-		
+			if editingMode {
+				HStack {
+					Image(systemName: "pencil.circle")
+						.resizable()
+						.foregroundColor(.blue)
+						.frame(width: 30, height: 30)
+					Image(systemName: "chevron.right")
+						.imageScale(.large)
+						.foregroundColor(.gray)
+				}
+				.padding(.trailing)
+				.onTapGesture {
+						editingPlayer = player
+						showEditor = true
+					}
+				}
+			}
+			.onTapGesture {
+				if !editingMode {
+					selectedPlayer = player == selectedPlayer ? nil : player
+					isShowing = false
+				} else {
+					editingPlayer = player
+					showEditor = true
+				}
+			}
 		}
 	}
 	
@@ -138,8 +170,7 @@ struct PlayerSelectionView: View {
 			Spacer()
 			Toggle("", isOn: $editingMode)
 			Text("Edit")
-				.padding(.leading)
-		}
+		}.padding(.trailing)
 	}
 	
 	
@@ -169,24 +200,20 @@ struct PlayerRow: View {
 	
 	var body: some View {
 		HStack {
-			image
+			Image(uiImage: player.avatarImage ?? UIImage())
+				.resizable()
+				.foregroundColor(.blue)
+				.frame(width: 50, height: 50)
+				.clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+				.padding()
 			Text(player.username)
 				.font(.title)
 				.foregroundColor(.white)
 			Spacer()
 		}
-		.onAppear {
-			updateAvatar()
-		}
+		
 	}
-	
-	func updateAvatar() {
-		guard player.avatarImage == nil else { return }
-		player.loadAvatar { image in
-			guard let image = image else { return }
-			player.avatarImage = image
-		}
-	}
+
 	
 	var image: some View {
 		let image: Image
@@ -196,11 +223,7 @@ struct PlayerRow: View {
 			image = Image(systemName: "person.circle")
 		}
 		return image
-			.resizable()
-			.frame(width: 50, height: 50)
-			.foregroundColor(.blue)
-			.clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-			.padding()
+			
 	}
 }
 
@@ -210,6 +233,6 @@ struct PlayerRow: View {
 
 struct PlayerSelectionView_Previews: PreviewProvider {
 	static var previews: some View {
-		PlayerSelectionView(selectedPlayer: .constant(nil), teamID: .home)
+		PlayerSelectionView(selectedPlayer: .constant(nil), isShowing: .constant(true), teamID: .home)
 	}
 }
